@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="在月隱塔羅寫下你的疑問，自由選牌，探索感情、工作與生活的下一步。">
+<meta name="theme-color" content="#120d19">
+<title>月隱塔羅｜線上塔羅占卜</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23231830'/%3E%3Cpath d='M26 9a12 12 0 1 0 5 19A11 11 0 0 1 26 9Z' fill='%23f1cf9d'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="./assets/style.css">
+<script defer src="./assets/app.js"></script>
+</head>
+<body>
+<header class="top" id="top">
+  <div class="container nav">
+    <a href="#top" class="brand"><span class="brand-icon" aria-hidden="true">☾</span><span>月隱塔羅<small>MOONVEIL TAROT</small></span></a>
+    <nav aria-label="主選單"><a href="#reading">開始占卜</a><a href="#themes">主題探索</a><a href="#faq">占卜指南</a></nav>
+    <button class="history-button" type="button" id="show-history" disabled><span aria-hidden="true">◷</span> 抽牌紀錄</button>
+  </div>
+</header>
+<main>
+  <section class="hero" id="reading" aria-labelledby="hero-title">
+    <div class="hero-inner container">
+      <div class="tag"><span></span> 線上塔羅占卜 <span></span></div>
+      <h1 id="hero-title">把心事，<br class="mobile-break">交給月光</h1>
+      <p class="intro">寫下一個你想釐清的問題，讓塔羅陪你看看眼前的選擇。</p>
+      <div class="reading-shell">
+        <div id="deck-notice" class="deck-notice">
+          <p id="deck-status" role="status">正在載入塔羅牌…</p>
+          <button id="retry-deck" class="secondary" type="button" hidden>重新載入</button>
+        </div>
+        <form id="reading-form">
+          <div class="question-header"><label for="question">你想問塔羅什麼？</label><select id="theme-select" aria-label="占卜主題">
+            <option value="general">自由占卜</option><option value="love">感情塔羅</option><option value="work">工作塔羅</option><option value="choice">選擇指引</option><option value="daily">今日一牌</option>
+          </select></div>
+          <textarea id="question" maxlength="160" rows="2" placeholder="例如：面對最近的變動，我可以從哪裡開始？" aria-describedby="question-count"></textarea>
+          <div class="question-bottom"><span>也可以先試試下面的問題</span><span id="question-count">0 / 160</span></div>
+          <div class="form-bottom">
+            <fieldset class="spread"><legend>牌陣</legend><label><input type="radio" name="spread" value="1"><span>單張指引</span></label><label><input type="radio" name="spread" value="3" checked><span>三張牌陣</span></label></fieldset>
+            <button class="primary" type="submit" id="start-draw" disabled><span aria-hidden="true">✦</span> 開始抽牌</button>
+          </div>
+        </form>
+        <div id="draw" hidden>
+          <div class="step-head"><div><p class="kicker">抽牌</p><h2 tabindex="-1" id="draw-title">選擇你的牌</h2></div><button class="text-button" id="edit-question" type="button">返回提問</button></div>
+          <p class="draw-question" id="draw-question"></p>
+          <p class="draw-status" id="draw-status" role="status"></p>
+          <div id="card-board" class="card-board"></div>
+          <div class="draw-actions"><button class="secondary" type="button" id="reshuffle">重新洗牌</button><button class="primary" id="reveal" type="button" disabled>翻牌看解讀</button></div>
+        </div>
+        <div id="result" hidden>
+          <div class="step-head"><div><p class="kicker">牌陣解讀</p><h2 id="result-title" tabindex="-1">這次抽到的牌</h2></div><button id="start-over" type="button" class="secondary">再抽一次</button></div>
+          <p class="draw-question" id="result-question"></p>
+          <div id="result-cards" class="result-cards"></div>
+          <div class="reflection"><h3>給自己的提問</h3><p id="reflection-text"></p></div>
+        </div>
+        <noscript><p>請啟用瀏覽器的 JavaScript 以使用抽牌功能。</p></noscript>
+      </div>
+      <div class="suggestions" id="suggestions" aria-label="提問範例"></div>
+    </div>
+  </section>
+  <section class="themes container" id="themes" aria-labelledby="themes-title">
+    <div class="section-heading"><div><p class="kicker">探索牌陣</p><h2 id="themes-title">從你在意的事開始</h2></div><p>選擇一個主題，帶著你的問題來抽牌。</p></div>
+    <div class="topics">
+      <button class="topic love" type="button" data-theme="love"><span class="topic-icon" aria-hidden="true">♡</span><strong>感情塔羅</strong><span>看見關係裡的感受與需要</span></button>
+      <button class="topic work" type="button" data-theme="work"><span class="topic-icon" aria-hidden="true">◇</span><strong>工作塔羅</strong><span>整理職涯選擇與下一步</span></button>
+      <button class="topic choice" type="button" data-theme="choice"><span class="topic-icon" aria-hidden="true">☽</span><strong>選擇指引</strong><span>比較兩種選擇與取捨</span></button>
+      <button class="topic daily" type="button" data-theme="daily"><span class="topic-icon" aria-hidden="true">☼</span><strong>今日一牌</strong><span>用一張牌開啟今天</span></button>
+    </div>
+  </section>
+  <section class="guide container" id="faq" aria-labelledby="faq-title">
+    <div class="section-heading"><div><p class="kicker">占卜指南</p><h2 id="faq-title">第一次抽牌？</h2></div></div>
+    <details><summary>怎麼問塔羅比較好？</summary><p>試著把問題聚焦在自己能觀察或採取的行動。像是「我可以怎麼改善這段關係的溝通？」或「面對換工作的選擇，我該留意什麼？」</p></details>
+    <details><summary>單張指引和三張牌陣有什麼差別？</summary><p>單張牌聚焦當下最值得留意的事。三張牌隨主題安排位置，例如自由占卜是「過去、現在、可能方向」，選擇指引則是「選項 A、選項 B、取捨重點」。</p></details>
+    <details><summary>抽牌結果會保存在哪裡？</summary><p>紀錄保存在你目前使用的瀏覽器。你可以在「抽牌紀錄」查看、重新開啟或清除記錄。</p></details>
+  </section>
+</main>
+<footer><div class="container footer"><a href="#top" class="brand"><span class="brand-icon" aria-hidden="true">☾</span>月隱塔羅</a><p>塔羅解讀供娛樂與自我反思。</p></div></footer>
+<dialog id="history-dialog" aria-labelledby="history-title">
+  <div class="step-head"><h2 id="history-title">抽牌紀錄</h2><form method="dialog"><button class="secondary" type="submit">關閉</button></form></div>
+  <p id="history-status" role="status"></p>
+  <div id="history-list"></div>
+  <div class="history-actions"><button id="clear-history" type="button" class="text-button">清除所有紀錄</button><div id="confirm-clear" hidden><p>確定清除這個瀏覽器的所有抽牌紀錄？</p><button id="cancel-clear" type="button" class="secondary">取消</button> <button id="confirm-delete" type="button" class="secondary">確定清除</button></div></div>
+</dialog>
+</body>
+</html>

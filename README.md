@@ -9,6 +9,16 @@
 | `schema.sql` | 牌卡資料表、欄位約束與索引 |
 | `build_database.py` | 驗證牌卡資料並產生 SQLite 檔 |
 
+## 月隱塔羅網站
+
+網站提供單張指引與三張牌陣，從 `data/cards.json` 讀取牌義。抽牌紀錄保存在使用者的瀏覽器。
+
+在儲存庫根目錄啟動本機預覽，再開啟 `http://localhost:8000/`。
+
+```sh
+python3 -m http.server 8000
+```
+
 ## 查詢範例
 
 透過 `sqlite3 tarot.sqlite3` 開啟資料庫，查詢指定牌卡的兩種解讀。
