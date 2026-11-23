@@ -8,13 +8,13 @@ const readingContexts = {
   },
   love: {
     single: "先分清自己真正需要的是什麼，再回想對方實際說過或做過什麼。兩者之間的落差，可以成為你下次開口的起點。",
-    connect: ([feelings, relationship, direction]) => `你的感受由${feelings}切入，關係現況則由${relationship}補上另一個角度。把前兩張對照，看看自己的期待和雙方實際的互動在哪裡相符、在哪裡有落差。相處方向的${direction}，適合拿來想一個你願意開啟的對話。`,
+    connect: ([feelings, relationship, direction]) => `你的感受由${feelings}切入，關係現況則由${relationship}補上另一個角度。把前兩張對照，看看自己的期待和雙方實際的互動在哪裡相符、在哪裡有落差。相處方向則對應${direction}，適合拿來想一個你願意開啟的對話。`,
     close: "先把感受整理成一項你能清楚表達的需要。"
   },
   work: {
     single: "把牌意對照一個具體的工作情境，例如最近的分工、正在評估的機會，或讓你卡住的決定。這會讓你更容易知道接下來要確認什麼。",
-    connect: ([situation, concern, next]) => `目前處境的${situation}和需要留意的${concern}，可以拿來對照工作中已有的條件和仍待確認的資訊。下一步的${next}提供一個試行方向。先驗證一個最可能影響決定的假設，再評估是否要投入更多時間或資源。`,
-    close: "把方向轉成一個能在工作上低成本試行的小步驟。"
+    connect: ([situation, concern, next]) => `目前處境對應${situation}，值得留意的事則對應${concern}。對照前兩張牌，分清工作中已有的條件和仍待確認的資訊。再根據${next}，驗證一個最可能影響決定的假設，看看是否值得繼續投入。`,
+    close: "做出職涯決定前，先替自己留一個可以調整的空間。"
   },
   choice: {
     single: "先把這張牌的主題當成一個比較標準。用同樣的標準看每個選項，留意哪一項差異會實際影響你的日常。",
@@ -101,7 +101,7 @@ function buildReadingAnalysis(themeKey, entries, positions, deck) {
   const {card, reversed, label, topic} = pivot;
   const steps = suitInsights[card.suit]?.steps ?? majorNextSteps[card.rank];
   const nextStep = steps?.[Number(reversed)] ?? "先記下一件可以查證或試做的小事，做完再看你的想法有沒有改變。";
-  const conclusion = `${context.close}以${label}的${topic}為起點，${nextStep}`;
+  const conclusion = `${context.close}沿著${label}提醒的${topic}，${nextStep}`;
   return {paragraphs, conclusion};
 }
 
@@ -114,7 +114,7 @@ function describeSpreadPattern(cards) {
     balance = "三張都是逆位。先分別看各位置有哪些假設、界線或節奏需要再確認，從最容易改變的一項開始。";
   } else {
     const positions = reversedCards.map(({position}) => "「" + position + "」").join("、");
-    balance = `逆位落在${positions}。把這些位置先當作需要多確認的地方，其他位置的正位牌義則可當成你手上已有的線索或資源。把兩邊放在一起，看看哪些事可以開始，哪些還要先弄清楚。`;
+    balance = `逆位落在${positions}。在逆位所在的位置多確認一步，再把其他位置的正位牌義當作手上已有的線索或資源。把兩邊放在一起，看看哪些事可以開始，哪些還要先弄清楚。`;
   }
 
   const repeatedSuit = Object.keys(suitInsights).find((suit) =>
