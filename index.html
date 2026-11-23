@@ -8,6 +8,7 @@
 <title>月隱塔羅｜線上塔羅占卜</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23231830'/%3E%3Cpath d='M26 9a12 12 0 1 0 5 19A11 11 0 0 1 26 9Z' fill='%23f1cf9d'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="./assets/style.css">
+<script defer src="./assets/interpretation.js"></script>
 <script defer src="./assets/app.js"></script>
 </head>
 <body>
@@ -51,7 +52,15 @@
           <div class="step-head"><div><p class="kicker">牌陣解讀</p><h2 id="result-title" tabindex="-1">這次抽到的牌</h2></div><button id="start-over" type="button" class="secondary">再抽一次</button></div>
           <p class="draw-question" id="result-question"></p>
           <div id="result-cards" class="result-cards"></div>
+          <section class="reading-synthesis" aria-labelledby="reading-synthesis-title">
+            <h3 id="reading-synthesis-title">綜合解讀</h3>
+            <div id="reading-synthesis"></div>
+          </section>
           <div class="reflection"><h3>給自己的提問</h3><p id="reflection-text"></p></div>
+          <section class="reading-conclusion" aria-labelledby="reading-conclusion-title">
+            <h3 id="reading-conclusion-title">結語</h3>
+            <p id="reading-conclusion"></p>
+          </section>
         </div>
         <noscript><p>請啟用瀏覽器的 JavaScript 以使用抽牌功能。</p></noscript>
       </div>

@@ -188,6 +188,9 @@ function displayReading(reading) {
   const positions = reading.entries.length === 1 ? [theme === "daily" ? "今日指引" : "當下指引"] : config.slots.length === 3 ? config.slots : themes.general.slots;
   byId("result-question").textContent = config.name + (reading.question ? "｜" + reading.question : "");
   byId("result-cards").replaceChildren(...reading.entries.map((entry, index) => makeResultCard(entry, positions[index])));
+  const {paragraphs, conclusion} = buildReadingAnalysis(reading.theme, reading.entries, positions, tarotDeck);
+  byId("reading-synthesis").replaceChildren(...paragraphs.map((paragraph) => node("p", paragraph)));
+  byId("reading-conclusion").textContent = conclusion;
   byId("reflection-text").textContent = config.reflection;
   show("result", "result-title");
 }

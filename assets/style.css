@@ -93,6 +93,28 @@ footer{border-top:1px solid var(--line);background:#160f1c}
 .face{width:76px;margin:0 auto 11px;animation:unveil .34s ease-out both}
 .face.reversed span{transform:rotate(180deg)}
 @keyframes unveil{from{opacity:0;transform:rotateY(80deg)}}
+.reading-synthesis,.reading-conclusion {
+  margin-top:18px;
+  overflow-wrap:anywhere;
+}
+.reading-synthesis {
+  border-top:1px solid var(--line);
+  padding-top:16px;
+}
+.reading-synthesis h3,.reading-conclusion h3 {
+  color:var(--gold);
+  font:700 1.1rem/1.4 var(--serif);
+  margin-bottom:7px;
+}
+.reading-synthesis p + p {
+  margin-top:9px;
+}
+.reading-conclusion {
+  padding:12px 15px;
+  border:1px solid #bd95645e;
+  border-radius:10px;
+  background:#32232e;
+}
 .reflection{margin-top:15px;border-left:2px solid #e2b67e;background:#241a2a;padding:10px 13px;overflow-wrap:anywhere}
 .reflection h3{font-size:.9rem;color:var(--gold)}
 dialog{background:#211728;color:var(--text);border:1px solid #8a6887;border-radius:17px;padding:22px;width:min(550px,calc(100% - 28px));max-height:85vh}
