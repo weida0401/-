@@ -3,15 +3,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="用生日查詢太陽星座，認識十二星座的日期、元素、相處風格與日常練習。">
+  <meta name="description" content="用生日查太陽星座、探索星座配對，並依行星運行查看每日與每週星座運勢。">
   <meta name="theme-color" content="#1c141b">
   <title>十二星座｜月隱塔羅</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23231830'/%3E%3Cpath d='M26 9a12 12 0 1 0 5 19A11 11 0 0 1 26 9Z' fill='%23f1cf9d'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../assets/style.css">
   <link rel="stylesheet" href="../assets/moonveil-theme.css?v=warm-moon">
-  <link rel="stylesheet" href="../assets/zodiac.css?v=warm-moon">
+  <link rel="stylesheet" href="../assets/zodiac.css?v=transits">
+  <link rel="stylesheet" href="../assets/zodiac-tools.css?v=transits">
   <script defer src="../assets/site-music.js?v=warm-moon"></script>
-  <script defer src="../assets/zodiac.js?v=warm-moon"></script>
+  <script defer src="../assets/vendor/astronomy-engine-2.1.19.min.js"></script>
+  <script defer src="../assets/zodiac-transits.js?v=transits"></script>
+  <script defer src="../assets/zodiac-horoscope.js?v=transits"></script>
+  <script defer src="../assets/zodiac-match.js?v=transits"></script>
+  <script defer src="../assets/zodiac-tools.js?v=transits"></script>
+  <script defer src="../assets/zodiac.js?v=transits"></script>
 </head>
 <body class="zodiac-page">
   <header class="top">
@@ -34,7 +40,7 @@
       <div class="container zodiac-hero-content">
         <div class="zodiac-heading">
           <h1 id="zodiac-title">十二星座</h1>
-          <p>從生日找到你的太陽星座。也可以選一個星座，看看它的特質、相處方式和日常練習。</p>
+          <p>用生日找到你的太陽星座，來看每日與每週運勢，或比較兩個星座的相處方式。</p>
         </div>
         <form id="zodiac-finder" class="zodiac-finder" aria-labelledby="finder-title" novalidate>
           <h2 id="finder-title">用生日找星座</h2>
@@ -59,7 +65,88 @@
       </div>
     </section>
 
-    <section class="container zodiac-explorer" aria-labelledby="explorer-title">
+    <nav class="container zodiac-jump-links" aria-label="星座頁導覽">
+      <a href="#zodiac-forecast">每日與每週運勢</a>
+      <a href="#zodiac-match">星座配對</a>
+      <a href="#zodiac-explore">認識十二星座</a>
+    </nav>
+
+    <section class="container zodiac-feature" id="zodiac-forecast" aria-labelledby="forecast-title">
+      <header class="astro-heading">
+        <h2 id="forecast-title">星座運勢</h2>
+        <p>看看行星正在走到哪裡，找出今天或這一週值得留意的事。</p>
+      </header>
+      <div class="astro-controls">
+        <label class="astro-field" for="forecast-sign">太陽星座
+          <select id="forecast-sign"></select>
+        </label>
+        <fieldset class="forecast-period" id="forecast-period">
+          <legend>運勢期間</legend>
+          <label><input type="radio" name="forecast-period" value="daily" checked><span>每日</span></label>
+          <label><input type="radio" name="forecast-period" value="weekly"><span>每週</span></label>
+        </fieldset>
+        <p class="forecast-date" id="forecast-date"></p>
+      </div>
+      <p class="astro-status" id="forecast-status" role="status" hidden></p>
+      <noscript><p>請啟用 JavaScript 以計算行星位置與運勢。</p></noscript>
+      <div class="forecast-layout" id="forecast-results" hidden>
+        <article class="astro-card" aria-labelledby="forecast-headline">
+          <p class="astro-caption" id="forecast-caption"></p>
+          <h3 id="forecast-headline"></h3>
+          <p id="forecast-overview" class="astro-overview"></p>
+          <dl class="astro-details">
+            <div><dt>感情與人際</dt><dd id="forecast-relationships"></dd></div>
+            <div><dt>工作與生活</dt><dd id="forecast-work"></dd></div>
+            <div><dt>可以做的一件事</dt><dd id="forecast-next"></dd></div>
+          </dl>
+          <div class="transit-highlights">
+            <h4 id="transit-highlights-title">主要相位</h4>
+            <ul id="forecast-highlights" aria-labelledby="transit-highlights-title"></ul>
+          </div>
+        </article>
+        <aside class="astro-card transit-card" aria-labelledby="transit-sky-title">
+          <h3 id="transit-sky-title">行星位置</h3>
+          <p class="astro-caption" id="forecast-sky-date"></p>
+          <div class="transit-wheel" id="transit-wheel" aria-hidden="true"></div>
+          <ul class="transit-list" id="forecast-sky" aria-label="行星與黃道位置"></ul>
+        </aside>
+      </div>
+      <details class="astro-method">
+        <summary>行星位置與運勢怎麼算？</summary>
+        <p>盤面採台灣時間每日中午的地心黃道位置。每週運勢取週一至週日各一天的盤面，找出與所選太陽星座中點較接近的相位。個人出生星盤則需要出生時間與地點。</p>
+      </details>
+      <p id="forecast-announcement" class="astro-sr-only" role="status"></p>
+    </section>
+
+    <section class="container zodiac-feature" id="zodiac-match" aria-labelledby="match-title">
+      <header class="astro-heading">
+        <h2 id="match-title">星座配對</h2>
+        <p>選兩個太陽星座，看看相處時容易合拍和需要協調的地方。</p>
+      </header>
+      <div class="astro-controls match-controls">
+        <label class="astro-field" for="match-first">第一個星座
+          <select id="match-first"></select>
+        </label>
+        <label class="astro-field" for="match-second">第二個星座
+          <select id="match-second"><option value="">選擇星座</option></select>
+        </label>
+      </div>
+      <p class="astro-status" id="match-status" role="status" hidden></p>
+      <article class="astro-card match-result" id="match-result" aria-labelledby="match-headline" hidden>
+        <p class="astro-caption" id="match-caption"></p>
+        <h3 id="match-headline"></h3>
+        <p id="match-overview" class="astro-overview"></p>
+        <dl class="astro-details">
+          <div><dt>容易合拍的地方</dt><dd id="match-strength"></dd></div>
+          <div><dt>需要協調的地方</dt><dd id="match-friction"></dd></div>
+          <div><dt>可以試試的做法</dt><dd id="match-next"></dd></div>
+          <div id="match-transit-row" hidden><dt>本週相處提醒</dt><dd id="match-transit"></dd></div>
+        </dl>
+      </article>
+      <p id="match-announcement" class="astro-sr-only" role="status"></p>
+    </section>
+
+    <section class="container zodiac-explorer" id="zodiac-explore" aria-labelledby="explorer-title">
       <div class="zodiac-selector">
         <h2 id="explorer-title">查看星座</h2>
         <ul id="zodiac-signs" class="zodiac-signs" aria-label="十二星座"></ul>
@@ -79,6 +166,7 @@
           <div><dt>相處</dt><dd id="sign-relationship"></dd></div>
           <div><dt>練習</dt><dd id="sign-practice"></dd></div>
         </dl>
+        <a class="astro-profile-link" id="profile-forecast-link" href="#zodiac-forecast">看這個星座的運勢 <span aria-hidden="true">↑</span></a>
       </article>
     </section>
   </main>

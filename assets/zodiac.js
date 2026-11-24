@@ -140,6 +140,7 @@
     get('sign-relationship').textContent = sign.relationship;
     get('sign-practice').textContent = sign.practice;
     profile.hidden = false;
+    window.MoonveilZodiacTools?.selectSign(sign.id);
   }
 
   function openSign(sign) {
@@ -179,8 +180,12 @@
 
   function updateFromHash() {
     const selected = signsById.get(location.hash.slice(1));
-    renderSign(selected ?? signs[0]);
-    if (selected) profile.scrollIntoView({block:'nearest'});
+    if (selected) {
+      renderSign(selected);
+      profile.scrollIntoView({block:'nearest'});
+    } else if (!activeId || !location.hash) {
+      renderSign(signs[0]);
+    }
   }
 
   finder.addEventListener('submit', event => {
@@ -215,10 +220,12 @@
     clearBirthdayStatus();
     openSign(signsById.get(link.dataset.sign));
   });
+  get('profile-forecast-link')?.addEventListener('click', () => window.MoonveilZodiacTools?.selectSign(activeId));
   window.addEventListener('hashchange', updateFromHash);
 
   month.append(...Array.from({length:12}, (_, index) => new Option((index + 1) + ' 月', String(index + 1))));
   updateBirthdayDays();
   signList.append(...signs.map(makeSignLink));
+  window.MoonveilZodiacTools?.initialize(signs);
   updateFromHash();
 })();
