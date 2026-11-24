@@ -432,6 +432,14 @@
   font-variant-numeric: tabular-nums;
 }
 
+.multipoint-result .result-board-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: .875rem;
+  white-space: nowrap;
+}
+
 .multipoint-result #reading-question {
   margin-top: 6px;
   overflow-wrap: anywhere;
@@ -446,15 +454,15 @@
 }
 
 .multipoint-result .score-body {
-  padding: clamp(14px, 2.8vw, 23px);
-  border: 1px solid #c18d706e;
+  padding: clamp(12px, 2.4vw, 18px);
+  border: 1px solid #614964;
   border-radius: 12px;
-  background: linear-gradient(145deg, #452c3c, #2a1b32);
+  background: #251a2e;
 }
 
 .multipoint-result .score-value {
-  color: #fff0d6;
-  font: 700 clamp(1.9rem, 5vw, 3.1rem)/1.28 Georgia, serif;
+  color: #f8e7ee;
+  font: 700 clamp(1.4rem, 3.1vw, 1.85rem)/1.4 Georgia, serif;
   font-variant-numeric: tabular-nums;
 }
 
@@ -522,6 +530,36 @@
 
 .multipoint-result .reading-conclusion {
   margin-top: clamp(16px, 3vw, 25px);
+  padding: clamp(14px, 3.4vw, 24px);
+  border-color: #b08a76;
+  border-inline-start: 3px solid var(--gold);
+  background: linear-gradient(145deg, #49303f, #302136 76%);
+}
+
+.multipoint-result .reading-conclusion h3 {
+  margin-bottom: 3px;
+  font: 700 .94rem/1.45 var(--sans);
+}
+
+.multipoint-result .conclusion-headline {
+  margin-bottom: 7px;
+  color: #fff0d6;
+  font: 700 clamp(1.32rem, 3.7vw, 2rem)/1.4 var(--serif);
+}
+
+.multipoint-result .conclusion-action {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 4px 11px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #d8ac7957;
+}
+
+.multipoint-result .conclusion-action h4 {
+  margin: 0;
+  color: var(--gold);
+  font-size: 1rem;
 }
 
 .multipoint-result #trace {
@@ -609,6 +647,10 @@
 }
 
 @media (max-width: 420px) {
+  .multipoint-result .conclusion-action {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .multipoint-actions {
     align-items: stretch;
   }

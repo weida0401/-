@@ -95,7 +95,7 @@ const position = {
   root:'根基',
   past:'過去',
   now:'現況',
-  obstacle:'阻力',
+  obstacle:'卡點與解法',
   inner:'內在',
   outer:'外在',
   action:'行動',
@@ -103,7 +103,7 @@ const position = {
 };
 const spreads = {
   3:{name:'三點', desc:'從過去、現況與趨勢抓住主線。', slots:[['past',25],['now',45],['trend',30]]},
-  5:{name:'五點', desc:'從根基、現況、阻力、行動與趨勢整理局勢。',slots:[['root',15],['now',25],['obstacle',20],['action',25],['trend',15]]},
+  5:{name:'五點', desc:'看看事情的根基和現況，找出卡住的地方以及下一步。',slots:[['root',15],['now',25],['obstacle',20],['action',25],['trend',15]]},
   7:{name:'七點', desc:'加入內在與外在點位，檢查兩者如何影響下一步。',slots:[['root',10],['now',20],['obstacle',15],['inner',10],['outer',10],['action',20],['trend',15]]}
 };
 const deck = [
@@ -195,14 +195,17 @@ function displayCards(spread, points) {
 }
 function displayReading(points, question, theme) {
   const calc = calculate(points);
-  const band = calc.index < 40 ? '阻力較強' : calc.index >= 60 ? '推力較強' : '推力與阻力接近';
+  const answer = multiPointReading.answer(points, theme, question, calc.index);
+  const band = calc.index < 40 ? '牌面提醒先處理卡點' : calc.index >= 60 ? '牌面有較多助力' : '牌面有助力也有顧慮';
+  $('conclusion-headline').textContent = answer.headline;
+  $('conclusion').textContent = answer.body;
+  $('conclusion-next').textContent = answer.nextStep;
   $('score').textContent = number(calc.index);
   $('bar').style.width = calc.index + '%';
   $('bar').parentElement.setAttribute('aria-valuenow', calc.index);
   $('band').textContent = band;
-  $('summary').textContent = multiPointReading.summary(points, theme);
+  $('summary').textContent = multiPointReading.summary(points, theme, question);
   $('pairing').textContent = multiPointReading.pairing(calc);
-  $('conclusion').textContent = multiPointReading.conclusion(points, theme);
   $('reading-question').hidden = question.length === 0;
   $('reading-question').textContent = question ? '本次占問 · ' + question : '';
   $('reading').replaceChildren(...points.map(point => {
@@ -229,7 +232,7 @@ function displayReading(points, question, theme) {
     element('p', `指數 ≈ 50 ＋ 25 × (${signed(calc.combined, 3)}) ＝ ${number(calc.index)}`));
   $('trace').open = false;
   result.hidden = false;
-  $('status').textContent = `抽牌完成。牌陣推進指數 ${number(calc.index)}，${band}。`;
+  $('status').textContent = '抽牌完成。' + answer.headline;
 }
 function activeSpread() {
   return spreads[new FormData(form).get('spread')];
@@ -311,7 +314,8 @@ reveal.addEventListener('click', () => {
   $('draw').textContent = '再抽一次';
   displayCards(spread, revealedPoints);
   renderResult();
-  $('board-title').focus();
+  $('result-title').focus({preventScroll:true});
+  result.scrollIntoView({block:'start'});
 });
 form.addEventListener('change', event => {
   if (event.target.name === 'spread') clearReading();

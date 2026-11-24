@@ -5,7 +5,7 @@ const multiPointReading = (() => {
     root: ['根基', '可以回頭看看，什麼時候開始有這個狀況？'],
     past: ['過去', '回想一個類似的時刻，當時的做法有哪些現在還適用？'],
     now: ['現況', '先用最近發生的一件事對照這個提醒，看看哪一部分最貼近眼前的狀況。'],
-    obstacle: ['阻力', '想一想，眼前最耗力的部分是什麼？有哪一塊可以縮小，或請人一起處理？'],
+    obstacle: ['卡點與解法', '看看什麼容易卡住，以及手上有沒有辦法把它鬆開。'],
     inner: ['內在', '找個安靜的時候問自己，你真正想得到的是什麼？'],
     outer: ['外在', '多看一眼手上已有的資訊和支援，挑一項可以向外確認的條件。'],
     action: ['行動', '挑個容易開始的做法，試過一次再看要不要繼續。'],
@@ -78,6 +78,77 @@ const multiPointReading = (() => {
     ]
   };
 
+  const answerProfiles = {
+    investment: {
+      headlines: [
+        '眼前先釐清投資風險，再決定要不要繼續評估',
+        '這個機會可以研究，先把計畫和風險寫清楚',
+        '可以繼續評估這個投資機會，計畫還要補清楚'
+      ],
+      condition: '成不成要看獲利理由能不能用實際資料驗證，以及你能不能守住風險上限。',
+      nextStep: '先寫下這筆投資為什麼可能成立、你最多能承受多少損失，以及發生什麼情況就要退出。用這三項去對照實際資料，再做決定。'
+    },
+    love: {
+      headlines: [
+        '關係能不能往前，先看卡住的地方能否談開',
+        '還有空間了解彼此，先看對方怎麼回應',
+        '可以找機會把話說開，後續還要看彼此怎麼回應'
+      ],
+      condition: '把重點放在雙方能否說清楚各自的期待。如果說完之後，行動也跟得上，關係才有更具體的調整空間。'
+    },
+    work: {
+      headlines: [
+        '工作上的關鍵條件還不齊，先確認卡在哪裡',
+        '有方向可以試，先確認資源和分工',
+        '工作上有可用的條件，可以先驗證一小步'
+      ],
+      condition: '先找出影響結果的條件，例如對方期待的成果、你能投入的時間，或誰能給你回饋。確認其中一項，再判斷這個做法是否走得通。'
+    },
+    choice: {
+      headlines: [
+        '選擇的代價還沒弄清楚，先補一項關鍵資訊',
+        '先用同一個標準比較兩條路，再做選擇',
+        '可以先試自己較在意的方向，留一點回頭的空間'
+      ],
+      condition: '決定前可用一個對你最重要的條件比較，例如時間、生活變動或要承擔的代價。如果其中一條路能先小規模試做，就用實際經驗再對照一次。'
+    },
+    daily: {
+      headlines: [
+        '今天先把最容易卡住的一件事縮小',
+        '今天先觀察一件事，讓下一步清楚一點',
+        '今天有一件小事可以往前做'
+      ],
+      condition: '把牌面的提醒放進今天實際會遇到的一件事。做完或觀察過後，看看自己有沒有更靠近想要的方向。'
+    },
+    outcome: {
+      headlines: [
+        '照目前的條件，先處理卡點再談結果',
+        '目前成敗還難判斷，關鍵條件值得再確認',
+        '有機會往前，結果要看關鍵條件能否落實'
+      ],
+      condition: '把現在能觀察到的助力和仍待確認的地方分開。先查一個可能改變判斷的條件，看清楚之後再決定要不要繼續。'
+    },
+    general: {
+      headlines: [
+        '先處理最消耗你的卡點',
+        '先確認一個線索，讓方向更清楚',
+        '先用手上已有的條件做一小步'
+      ],
+      condition: '先把問題縮到眼前一件能調整的事。試過之後，用實際發生的變化重新看這個問題。'
+    }
+  };
+
+  function questionKind(question, themeKey) {
+    if (/面[試试]|[錄录]取|升[遷迁]|[應应][徵征]|求[職职]/.test(question)) return 'work';
+    if (/投[資资]|股票|股[價价]|基金(?![會会])|本金|[獲获]利|[報报]酬|理[財财]|比特[幣币]|加密[貨货][幣币]|期[貨货]|[資资][產产]|ETF/i.test(question)) return 'investment';
+    if (/感情|[戀恋][愛爱]|[復复]合|[曖暧]昧|前任|交往|分手|[結结]婚|伴[侶侣]|告白|喜[歡欢]我|追求[他她]/.test(question)) return 'love';
+    if (/工作|[職职][場场涯业業]|[轉转][職职]|升[職职]|同事|主管|[專专]案|[創创][業业]/.test(question)) return 'work';
+    if (/[選选]哪|哪[個个]比[較较]|[兩两][個个][選选][項项]|二[選选]一|[選选].*[還还]是|[還还]是[選选]|[選选][擇择]哪|取[捨舍]/.test(question)) return 'choice';
+    if (themeKey !== 'general' && Object.hasOwn(themes, themeKey)) return themeKey;
+    if (/[會会]不[會会]|能不能|是否|可否|能否|有[沒没]有|[會会]成功|能成功|[該该]不[該该]|要不要|[嗎吗嘛][？?!！]*$/.test(question)) return 'outcome';
+    return 'general';
+  }
+
   const strongest = (items, measure) => items.reduce((best, item) => {
     const value = measure(item);
     return value > 0 && (!best || value > measure(best)) ? item : best;
@@ -87,6 +158,12 @@ const multiPointReading = (() => {
     return `「${positions[point.key][0]}」的${point.card.name}（${point.reversed ? '逆位' : '正位'}）`;
   }
 
+  function plainMeaning(point) {
+    if (point.meaning === '以清楚的願景引導資源投入') return '先訂好方向，再想要投入多少資源';
+    if (point.meaning === '找出讓決策遲疑的限制') return '找出哪個條件讓你下不了決定';
+    return point.meaning.replace(/^以/, '用');
+  }
+
   function summary(points, themeKey) {
     const theme = themes[themeKey] ?? themes.general;
     const support = strongest(points, point => point.contribution);
@@ -94,14 +171,15 @@ const multiPointReading = (() => {
     const parts = [];
 
     if (support) {
-      parts.push(`${pointName(support)}給了你一個可以試的方向。它提醒你${support.meaning}。`);
+      const opening = support.key === 'obstacle' ? '指出一個可以化解卡點的做法' : '給了你一個可以試的方向';
+      parts.push(`${pointName(support)}${opening}。試著${plainMeaning(support).replace(/^先/, '')}。`);
     }
     if (caution) {
-      parts.push(`${pointName(caution)}值得停下來多看一眼。可以${caution.meaning}，再決定怎麼往前。`);
+      parts.push(`${pointName(caution)}值得停下來多看一眼。${plainMeaning(caution)}，會讓下一步更清楚。`);
     }
     if (!support && !caution) {
       const current = points.find(point => point.key === 'now');
-      parts.push(`這副牌的推進指數落在中間。先看看${pointName(current)}的提醒，你可以${current.meaning}。`);
+      parts.push(`這副牌的推進指數落在中間。${pointName(current)}提醒你${plainMeaning(current)}。`);
     }
     parts.push(theme.lens);
     return parts.join('');
@@ -128,16 +206,41 @@ const multiPointReading = (() => {
     return `比較值得連起來看的是「${first}」的${pair.left.card.name}和「${second}」的${pair.right.card.name}（配對貢獻 ${contribution}）。${effect}${impact}`;
   }
 
-  function conclusion(points, themeKey) {
-    const theme = themes[themeKey] ?? themes.general;
+  function themeStep(theme, point) {
+    const steps = theme === themes.general ? everydaySteps[point.card.suit] ?? theme.steps : theme.steps;
+    return steps[Math.sign(point.score) + 1];
+  }
+
+  function answer(points, themeKey, question, index) {
+    const kind = questionKind((question ?? '').trim(), themeKey);
+    const profile = answerProfiles[kind];
+    const headline = profile.headlines[index < 40 ? 0 : index >= 60 ? 2 : 1];
+    const support = strongest(points, point => point.contribution);
+    const largestConcern = strongest(points, point => -point.contribution);
+    const trend = points.find(point => point.key === 'trend');
+    const caution = kind === 'investment' && trend?.contribution < 0 ? trend : largestConcern;
     const focus = points.find(point => point.key === 'action') ?? points.find(point => point.key === 'now');
-    const steps = theme === themes.general ? everydaySteps[focus.card.suit] ?? theme.steps : theme.steps;
-    return `接下來可以從${pointName(focus)}想一個小步驟。${steps[Math.sign(focus.score) + 1]}`;
+    const parts = [profile.condition];
+    if (support) {
+      const lead = support.key === 'obstacle' ? '提供了一個處理卡點的方法' : '指出目前可以借力的地方';
+      parts.push(`${pointName(support)}${lead}。它提醒你${plainMeaning(support)}。`);
+    }
+    if (caution) {
+      parts.push(kind === 'investment'
+        ? `${pointName(caution)}也提醒你，仍有會影響判斷的條件需要先查清楚。`
+        : `${pointName(caution)}提醒你${plainMeaning(caution)}。`);
+    }
+    if (!support && !caution) {
+      parts.push(`這次的牌勢偏中性。${pointName(focus)}可以作為第一個觀察點。`);
+    }
+
+    const theme = themes[kind] ?? themes.general;
+    return {headline, body: parts.join(''), nextStep: profile.nextStep ?? themeStep(theme, focus)};
   }
 
   function perCard(point) {
-    return `${point.meaning}。${positions[point.key][1]}`;
+    return `${plainMeaning(point)}。${positions[point.key][1]}`;
   }
 
-  return {summary, pairing, conclusion, perCard};
+  return {answer, summary, pairing, perCard};
 })();
