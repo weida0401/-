@@ -300,7 +300,12 @@ const $ = id => root.querySelector('#' + id);
 const form = $('form');
 const cards = $('cards');
 const result = $('result');
+const draw = $('draw');
+const clear = $('clear');
 const manualDeck = $('manual-deck');
+const deckTitle = $('deck-title');
+const shuffleStage = $('shuffle-stage');
+const deckPicking = $('deck-picking');
 const deckCards = $('deck-cards');
 const deckViewport = $('deck-viewport');
 const pickedPreview = $('picked-preview');
@@ -403,6 +408,7 @@ function makeDeckButton(index) {
   const button = element('button', undefined, 'deck-card');
   button.type = 'button';
   const offset = index % cardsPerRow - (cardsPerRow - 1) / 2;
+  button.style.setProperty('--fan-offset', offset);
   button.style.setProperty('--fan-angle', `${offset * 2}deg`);
   button.style.setProperty('--fan-rise', `${12 - offset * offset / 3}px`);
   const sigil = element('span', '☾', 'deck-sigil');
@@ -480,27 +486,49 @@ function clearReading() {
   revealedPoints = undefined;
   displayCards(activeSpread());
   manualDeck.hidden = true;
+  shuffleStage.hidden = true;
+  deckPicking.hidden = true;
   deckCards.replaceChildren();
   pickedPreview.replaceChildren();
   flipMode.disabled = false;
   reveal.disabled = true;
+  reveal.hidden = true;
   result.hidden = true;
-  $('clear').hidden = true;
-  $('draw').textContent = '開始選牌';
-  $('status').textContent = '請開始選牌。';
+  clear.hidden = true;
+  draw.disabled = false;
+  draw.textContent = '洗牌並展開';
+  $('status').textContent = '可以開始洗牌。';
 }
-form.addEventListener('submit', event => {
+form.addEventListener('submit', async event => {
   event.preventDefault();
+  if (draw.disabled) return;
+
   clearReading();
-  selection = {spread: activeSpread(), options: shuffleDeck(), picks: [], mode: flipMode.value};
-  deckCards.replaceChildren(...selection.options.map((_, index) => makeDeckButton(index)));
+  const currentSelection = {spread: activeSpread(), options: shuffleDeck(), picks: [], mode: flipMode.value};
+  selection = currentSelection;
+  draw.disabled = true;
+  draw.textContent = '洗牌中…';
+  flipMode.disabled = true;
+  clear.textContent = '取消洗牌';
+  clear.hidden = false;
+  deckTitle.textContent = '洗牌';
+  $('draw-status').textContent = '正在洗牌，洗好後會展開整副牌。';
   manualDeck.hidden = false;
+  deckTitle.focus();
+
+  await window.playTarotShuffle?.(shuffleStage);
+  if (selection !== currentSelection) return;
+
+  deckCards.replaceChildren(...selection.options.map((_, index) => makeDeckButton(index)));
+  deckTitle.textContent = '從 78 張牌中選牌';
+  deckPicking.hidden = false;
   deckViewport.scrollLeft = 0;
-  $('clear').hidden = false;
-  $('draw').textContent = '重新洗牌';
+  draw.textContent = '重新洗牌';
+  draw.disabled = false;
+  clear.textContent = '清除結果';
   reveal.textContent = selection.mode === 'instant' ? '看完整解讀' : '翻牌看解讀';
+  reveal.hidden = false;
   updateSelection();
-  $('deck-title').focus();
 });
 reveal.addEventListener('click', () => {
   if (!selection || selection.picks.length !== selection.spread.slots.length) return;
@@ -513,7 +541,7 @@ reveal.addEventListener('click', () => {
   pickedPreview.replaceChildren();
   flipMode.disabled = false;
   reveal.disabled = true;
-  $('draw').textContent = '再抽一次';
+  draw.textContent = '再抽一次';
   displayCards(spread, revealedPoints);
   renderResult();
   $('result-title').focus({preventScroll:true});
@@ -538,9 +566,9 @@ deckCards.addEventListener('keydown', event => {
     }
   }
 });
-$('clear').addEventListener('click', () => {
+clear.addEventListener('click', () => {
   clearReading();
-  $('draw').focus();
+  draw.focus();
 });
 displayCards(activeSpread());
 

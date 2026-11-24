@@ -465,6 +465,19 @@
   transition: background-color .18s, border-color .18s, box-shadow .18s;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .manual-deck .deck-card {
+    animation: unfold-tarot-fan .46s cubic-bezier(.22, .7, .27, 1);
+  }
+}
+
+@keyframes unfold-tarot-fan {
+  from {
+    opacity: .25;
+    transform: translateX(calc(var(--fan-step) * var(--fan-offset) * -1)) scale(.9);
+  }
+}
+
 .manual-deck .deck-card::before,
 .manual-deck .deck-card::after {
   position: absolute;

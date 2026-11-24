@@ -5,8 +5,11 @@ const form = byId("reading-form");
 const question = byId("question");
 const themeSelect = byId("theme-select");
 const draw = byId("draw");
+const drawTitle = byId("draw-title");
 const result = byId("result");
 const board = byId("card-board");
+const shuffleStage = byId("shuffle-stage");
+const reshuffle = byId("reshuffle");
 const reveal = byId("reveal");
 const suggestions = byId("suggestions");
 const dialog = byId("history-dialog");
@@ -43,6 +46,7 @@ const themes = {
 };
 let theme = "general";
 let session;
+let shuffleRun;
 let tarotDeck;
 let records = [];
 let savedLocally = true;
@@ -88,6 +92,10 @@ function updateCount() {
 }
 
 function show(stage, focusId) {
+  if (stage !== "draw" && shuffleRun) {
+    shuffleRun = undefined;
+    shuffleStage.hidden = true;
+  }
   form.hidden = stage !== "form";
   draw.hidden = stage !== "draw";
   result.hidden = stage !== "result";
@@ -118,16 +126,39 @@ function selectTheme(key, focusId) {
   show("form", focusId);
 }
 
-function shuffle() {
+async function shuffle() {
+  if (shuffleRun || draw.hidden) return;
+  const run = session;
+  shuffleRun = run;
+  drawTitle.textContent = "洗牌";
+  if (document.activeElement === reshuffle) drawTitle.focus({preventScroll:true});
+  reshuffle.disabled = true;
+  reveal.disabled = true;
+  board.hidden = true;
+  board.replaceChildren();
+  byId("draw-status").textContent = "正在洗牌，請稍候。";
+
   const indices = tarotDeck.map((_, index) => index);
   for (let upper = indices.length - 1; upper > 0; upper--) {
     const index = Math.floor(Math.random() * (upper + 1));
     [indices[upper], indices[index]] = [indices[index], indices[upper]];
   }
-  session.options = indices.map((index) => ({index, reversed: Math.random() < 0.5}));
-  session.picks = [];
-  board.replaceChildren(...session.options.map((_, index) => createBack(index)));
+  run.options = indices.map((index) => ({index, reversed: Math.random() < 0.5}));
+  run.picks = [];
+
+  try {
+    await window.playTarotShuffle?.(shuffleStage);
+  } catch {
+    // The deck is ready even if the visual effect is interrupted.
+  }
+  if (shuffleRun !== run) return;
+  shuffleRun = undefined;
+  shuffleStage.hidden = true;
+  drawTitle.textContent = "選擇你的牌";
+  board.replaceChildren(...run.options.map((_, index) => createBack(index)));
   board.scrollTop = 0;
+  board.hidden = false;
+  reshuffle.disabled = false;
   updateBoard();
 }
 
@@ -140,6 +171,7 @@ function createBack(index) {
   order.setAttribute("aria-hidden", "true");
   button.append(motif, order);
   button.addEventListener("click", () => {
+    if (shuffleRun || draw.hidden || button.parentNode !== board) return;
     const orderIndex = session.picks.indexOf(index);
     if (orderIndex >= 0) session.picks.splice(orderIndex, 1);
     else if (session.picks.length < session.count) session.picks.push(index);
@@ -244,19 +276,20 @@ function displayHistory() {
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
-  if (!tarotDeck) return;
+  if (!tarotDeck || form.hidden) return;
   session = {question:question.value.trim(), theme, count:Number(new FormData(form).get("spread"))};
   byId("draw-question").textContent = session.question || themes[theme].name;
+  show("draw");
   shuffle();
-  show("draw", "draw-title");
+  drawTitle.focus();
 });
 question.addEventListener("input", updateCount);
 themeSelect.addEventListener("change", () => selectTheme(themeSelect.value));
 byId("edit-question").addEventListener("click", () => show("form", "question"));
 byId("start-over").addEventListener("click", () => show("form", "question"));
-byId("reshuffle").addEventListener("click", shuffle);
+reshuffle.addEventListener("click", shuffle);
 reveal.addEventListener("click", () => {
-  if (!session || session.picks.length !== session.count || draw.hidden) return;
+  if (!session || shuffleRun || session.picks.length !== session.count || draw.hidden) return;
   const reading = {
     theme:session.theme,
     question:session.question,

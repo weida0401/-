@@ -1,0 +1,107 @@
+.tarot-shuffle {
+  display: grid;
+  place-items: center;
+  width: min(100%, 34rem);
+  min-height: clamp(126px, 20vw, 165px);
+  margin: 14px auto 0;
+  overflow: hidden;
+  border: 1px solid #916e845e;
+  border-radius: 14px;
+  background:
+    radial-gradient(ellipse at 50% 38%, #4930478c, transparent 62%),
+    #211628;
+}
+
+.tarot-shuffle[hidden] {
+  display: none;
+}
+
+.tarot-shuffle-stack {
+  --shuffle-gap: clamp(38px, 10vw, 74px);
+  display: grid;
+  place-items: center;
+}
+
+.tarot-shuffle-card {
+  --packet: var(--shuffle-packet, 1);
+  --rank: var(--shuffle-rank, 0);
+  --index: var(--shuffle-index, 0);
+  --stack-x: calc(var(--index) * .45px);
+  --stack-y: calc(var(--index) * -.8px);
+  grid-area: 1 / 1;
+  z-index: var(--index);
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  width: clamp(42px, 8.5vw, 59px);
+  aspect-ratio: 5 / 7;
+  border: 1px solid #c29669;
+  border-radius: 6px;
+  background: radial-gradient(ellipse at 50% 42%, #6c4567, #2d1b41 78%);
+  box-shadow: 0 2px 6px #100a18b5;
+  color: #f3d19c;
+  font: clamp(1.1rem, 3vw, 1.55rem)/1 Georgia, serif;
+  text-shadow: 0 0 9px #f4c08a92;
+  transform: translate(var(--stack-x), var(--stack-y)) rotate(-5deg);
+  animation: tarot-shuffle-riffle 1.14s ease-in-out calc(var(--rank) * 23ms) both;
+}
+
+.tarot-shuffle-card::before,
+.tarot-shuffle-card::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  border: 1px solid #d8ac796b;
+}
+
+.tarot-shuffle-card::before {
+  inset: 3px;
+  border-radius: 4px;
+}
+
+.tarot-shuffle-card::after {
+  inset: 22% 13%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 45deg, #d8ac792c 0deg 1deg, transparent 1deg 45deg);
+}
+
+@keyframes tarot-shuffle-riffle {
+  0%, 8% {
+    transform: translate(var(--stack-x), var(--stack-y)) rotate(-5deg);
+  }
+
+  32%, 43% {
+    transform:
+      translate(
+        calc(var(--packet) * (var(--shuffle-gap) + var(--rank) * 1px)),
+        calc(var(--rank) * -1.8px - 4px)
+      )
+      rotate(calc(var(--packet) * (11deg + var(--rank) * 1.1deg)));
+  }
+
+  67% {
+    transform:
+      translate(
+        calc(var(--packet) * -13px + (var(--rank) - 1.5) * 5px),
+        calc((var(--rank) - 1.5) * -4px + var(--packet) * 5px)
+      )
+      rotate(calc(var(--packet) * -12deg + (var(--rank) - 1.5) * 2deg));
+  }
+
+  84% {
+    transform:
+      translate(calc(var(--packet) * 3px + var(--stack-x)), calc(var(--stack-y) - 3px))
+      rotate(calc(var(--packet) * 3deg));
+  }
+
+  100% {
+    transform: translate(var(--stack-x), var(--stack-y)) rotate(-5deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tarot-shuffle-card {
+    animation: none;
+  }
+}

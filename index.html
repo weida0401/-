@@ -7,9 +7,11 @@
 <meta name="theme-color" content="#120d19">
 <title>月隱塔羅｜線上塔羅占卜</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23231830'/%3E%3Cpath d='M26 9a12 12 0 1 0 5 19A11 11 0 0 1 26 9Z' fill='%23f1cf9d'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="./assets/style.css?v=manual-deck">
+<link rel="stylesheet" href="./assets/style.css?v=shuffle-stage">
+<link rel="stylesheet" href="./assets/tarot-shuffle.css?v=shuffle-stage">
 <script defer src="./assets/interpretation.js?v=manual-deck"></script>
-<script defer src="./assets/app.js?v=manual-deck"></script>
+<script defer src="./assets/tarot-shuffle.js?v=shuffle-stage"></script>
+<script defer src="./assets/app.js?v=shuffle-stage"></script>
 </head>
 <body>
 <header class="top" id="top">
@@ -38,7 +40,7 @@
           <div class="question-bottom"><span>也可以先試試下面的問題</span><span id="question-count">0 / 160</span></div>
           <div class="form-bottom">
             <fieldset class="spread"><legend>牌陣</legend><label><input type="radio" name="spread" value="1"><span>單張指引</span></label><label><input type="radio" name="spread" value="3" checked><span>三張牌陣</span></label></fieldset>
-            <button class="primary" type="submit" id="start-draw" disabled><span aria-hidden="true">✦</span> 開始抽牌</button>
+            <button class="primary" type="submit" id="start-draw" disabled><span aria-hidden="true">✦</span> 洗牌並展開</button>
           </div>
           <a class="multipoint-entry" href="./multipoint/">
             <span class="multipoint-entry-icon" aria-hidden="true">◇</span>
@@ -49,7 +51,8 @@
           <div class="step-head"><div><p class="kicker">抽牌</p><h2 tabindex="-1" id="draw-title">選擇你的牌</h2></div><button class="text-button" id="edit-question" type="button">返回提問</button></div>
           <p class="draw-question" id="draw-question"></p>
           <p class="draw-status" id="draw-status" role="status"></p>
-          <div id="card-board" class="card-board" role="group" aria-label="78 張背面的塔羅牌"></div>
+          <div class="tarot-shuffle" id="shuffle-stage" aria-hidden="true" hidden></div>
+          <div id="card-board" class="card-board" role="group" aria-label="78 張背面的塔羅牌" hidden></div>
           <div class="draw-actions"><button class="secondary" type="button" id="reshuffle">重新洗牌</button><button class="primary" id="reveal" type="button" disabled>翻牌看解讀</button></div>
         </div>
         <div id="result" hidden>

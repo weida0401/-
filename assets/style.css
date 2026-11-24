@@ -116,6 +116,8 @@ footer{border-top:1px solid var(--line);background:#160f1c}
   scrollbar-gutter:stable;
   padding:5px;
 }
+.card-board:not([hidden]){animation:deck-open .28s ease-out both}
+@keyframes deck-open{from{opacity:0;transform:translateY(6px)}}
 .tarot-back,.face{aspect-ratio:2/3;display:grid;place-items:center;position:relative;isolation:isolate;border:1px solid #b89b70;border-radius:9px;overflow:hidden;background:radial-gradient(ellipse at 50% 50%,#5a3b64,#2a1b3b 67%);color:#efcc93;text-shadow:0 0 14px #ffd59288;font:clamp(1.35rem,4.2vw,2.6rem)/1 Georgia}
 .tarot-back::before,.face::before{content:"";position:absolute;inset:5px;border:1px solid #d3a67280;border-radius:5px;background:repeating-conic-gradient(from 45deg,#d8ac7930 0deg 1deg,transparent 1deg 45deg);z-index:-1}
 .tarot-back::after,.face::after{content:"";position:absolute;inset:24% 12%;border:1px solid #d8ac7988;border-radius:50%;z-index:-1}
