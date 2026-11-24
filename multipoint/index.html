@@ -4,20 +4,27 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="月隱塔羅的三點、五點與七點牌陣，從牌位權重、相鄰配對和牌義看見推力與阻力。">
-  <meta name="theme-color" content="#120d19">
+  <meta name="theme-color" content="#1c141b">
   <title>多點塔羅牌陣｜月隱塔羅</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23231830'/%3E%3Cpath d='M26 9a12 12 0 1 0 5 19A11 11 0 0 1 26 9Z' fill='%23f1cf9d'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../assets/style.css?v=manual-deck">
   <link rel="stylesheet" href="../assets/tarot-shuffle.css?v=shuffle-stage">
   <link rel="stylesheet" href="../assets/multipoint.css?v=shuffle-stage">
+  <link rel="stylesheet" href="../assets/moonveil-theme.css?v=warm-moon">
   <script defer src="../assets/tarot-shuffle.js?v=shuffle-stage"></script>
   <script defer src="../assets/multipoint.js?v=shuffle-stage"></script>
+  <script defer src="../assets/site-music.js?v=warm-moon"></script>
 </head>
 <body class="multipoint-page">
   <header class="top">
     <div class="container nav">
       <a href="../" class="brand"><span class="brand-icon" aria-hidden="true">☾</span><span>月隱塔羅<small>MOONVEIL TAROT</small></span></a>
-      <a href="../" class="secondary home-link">返回首頁</a>
+      <nav class="site-links" aria-label="主選單">
+        <a href="../#reading">開始占卜</a><a href="./" aria-current="page">多點牌陣</a><a href="../zodiac/">十二星座</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="music-toggle" id="music-toggle" type="button" aria-label="背景音樂" aria-pressed="false"><span class="music-icon" aria-hidden="true">♪</span><span>音樂</span></button>
+      </div>
     </div>
   </header>
   <main id="tarot-reading">
@@ -136,5 +143,6 @@
       <p>塔羅解讀供娛樂與自我反思。</p>
     </div>
   </footer>
+  <audio id="site-music" preload="none" loop src="../assets/moonveil-night.mp3" hidden></audio>
 </body>
 </html>

@@ -4,29 +4,40 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="在月隱塔羅寫下你的疑問，自由選牌，探索感情、工作與生活的下一步。">
-<meta name="theme-color" content="#120d19">
+<meta name="theme-color" content="#1c141b">
 <title>月隱塔羅｜線上塔羅占卜</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23231830'/%3E%3Cpath d='M26 9a12 12 0 1 0 5 19A11 11 0 0 1 26 9Z' fill='%23f1cf9d'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="./assets/style.css?v=shuffle-stage">
 <link rel="stylesheet" href="./assets/tarot-shuffle.css?v=shuffle-stage">
+<link rel="stylesheet" href="./assets/moonveil-theme.css?v=warm-moon">
 <script defer src="./assets/interpretation.js?v=manual-deck"></script>
 <script defer src="./assets/tarot-shuffle.js?v=shuffle-stage"></script>
 <script defer src="./assets/app.js?v=shuffle-stage"></script>
+<script defer src="./assets/site-music.js?v=warm-moon"></script>
 </head>
-<body>
+<body class="home-page">
 <header class="top" id="top">
   <div class="container nav">
     <a href="#top" class="brand"><span class="brand-icon" aria-hidden="true">☾</span><span>月隱塔羅<small>MOONVEIL TAROT</small></span></a>
-    <nav aria-label="主選單"><a href="#reading">開始占卜</a><a href="#themes">主題探索</a><a href="#faq">占卜指南</a></nav>
-    <button class="history-button" type="button" id="show-history" disabled><span aria-hidden="true">◷</span> 抽牌紀錄</button>
+    <nav class="site-links" aria-label="主選單">
+      <a href="#reading" aria-current="page">開始占卜</a><a href="./multipoint/">多點牌陣</a><a href="./zodiac/">十二星座</a><a class="wide-link" href="#themes">主題探索</a><a class="wide-link" href="#faq">占卜指南</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="music-toggle" id="music-toggle" type="button" aria-label="背景音樂" aria-pressed="false"><span class="music-icon" aria-hidden="true">♪</span><span>音樂</span></button>
+      <button class="history-button" type="button" id="show-history" disabled><span aria-hidden="true">◷</span> 抽牌紀錄</button>
+    </div>
   </div>
 </header>
 <main>
   <section class="hero" id="reading" aria-labelledby="hero-title">
     <div class="hero-inner container">
-      <div class="tag"><span></span> 線上塔羅占卜 <span></span></div>
-      <h1 id="hero-title">把心事，<br class="mobile-break">交給月光</h1>
-      <p class="intro">寫下一個你想釐清的問題，讓塔羅陪你看看眼前的選擇。</p>
+      <div class="hero-intro">
+        <p class="tag">線上塔羅占卜</p>
+        <h1 id="hero-title">把心事，<br>交給月光</h1>
+        <p class="intro">寫下一個你想釐清的問題，讓塔羅陪你看看眼前的選擇。</p>
+        <a class="hero-zodiac-link" href="./zodiac/"><span aria-hidden="true">✧</span> 探索十二星座 <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="hero-reading">
       <div class="reading-shell">
         <div id="deck-notice" class="deck-notice">
           <p id="deck-status" role="status">正在載入塔羅牌…</p>
@@ -72,6 +83,7 @@
         <noscript><p>請啟用瀏覽器的 JavaScript 以使用抽牌功能。</p></noscript>
       </div>
       <div class="suggestions" id="suggestions" aria-label="提問範例"></div>
+      </div>
     </div>
   </section>
   <section class="themes container" id="themes" aria-labelledby="themes-title">
@@ -97,5 +109,6 @@
   <div id="history-list"></div>
   <div class="history-actions"><button id="clear-history" type="button" class="text-button">清除所有紀錄</button><div id="confirm-clear" hidden><p>確定清除這個瀏覽器的所有抽牌紀錄？</p><button id="cancel-clear" type="button" class="secondary">取消</button> <button id="confirm-delete" type="button" class="secondary">確定清除</button></div></div>
 </dialog>
+<audio id="site-music" preload="none" loop src="./assets/moonveil-night.mp3" hidden></audio>
 </body>
 </html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="用生日查詢太陽星座，認識十二星座的日期、元素、相處風格與日常練習。">
+  <meta name="theme-color" content="#1c141b">
+  <title>十二星座｜月隱塔羅</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23231830'/%3E%3Cpath d='M26 9a12 12 0 1 0 5 19A11 11 0 0 1 26 9Z' fill='%23f1cf9d'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../assets/moonveil-theme.css?v=warm-moon">
+  <link rel="stylesheet" href="../assets/zodiac.css?v=warm-moon">
+  <script defer src="../assets/site-music.js?v=warm-moon"></script>
+  <script defer src="../assets/zodiac.js?v=warm-moon"></script>
+</head>
+<body class="zodiac-page">
+  <header class="top">
+    <div class="container nav">
+      <a href="../" class="brand"><span class="brand-icon" aria-hidden="true">☾</span><span>月隱塔羅<small>MOONVEIL TAROT</small></span></a>
+      <nav class="site-links" aria-label="主選單">
+        <a href="../#reading">開始占卜</a>
+        <a href="../multipoint/">多點牌陣</a>
+        <a href="./" aria-current="page">十二星座</a>
+      </nav>
+      <div class="nav-actions">
+        <button id="music-toggle" class="music-toggle" type="button" aria-label="背景音樂" aria-pressed="false"><span class="music-icon" aria-hidden="true">♪</span><span>音樂</span></button>
+      </div>
+    </div>
+  </header>
+  <audio id="site-music" preload="none" loop src="../assets/moonveil-night.mp3" hidden></audio>
+
+  <main>
+    <section class="zodiac-hero" aria-labelledby="zodiac-title">
+      <div class="container zodiac-hero-content">
+        <div class="zodiac-heading">
+          <h1 id="zodiac-title">十二星座</h1>
+          <p>從生日找到你的太陽星座。也可以選一個星座，看看它的特質、相處方式和日常練習。</p>
+        </div>
+        <form id="zodiac-finder" class="zodiac-finder" aria-labelledby="finder-title" novalidate>
+          <h2 id="finder-title">用生日找星座</h2>
+          <div class="zodiac-date-inputs">
+            <label for="birth-month">出生月
+              <select id="birth-month" name="month" required>
+                <option value="">選擇月份</option>
+              </select>
+            </label>
+            <label for="birth-day">出生日
+              <select id="birth-day" name="day" required>
+                <option value="">選擇日期</option>
+              </select>
+            </label>
+          </div>
+          <div class="zodiac-finder-footer">
+            <button class="primary" type="submit">查詢星座</button>
+            <p id="birthday-status" class="birthday-status" role="status" aria-live="polite"></p>
+          </div>
+          <p class="zodiac-date-note">日期採常見區間。</p>
+        </form>
+      </div>
+    </section>
+
+    <section class="container zodiac-explorer" aria-labelledby="explorer-title">
+      <div class="zodiac-selector">
+        <h2 id="explorer-title">查看星座</h2>
+        <ul id="zodiac-signs" class="zodiac-signs" aria-label="十二星座"></ul>
+        <noscript><p>請啟用瀏覽器的 JavaScript 以使用星座查詢。</p></noscript>
+      </div>
+      <article class="zodiac-profile" id="zodiac-profile" aria-labelledby="sign-name" tabindex="-1" hidden>
+        <header class="zodiac-profile-heading">
+          <span class="zodiac-profile-glyph" id="sign-glyph" aria-hidden="true"></span>
+          <div>
+            <h2 id="sign-name"></h2>
+            <p class="zodiac-profile-meta"><span id="sign-dates"></span><span id="sign-element"></span></p>
+          </div>
+        </header>
+        <p id="sign-intro" class="zodiac-profile-intro"></p>
+        <dl class="zodiac-profile-details">
+          <div><dt>特質</dt><dd id="sign-character"></dd></div>
+          <div><dt>相處</dt><dd id="sign-relationship"></dd></div>
+          <div><dt>練習</dt><dd id="sign-practice"></dd></div>
+        </dl>
+      </article>
+    </section>
+  </main>
+
+  <footer><div class="container footer"><a href="../" class="brand"><span class="brand-icon" aria-hidden="true">☾</span>月隱塔羅</a><p>星座解讀供娛樂與自我觀察。</p></div></footer>
+</body>
+</html>
