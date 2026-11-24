@@ -124,9 +124,10 @@ function shuffle() {
     const index = Math.floor(Math.random() * (upper + 1));
     [indices[upper], indices[index]] = [indices[index], indices[upper]];
   }
-  session.options = indices.slice(0, 6).map((index) => ({index, reversed: Math.random() < 0.5}));
+  session.options = indices.map((index) => ({index, reversed: Math.random() < 0.5}));
   session.picks = [];
   board.replaceChildren(...session.options.map((_, index) => createBack(index)));
+  board.scrollTop = 0;
   updateBoard();
 }
 
@@ -158,7 +159,9 @@ function updateBoard() {
     button.disabled = complete && !order;
   });
   reveal.disabled = !complete;
-  byId("draw-status").textContent = complete ? "選牌完成。準備好就翻牌，也可以點已選的牌來取消。" : "請選 " + count + " 張牌，目前已選 " + picks.length + " 張。";
+  byId("draw-status").textContent = complete
+    ? "選牌完成。準備好就翻牌，也可以點已選的牌來取消。"
+    : "從 " + session.options.length + " 張牌中選 " + count + " 張，目前已選 " + picks.length + " 張。";
 }
 
 function makeResultCard(entry, position) {

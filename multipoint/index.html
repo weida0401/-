@@ -9,6 +9,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23231830'/%3E%3Cpath d='M26 9a12 12 0 1 0 5 19A11 11 0 0 1 26 9Z' fill='%23f1cf9d'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../assets/style.css">
   <link rel="stylesheet" href="../assets/multipoint.css">
+  <script defer src="../assets/multipoint-reading.js"></script>
   <script defer src="../assets/multipoint.js"></script>
 </head>
 <body class="multipoint-page">
@@ -27,12 +28,22 @@
     </section>
     <div class="container multipoint-content">
       <section class="multipoint-panel" aria-label="抽牌設定和牌位">
-        <form id="form">
+        <form class="multipoint-form" id="form">
+          <label class="question-field" for="question">
+            占問 <span class="optional">（選填）</span>
+            <input id="question" name="question" type="text" maxlength="100" autocomplete="off" placeholder="例如：面對眼前的變動，我該從哪裡開始？">
+          </label>
+          <fieldset class="reading-themes">
+            <legend>占問主題</legend>
+            <div class="reading-theme-options">
+              <label><input type="radio" name="theme" value="general" checked><span>自由占卜</span></label>
+              <label><input type="radio" name="theme" value="love"><span>感情塔羅</span></label>
+              <label><input type="radio" name="theme" value="work"><span>工作塔羅</span></label>
+              <label><input type="radio" name="theme" value="choice"><span>選擇指引</span></label>
+              <label><input type="radio" name="theme" value="daily"><span>今日指引</span></label>
+            </div>
+          </fieldset>
           <div class="multipoint-controls">
-            <label class="question-field" for="question">
-              占問 <span class="optional">（選填）</span>
-              <input id="question" name="question" type="text" maxlength="100" autocomplete="off" placeholder="例如：面對眼前的變動，我該從哪裡開始？">
-            </label>
             <label class="spread-field" for="spread-select">牌陣
               <select id="spread-select" name="spread">
                 <option value="3">三點</option>
@@ -41,18 +52,27 @@
               </select>
             </label>
             <div class="multipoint-actions">
-              <button class="primary" id="draw" type="submit">抽牌並計算</button>
+              <button class="primary" id="draw" type="submit">開始選牌</button>
               <button class="secondary" id="clear" type="button" hidden>清除結果</button>
             </div>
           </div>
         </form>
         <section class="spread-board" aria-labelledby="board-title">
-          <h2 id="board-title">五點牌陣</h2>
+          <h2 id="board-title" tabindex="-1">五點牌陣</h2>
           <p class="text-muted" id="board-desc"></p>
           <ol class="positions" id="cards"></ol>
           <p class="text-muted text-small" id="hint"></p>
         </section>
         <noscript><p>請啟用瀏覽器的 JavaScript 以使用抽牌功能。</p></noscript>
+      </section>
+
+      <section class="multipoint-panel manual-deck" id="manual-deck" aria-labelledby="deck-title" hidden>
+        <h2 id="deck-title" tabindex="-1">從 78 張牌中選牌</h2>
+        <div class="deck-toolbar">
+          <p id="draw-status" role="status"></p>
+          <button class="primary" id="reveal" type="button" disabled>翻牌看解讀</button>
+        </div>
+        <div class="deck-cards" id="deck-cards" role="group" aria-label="牌背"></div>
       </section>
 
       <p class="sr-only" id="status" role="status" aria-live="polite"></p>

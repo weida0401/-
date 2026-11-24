@@ -31,7 +31,7 @@ h1{margin:11px 0 7px;font:700 clamp(2.8rem,6.3vw,5.1rem)/1.13 var(--serif);lette
 .mobile-break{display:none}
 .intro{color:#f1dfe9;font-size:1.06rem;text-shadow:0 2px 8px #150e1b}
 .reading-shell{width:min(680px,100%);margin:27px auto 0;padding:22px;text-align:left;background:#1d1526f2;border:1px solid #d3a6cb5e;border-radius:20px;box-shadow:0 18px 56px #09060c80;backdrop-filter:blur(12px)}
-.reading-shell:has(#result:not([hidden])){width:min(900px,100%)}
+.reading-shell:has(#draw:not([hidden]),#result:not([hidden])){width:min(900px,100%)}
 .deck-notice{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--line);color:var(--muted)}
 .question-header,.question-bottom,.form-bottom,.step-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .question-header label{font-weight:700;letter-spacing:.03em}
@@ -107,14 +107,22 @@ footer{border-top:1px solid var(--line);background:#160f1c}
 .text-button{border:0;background:transparent;color:#e0c6dc;text-decoration:underline;text-underline-offset:.2em;padding:6px 0}
 .draw-question{margin-top:10px;color:#e6d2e4;overflow-wrap:anywhere;white-space:pre-wrap}
 .draw-status{color:var(--muted);font-size:.9rem;margin:9px 0 14px}
-.card-board{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px}
+.card-board {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(50px,1fr));
+  gap:8px;
+  max-height:min(46vh,26rem);
+  overflow-y:auto;
+  scrollbar-gutter:stable;
+  padding:5px;
+}
 .tarot-back,.face{aspect-ratio:2/3;display:grid;place-items:center;position:relative;isolation:isolate;border:1px solid #b89b70;border-radius:9px;overflow:hidden;background:radial-gradient(ellipse at 50% 50%,#5a3b64,#2a1b3b 67%);color:#efcc93;text-shadow:0 0 14px #ffd59288;font:clamp(1.35rem,4.2vw,2.6rem)/1 Georgia}
 .tarot-back::before,.face::before{content:"";position:absolute;inset:5px;border:1px solid #d3a67280;border-radius:5px;background:repeating-conic-gradient(from 45deg,#d8ac7930 0deg 1deg,transparent 1deg 45deg);z-index:-1}
 .tarot-back::after,.face::after{content:"";position:absolute;inset:24% 12%;border:1px solid #d8ac7988;border-radius:50%;z-index:-1}
 .tarot-back:hover:not(:disabled),.tarot-back[aria-pressed="true"]{border-color:#ffdf9a;background:radial-gradient(ellipse at 50% 50%,#73516c,#3d2354 70%);box-shadow:0 0 12px #eec18855}
 .tarot-back[aria-pressed="true"]{outline:2px solid var(--gold);outline-offset:2px}
 .pick-order{position:absolute;bottom:9px;font:700 .8rem/1 var(--sans);text-shadow:none}
-.draw-actions{display:flex;justify-content:space-between;margin-top:20px;gap:10px}
+.draw-actions{display:flex;flex-wrap:wrap;justify-content:space-between;margin-top:14px;gap:10px}
 .result-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(194px,100%),1fr));gap:12px;margin-top:17px}
 .result-card{padding:15px;border:1px solid #614964;border-radius:11px;background:#261b30}
 .result-card h3{color:#fff0d3;font-size:1.16rem;margin:4px 0 7px}
@@ -155,7 +163,7 @@ dialog::backdrop{background:#0d0912bc;backdrop-filter:blur(4px)}
 .history-actions{margin-top:14px}
 #confirm-clear p{margin-bottom:7px}
 @media(max-width:740px){.container{width:min(100% - 36px,1120px)}.nav nav{gap:15px}.topics{grid-template-columns:repeat(2,1fr)}.hero-inner{padding-top:102px}.section-heading{align-items:start;flex-direction:column;gap:7px}}
-@media(max-width:540px){.nav{height:62px;gap:9px}.nav nav{display:none}.brand-icon{width:33px;height:33px}.hero-inner{padding-top:74px;padding-bottom:34px}.hero::before{background-position:center,center top;background-size:auto,auto 115%}.mobile-break{display:block}h1{font-size:clamp(2.4rem,11vw,3.4rem);letter-spacing:.06em}.intro{font-size:.95rem}.reading-shell{padding:15px;margin-top:18px}.form-bottom{flex-wrap:wrap;gap:11px}.form-bottom .primary{width:100%}.question-bottom{font-size:.75rem}.question-header{gap:6px}.card-board{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.tarot-back{max-height:102px;aspect-ratio:auto;height:clamp(62px,20vw,102px)}.topic{padding:13px;min-height:132px}.footer{align-items:start;flex-direction:column}}
+@media(max-width:540px){.nav{height:62px;gap:9px}.nav nav{display:none}.brand-icon{width:33px;height:33px}.hero-inner{padding-top:74px;padding-bottom:34px}.hero::before{background-position:center,center top;background-size:auto,auto 115%}.mobile-break{display:block}h1{font-size:clamp(2.4rem,11vw,3.4rem);letter-spacing:.06em}.intro{font-size:.95rem}.reading-shell{padding:15px;margin-top:18px}.form-bottom{flex-wrap:wrap;gap:11px}.form-bottom .primary{width:100%}.question-bottom{font-size:.75rem}.question-header{gap:6px}.topic{padding:13px;min-height:132px}.footer{align-items:start;flex-direction:column}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 
 #theme-select{appearance:none;border:1px solid #b58d6c6b;border-radius:8px;background:#38273b url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='m2 2 4 4 4-4' fill='none' stroke='%23ebc893' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 8px center;color:var(--gold);font:700 .875rem var(--sans);padding:6px 25px 6px 8px;cursor:pointer}

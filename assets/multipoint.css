@@ -52,6 +52,14 @@
   box-shadow: 0 18px 52px #09060c65;
 }
 
+.multipoint-form {
+  display: grid;
+  grid-template-areas: "question themes" "controls themes";
+  grid-template-columns: minmax(0, 1.45fr) minmax(18rem, 1fr);
+  gap: 12px clamp(16px, 3vw, 30px);
+  align-items: start;
+}
+
 .multipoint-controls,
 .multipoint-actions {
   display: flex;
@@ -60,6 +68,7 @@
   gap: 12px;
 }
 
+.multipoint-form > .question-field,
 .multipoint-controls > label {
   display: block;
   min-width: 0;
@@ -67,25 +76,29 @@
 }
 
 .question-field {
-  flex: 1 1 19rem;
+  grid-area: question;
+}
+
+.multipoint-controls {
+  grid-area: controls;
 }
 
 .spread-field {
   flex: 0 1 6.5rem;
 }
 
-.multipoint-controls .optional,
+.multipoint-form .optional,
 .multipoint-page .text-muted {
   color: var(--muted);
 }
 
-.multipoint-controls .optional {
+.multipoint-form .optional {
   font-size: .875rem;
   font-weight: 400;
 }
 
-.multipoint-controls input,
-.multipoint-controls select {
+.multipoint-form input[type="text"],
+.multipoint-form select {
   display: block;
   width: 100%;
   min-height: 44px;
@@ -99,11 +112,11 @@
   font-weight: 400;
 }
 
-.multipoint-controls input::placeholder {
+.multipoint-form input[type="text"]::placeholder {
   color: #ac9aaf;
 }
 
-.multipoint-controls select {
+.multipoint-form select {
   appearance: none;
   padding-right: 31px;
   background: #17101e url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='m2 2 4 4 4-4' fill='none' stroke='%23ebc893' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 11px center;
@@ -115,6 +128,69 @@
 
 .multipoint-actions .secondary {
   min-height: 44px;
+}
+
+.reading-themes {
+  grid-area: themes;
+  min-width: 0;
+  margin: 0;
+  padding: 10px 12px 12px;
+  border: 1px solid #bd95645e;
+  border-radius: 12px;
+  background: #2b1d30;
+}
+
+.reading-themes legend {
+  padding-inline: 6px;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.reading-theme-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.reading-theme-options label {
+  position: relative;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.reading-theme-options input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.reading-theme-options span {
+  display: grid;
+  place-items: center;
+  min-height: 44px;
+  padding: 6px;
+  border: 1px solid #79607c;
+  border-radius: 8px;
+  color: #f1e1ef;
+  font-size: .875rem;
+  text-align: center;
+}
+
+.reading-theme-options label:hover span {
+  border-color: var(--gold);
+}
+
+.reading-theme-options input:checked + span {
+  border-color: #ad8559;
+  background: #53384a;
+  color: #ffe1af;
+  font-weight: 700;
+}
+
+.reading-theme-options input:focus-visible + span {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
 }
 
 .spread-board {
@@ -257,6 +333,105 @@
   white-space: nowrap;
 }
 
+.manual-deck .deck-toolbar {
+  position: sticky;
+  top: 8px;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-block: 12px 16px;
+  padding: 9px 11px;
+  border: 1px solid #b08a766b;
+  border-radius: 11px;
+  background: #2c2034;
+  box-shadow: 0 6px 16px #0a070e54;
+}
+
+.manual-deck #draw-status {
+  color: #f0dce9;
+}
+
+.manual-deck #reveal {
+  padding-inline: clamp(10px, 2vw, 20px);
+}
+
+.manual-deck .deck-cards {
+  display: grid;
+  grid-template-columns: repeat(13, minmax(0, 1fr));
+  gap: clamp(5px, 1vw, 9px);
+}
+
+.manual-deck .deck-card {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 5 / 7;
+  min-height: 48px;
+  scroll-margin-block-start: 78px;
+  padding: 4px;
+  border: 1px solid #aa815e;
+  border-radius: 8px;
+  background: radial-gradient(ellipse at 50% 40%, #56355c, #261931 76%);
+  color: var(--gold);
+  transition: background-color .18s, border-color .18s, box-shadow .18s;
+}
+
+.manual-deck .deck-card::before,
+.manual-deck .deck-card::after {
+  position: absolute;
+  z-index: -1;
+  border: 1px solid #d5a5756e;
+  content: "";
+}
+
+.manual-deck .deck-card::before {
+  inset: 3px;
+  border-radius: 5px;
+}
+
+.manual-deck .deck-card::after {
+  inset: 23% 15%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 45deg, #d8ac792d 0deg 1deg, transparent 1deg 45deg);
+}
+
+.manual-deck .deck-card:hover:not(:disabled) {
+  border-color: #ffdf9a;
+  box-shadow: 0 0 10px #e7bd8070;
+}
+
+.manual-deck .deck-card[aria-pressed="true"] {
+  border-color: #ffdf9a;
+  background: radial-gradient(ellipse at 50% 40%, #845460, #4a2a50 78%);
+  box-shadow: inset 0 0 0 1px #ffdf9a;
+}
+
+.manual-deck .deck-sigil {
+  font: clamp(1.2rem, 3vw, 1.9rem)/1 Georgia, serif;
+}
+
+.manual-deck .deck-order:empty {
+  display: none;
+}
+
+.manual-deck .deck-order {
+  position: absolute;
+  inset-inline-end: 4px;
+  inset-block-start: 4px;
+  display: grid;
+  place-items: center;
+  min-width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: #261626;
+  font: 800 .75rem/1 var(--sans);
+  font-variant-numeric: tabular-nums;
+}
+
 .multipoint-result #reading-question {
   margin-top: 6px;
   overflow-wrap: anywhere;
@@ -378,6 +553,17 @@
   .multipoint-page .positions[data-count="7"] {
     --columns: 4;
   }
+
+  .manual-deck .deck-cards {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 750px) {
+  .multipoint-form {
+    grid-template-areas: "question" "themes" "controls";
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 @media (max-width: 620px) {
@@ -410,13 +596,19 @@
   .multipoint-result .lines {
     grid-template-columns: minmax(0, 1fr);
   }
+
+  .manual-deck .deck-cards {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 500px) {
+  .manual-deck .deck-cards {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 420px) {
-  .multipoint-controls .question-field {
-    flex-basis: 100%;
-  }
-
   .multipoint-actions {
     align-items: stretch;
   }
@@ -438,5 +630,9 @@
 
   .multipoint-page .positions[data-count="3"] {
     --columns: 3;
+  }
+
+  .manual-deck .deck-cards {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }

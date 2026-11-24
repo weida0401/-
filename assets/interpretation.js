@@ -2,29 +2,29 @@
 
 const readingContexts = {
   general: {
-    single: "把牌意放回眼前最困擾你的情境，想想這個主題曾在什麼時候出現。尤其值得留意的是，當時的做法現在還有沒有用。",
-    connect: ([past, present, direction]) => `過去的位置抽到${past}，現在的位置抽到${present}。對照這兩張牌，可以回頭看先前的經驗怎麼影響當下的反應。最後，${direction}提供新的觀察方向。想想舊做法有哪一部分仍有幫助，又有哪一部分值得調整。`,
-    close: "把眼前的問題縮小成一件你能觀察或改變的事。"
+    single: "最近有沒有一件小事，讓你想到這張牌？從那一刻回想你怎麼做、又希望有什麼不同，答案可能會比光想整個問題更清楚。",
+    connect: ([past, present, direction]) => `${past}像是在問，你以前怎麼走過類似的時刻？看到現在的${present}，可以回頭想想，當時有效的方法現在還適合嗎？${direction}提供了一個新的角度，找一個你願意調整的小地方就好。`,
+    close: "今天先挑一件你有餘力做的事。"
   },
   love: {
-    single: "先分清自己真正需要的是什麼，再回想對方實際說過或做過什麼。兩者之間的落差，可以成為你下次開口的起點。",
-    connect: ([feelings, relationship, direction]) => `你的感受由${feelings}切入，關係現況則由${relationship}補上另一個角度。把前兩張對照，看看自己的期待和雙方實際的互動在哪裡相符、在哪裡有落差。相處方向則對應${direction}，適合拿來想一個你願意開啟的對話。`,
-    close: "先把感受整理成一項你能清楚表達的需要。"
+    single: "可以想起最近的一次互動。當時哪一句話或哪個舉動讓你安心，又有什麼一直想說、還沒說出口？先從你自己的感受整理起。",
+    connect: ([feelings, relationship, direction]) => `${feelings}先把視線帶回你自己。最近的相處裡，有沒有一刻特別讓你想起${relationship}？想想你當時想要什麼，也看看對方實際做到了哪些。${direction}可以陪你想一句願意說出口的話。`,
+    close: "如果你想把這件事說清楚，先留一點空間給自己的感受。"
   },
   work: {
-    single: "把牌意對照一個具體的工作情境，例如最近的分工、正在評估的機會，或讓你卡住的決定。這會讓你更容易知道接下來要確認什麼。",
-    connect: ([situation, concern, next]) => `目前處境對應${situation}，值得留意的事則對應${concern}。對照前兩張牌，分清工作中已有的條件和仍待確認的資訊。再根據${next}，驗證一個最可能影響決定的假設，看看是否值得繼續投入。`,
-    close: "做出職涯決定前，先替自己留一個可以調整的空間。"
+    single: "先想一個具體的場景，例如最近的分工、剛收到的工作機會，或一直拖著沒決定的事。那個場景裡，有什麼是你真的知道的？還有哪件事需要問清楚？",
+    connect: ([situation, concern, next]) => `看見${situation}，可以先想想最近哪個工作場景最像這個情況。${concern}提醒你把還不確定的事問清楚。有了那個答案，再參考${next}，找一個試了也能調整的做法。`,
+    close: "做決定前，替自己留一點可以調整的空間。"
   },
   choice: {
-    single: "先把這張牌的主題當成一個比較標準。用同樣的標準看每個選項，留意哪一項差異會實際影響你的日常。",
-    connect: ([optionA, optionB, tradeoff]) => `選項 A 可從${optionA}來看，選項 B 則可從${optionB}來看。兩張牌各自指出一種值得查證的可能。把取捨牌的${tradeoff}當成共同標準，問自己選 A 會放棄什麼、選 B 又需要承擔什麼。`,
-    close: "選一項你重視的條件，用它來比較兩個選項會帶來的改變。"
+    single: "想像你選了其中一條路，隔天醒來會先遇到什麼。再換另一個選項，也想一次。把最大的差異寫下來，往往就能看出自己在意的是什麼。",
+    connect: ([optionA, optionB, tradeoff]) => `把選項 A 想得具體一點，看看${optionA}指的是哪一種日常。再用${optionB}想像選項 B 會怎麼過。最後用取捨牌${tradeoff}當共同標準，想想哪一邊的代價你願意長期承擔。`,
+    close: "如果還拿不定主意，讓兩個選項先回答同一個問題。"
   },
   daily: {
-    single: "把主題縮小到今天的一次對話、一件待辦或一段休息時間。事先選好想留意什麼，到了晚上就有一件具體的事可以回顧。",
-    connect: ([theme, concern, action]) => `今天可以用${theme}選定焦點，用${concern}提醒自己在哪些時刻放慢看清楚，再把${action}落到一件今天能做的小事。把三張一起看，重點在於讓提醒跟著行程走進一個具體的時刻。`,
-    close: "在今天的行程找一個適合的時段，先留給一件你做得到的事。"
+    single: "今天只要挑一個時刻留意它就好。可能是一段對話、一次休息，或你本來想匆匆做完的一件事。到晚上再回想那個當下有什麼不同。",
+    connect: ([theme, concern, action]) => `今天可以把${theme}當成帶在身上的一句提醒。遇到${concern}說的那種時刻，先慢一點看看發生了什麼。再挑個空檔，讓${action}變成一件做得完的小事。`,
+    close: "在今天的行程裡挑一個做得到的時段。"
   }
 };
 
@@ -92,7 +92,7 @@ function buildReadingAnalysis(themeKey, entries, positions, deck) {
 
   const pivot = cards[cards.length - 1];
   const paragraphs = cards.length === 1
-    ? [`${pivot.label}把重點放在${pivot.topic}。${pivot.reversed ? "先核對這件事有哪一部分需要調整，再想你有多少餘裕往前。" : "先找出目前已有的條件，看看哪一部分可以從小處開始。"}${context.single}`]
+    ? [`這次抽到${pivot.label}，它把話題帶到${pivot.topic}。${context.single}`]
     : [
         context.connect(cards.map(({label, topic}) => label + "的" + topic)),
         describeSpreadPattern(cards)
@@ -101,7 +101,7 @@ function buildReadingAnalysis(themeKey, entries, positions, deck) {
   const {card, reversed, label, topic} = pivot;
   const steps = suitInsights[card.suit]?.steps ?? majorNextSteps[card.rank];
   const nextStep = steps?.[Number(reversed)] ?? "先記下一件可以查證或試做的小事，做完再看你的想法有沒有改變。";
-  const conclusion = `${context.close}沿著${label}提醒的${topic}，${nextStep}`;
+  const conclusion = `${context.close}想起${label}帶出的${topic}，${nextStep}`;
   return {paragraphs, conclusion};
 }
 
@@ -109,12 +109,12 @@ function describeSpreadPattern(cards) {
   const reversedCards = cards.filter((entry) => entry.reversed);
   let balance;
   if (reversedCards.length === 0) {
-    balance = "三張都是正位。把其中一個已有條件的做法先付諸小規模的嘗試，再觀察它是否帶來你想要的變化。";
+    balance = "三張都是正位。你可以回到最有感覺的那一張，試一個現在做得到的改變，看看自己怎麼回應。";
   } else if (reversedCards.length === cards.length) {
-    balance = "三張都是逆位。先分別看各位置有哪些假設、界線或節奏需要再確認，從最容易改變的一項開始。";
+    balance = "三張都是逆位。這時不用急著逼自己得出答案。可以先挑一個讓你有點在意的牌位，把它對應的情況想得更具體一點。";
   } else {
     const positions = reversedCards.map(({position}) => "「" + position + "」").join("、");
-    balance = `逆位落在${positions}。在逆位所在的位置多確認一步，再把其他位置的正位牌義當作手上已有的線索或資源。把兩邊放在一起，看看哪些事可以開始，哪些還要先弄清楚。`;
+    balance = `逆位落在${positions}。如果這幾個牌位讓你想起最近卡住的時刻，可以停下來看看。再從其他牌裡找一個眼前已有的線索，幫自己把事情想清楚一點。`;
   }
 
   const repeatedSuit = Object.keys(suitInsights).find((suit) =>
@@ -122,5 +122,5 @@ function describeSpreadPattern(cards) {
   );
   if (!repeatedSuit) return balance;
   const {name, focus} = suitInsights[repeatedSuit];
-  return `牌陣中重複出現${name}，可以多留意${focus}。${balance}`;
+  return `這次重複抽到${name}，可以把注意力多放在${focus}。${balance}`;
 }
