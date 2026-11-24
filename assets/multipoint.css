@@ -210,7 +210,8 @@
 .multipoint-page .positions {
   --columns: 5;
   display: grid;
-  grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
+  grid-template-columns: repeat(var(--columns), minmax(0, 8rem));
+  justify-content: center;
   gap: clamp(8px, 1.7vw, 18px);
   margin: 16px 0 13px;
   padding: 0;
@@ -219,7 +220,6 @@
 
 .multipoint-page .positions[data-count="3"] {
   --columns: 3;
-  width: min(100%, 640px);
 }
 
 .multipoint-page .positions[data-count="7"] {
@@ -238,7 +238,7 @@
   place-items: center;
   align-content: center;
   gap: 4px;
-  min-height: clamp(116px, 13.6vw, 156px);
+  aspect-ratio: 7 / 12;
   padding: 9px 7px;
   overflow: hidden;
   border: 1px solid #a8805e;
@@ -258,11 +258,14 @@
 .multipoint-page .tile:not([data-suit])::after {
   content: "";
   position: absolute;
-  inset: 24% 19%;
+  inset: 50% auto auto 50%;
   z-index: -1;
+  width: 62%;
+  aspect-ratio: 1;
   border: 1px solid #d8ac7963;
   border-radius: 50%;
   background: repeating-conic-gradient(from 45deg, #d8ac7930 0deg 1deg, transparent 1deg 45deg);
+  transform: translate(-50%, -50%);
 }
 
 .multipoint-page .tile[data-suit] {
