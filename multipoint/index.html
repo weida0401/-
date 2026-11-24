@@ -8,8 +8,8 @@
   <title>多點塔羅牌陣｜月隱塔羅</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23231830'/%3E%3Cpath d='M26 9a12 12 0 1 0 5 19A11 11 0 0 1 26 9Z' fill='%23f1cf9d'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../assets/style.css?v=manual-deck">
-  <link rel="stylesheet" href="../assets/multipoint.css?v=conclusion">
-  <script defer src="../assets/multipoint.js?v=conclusion"></script>
+  <link rel="stylesheet" href="../assets/multipoint.css?v=fan-draw">
+  <script defer src="../assets/multipoint.js?v=fan-draw"></script>
 </head>
 <body class="multipoint-page">
   <header class="top">
@@ -50,6 +50,12 @@
                 <option value="7">七點</option>
               </select>
             </label>
+            <label class="flip-mode-field" for="flip-mode">翻牌方式
+              <select id="flip-mode" name="flip-mode">
+                <option value="batch" selected>選完一起翻</option>
+                <option value="instant">抽到就翻</option>
+              </select>
+            </label>
             <div class="multipoint-actions">
               <button class="primary" id="draw" type="submit">開始選牌</button>
               <button class="secondary" id="clear" type="button" hidden>清除結果</button>
@@ -71,7 +77,11 @@
           <p id="draw-status" role="status"></p>
           <button class="primary" id="reveal" type="button" disabled>翻牌看解讀</button>
         </div>
-        <div class="deck-cards" id="deck-cards" role="group" aria-label="牌背"></div>
+        <ol class="picked-preview" id="picked-preview" aria-label="已選牌位"></ol>
+        <p class="deck-scroll-hint" id="deck-scroll-hint">左右滑動可查看整列牌。</p>
+        <div class="deck-viewport" id="deck-viewport" role="region" aria-label="展開的塔羅牌" aria-describedby="deck-scroll-hint" tabindex="0">
+          <div class="deck-cards" id="deck-cards"></div>
+        </div>
       </section>
 
       <p class="sr-only" id="status" role="status" aria-live="polite"></p>
