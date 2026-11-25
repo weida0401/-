@@ -9,10 +9,12 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23231830'/%3E%3Cpath d='M26 9a12 12 0 1 0 5 19A11 11 0 0 1 26 9Z' fill='%23f1cf9d'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../assets/style.css?v=manual-deck">
   <link rel="stylesheet" href="../assets/tarot-shuffle.css?v=shuffle-stage">
-  <link rel="stylesheet" href="../assets/multipoint.css?v=portrait-cards">
+  <link rel="stylesheet" href="../assets/multipoint.css?v=illustrated-cards">
   <link rel="stylesheet" href="../assets/moonveil-theme.css?v=warm-moon">
+  <link rel="stylesheet" href="../assets/tarot-art.css?v=illustrated-cards">
   <script defer src="../assets/tarot-shuffle.js?v=shuffle-stage"></script>
-  <script defer src="../assets/multipoint.js?v=shuffle-stage"></script>
+  <script defer src="../assets/tarot-art.js?v=illustrated-cards"></script>
+  <script defer src="../assets/multipoint.js?v=illustrated-cards"></script>
   <script defer src="../assets/site-music.js?v=warm-moon"></script>
 </head>
 <body class="multipoint-page">
@@ -104,6 +106,7 @@
           <a class="text-button result-board-link" href="#board-title">查看抽到的牌</a>
         </div>
         <p class="text-muted" id="reading-question" hidden></p>
+        <ol class="result-gallery" id="result-gallery" aria-label="本次抽到的牌" tabindex="0"></ol>
         <section class="reading-conclusion" aria-labelledby="conclusion-title">
           <h3 id="conclusion-title">結論</h3>
           <p class="conclusion-headline" id="conclusion-headline"></p>
@@ -140,7 +143,7 @@
   <footer>
     <div class="container footer">
       <a href="../" class="brand"><span class="brand-icon" aria-hidden="true">☾</span>月隱塔羅</a>
-      <p>塔羅解讀供娛樂與自我反思。</p>
+      <p>塔羅解讀供娛樂與自我反思。<br><a class="tarot-art-credit" href="https://commons.wikimedia.org/wiki/Category:Rider-Waite_tarot_deck">牌面插畫 Pamela Colman Smith</a></p>
     </div>
   </footer>
   <audio id="site-music" preload="none" loop src="../assets/moonveil-night.mp3" hidden></audio>

@@ -178,9 +178,13 @@ const major = [
   ['審判','✴',1,'回顧經驗後做出清楚決定',-1,'找出延遲回應的原因'],
   ['世界','◎',2,'收束一輪成果並準備下一階段',-1,'補齊尚未收尾的環節']
 ];
-const ranks = ['王牌','二','三','四','五','六','七','八','九','十','侍者','騎士','皇后','國王'];
+const ranks = [
+  ['ace','王牌'], ['two','二'], ['three','三'], ['four','四'], ['five','五'],
+  ['six','六'], ['seven','七'], ['eight','八'], ['nine','九'], ['ten','十'],
+  ['page','侍者'], ['knight','騎士'], ['queen','皇后'], ['king','國王']
+];
 const minor = [
-  ['權杖','♧',[
+  ['權杖','wands',[
     [2,'趁動機清楚時啟動構想',-1,'先釐清動機不足或延遲的原因'],
     [1,'比較兩條路的資源與代價',-1,'釐清計畫的方向和讓決定卡住的條件'],
     [2,'觀察擴展計畫的外部回饋',-1,'先處理時程或合作延誤'],
@@ -196,7 +200,7 @@ const minor = [
     [2,'用有感染力的方式帶動參與',-1,'辨認比較心對判斷的影響'],
     [2,'先定下方向，再安排要投入的資源',-1,'檢查要求是否超過執行條件']
   ]],
-  ['聖杯','♙',[
+  ['聖杯','cups',[
     [2,'為新感受與交流留出空間',-1,'先照顧尚未能表達的感受'],
     [2,'確認交流關係中彼此的承諾',-1,'處理關係中互惠失衡的地方'],
     [2,'善用群體的支持與回饋',-1,'留意群體相處中的消耗'],
@@ -212,7 +216,7 @@ const minor = [
     [2,'聽見感受並維護情緒界線',-1,'留意照顧他人時的情緒耗損'],
     [2,'在情緒波動中維持穩定回應',-1,'先處理壓抑或失衡的情緒反應']
   ]],
-  ['寶劍','⚔',[
+  ['寶劍','swords',[
     [2,'用明確證據釐清核心問題',-1,'先澄清資訊與表述的混亂'],
     [0,'找出讓兩難無法收斂的資訊缺口',-1,'處理拖延決策造成的壓力'],
     [-2,'正視受傷或失望的來源',1,'找出已經開始癒合的地方'],
@@ -228,7 +232,7 @@ const minor = [
     [2,'用清楚的標準與界線做判斷',-1,'檢查判斷是否被舊經驗拉偏'],
     [2,'依一致的邏輯分配責任與資源',-1,'檢查判斷是否遭權力左右']
   ]],
-  ['錢幣','✺',[
+  ['錢幣','pentacles',[
     [2,'把新機會轉成具體資源或安排',-1,'先釐清機會的成本與條件'],
     [1,'依資源上限調整多項任務',-1,'先減少超出容量的承諾'],
     [2,'透過專長分工改善成果',-1,'釐清分工、品質與期待落差'],
@@ -261,8 +265,13 @@ const spreads = {
   7:{name:'七點', desc:'加入內在與外在點位，檢查兩者如何影響下一步。',slots:[['root',10],['now',20],['obstacle',15],['inner',10],['outer',10],['action',20],['trend',15]]}
 };
 const deck = [
-  ...major.map(([name, symbol, ...values]) => ({name, symbol, suit:'大阿爾克那', values})),
-  ...minor.flatMap(([suit, symbol, cards]) => cards.map((values, i) => ({name:suit + ranks[i], symbol, suit, values})))
+  ...major.map(([name, , ...values], i) => ({
+    id: 'major-' + String(i).padStart(2, '0'), name, values
+  })),
+  ...minor.flatMap(([suit, suitId, cards]) => cards.map((values, i) => {
+    const [rankId, label] = ranks[i];
+    return {id: suitId + '-' + rankId, name: suit + label, values};
+  }))
 ];
 function randomBelow(limit) {
   const sample = new Uint32Array(1);
@@ -327,6 +336,16 @@ function element(tag, text, className) {
   if (className) node.className = className;
   return node;
 }
+function cardArtwork({card, reversed}) {
+  return window.MoonveilCardArt?.create(card.id, reversed)
+    ?? element('span', '牌面暫時無法載入', 'tarot-art-fallback');
+}
+function cardCaption(point) {
+  return [
+    element('strong', point.card.name, 'card-name'),
+    element('span', orientation(point), 'slot-orientation')
+  ];
+}
 function displayCards(spread, points) {
   $('board-title').textContent = spread.name + '牌陣';
   $('board-desc').textContent = spread.desc;
@@ -335,16 +354,19 @@ function displayCards(spread, points) {
     const slot = element('li', undefined, 'slot');
     const point = points?.[i];
     const tile = element('div', undefined, 'tile');
-    const symbol = element('span', point?.card.symbol ?? '✦', 'sigil');
-    symbol.setAttribute('aria-hidden', 'true');
-    tile.append(symbol);
+    slot.append(tile, element('span', position[key], 'slot-title'));
     if (point) {
-      tile.dataset.suit = point.card.suit;
       tile.classList.add('is-revealed');
-      tile.classList.toggle('reversed', point.reversed);
-      tile.append(element('strong', point.card.name, 'card-name'), element('span', orientation(point), 'text-small text-muted'));
+      tile.append(cardArtwork(point));
+      const caption = element('div', undefined, 'slot-card-caption');
+      caption.append(...cardCaption(point));
+      slot.append(caption);
+    } else {
+      const symbol = element('span', '✦', 'sigil');
+      symbol.setAttribute('aria-hidden', 'true');
+      tile.append(symbol);
     }
-    slot.append(tile, element('span', position[key], 'slot-title'), element('span', weight + '% 權重', 'weight text-small text-muted'));
+    slot.append(element('span', weight + '% 權重', 'weight text-small text-muted'));
     if (point) {
       const contribution = element('span', '貢獻 ' + signed(point.contribution, 2), 'contribution');
       contribution.dataset.direction = direction(point);
@@ -352,6 +374,15 @@ function displayCards(spread, points) {
     }
     return slot;
   }));
+  const gallery = $('result-gallery');
+  gallery.replaceChildren(...(points ?? []).map(point => {
+    const item = element('li');
+    const face = element('div', undefined, 'result-gallery-face');
+    face.append(cardArtwork(point));
+    item.append(face, ...cardCaption(point));
+    return item;
+  }));
+  gallery.scrollLeft = 0;
   $('hint').textContent = points
     ? '已依牌陣順序完成抽牌。展開計算明細可核對每項貢獻。'
     : '從整副 78 張蓋牌中挑選。你選牌的順序，就是它們進入牌位的順序。';
@@ -441,17 +472,26 @@ function pointForSlot([key, weight], order) {
 }
 function displayPickedPreview() {
   const {spread, picks, mode} = selection;
+  const instant = mode === 'instant';
+  pickedPreview.classList.toggle('has-card-art', instant);
+  if (instant) pickedPreview.tabIndex = 0;
+  else pickedPreview.removeAttribute('tabindex');
   pickedPreview.replaceChildren(...spread.slots.map((slot, order) => {
     const picked = order < picks.length;
-    const opened = picked && mode === 'instant';
+    const opened = picked && instant;
     const preview = element('li', undefined, 'pick-preview-slot');
     preview.classList.toggle('is-picked', picked);
     preview.classList.toggle('is-open', opened);
     const mark = element('span', String(order + 1), 'pick-preview-mark');
-    if (opened) {
-      const point = pointForSlot(slot, order);
-      mark.textContent = point.card.name;
-      mark.append(element('span', orientation(point), 'pick-preview-orientation'));
+    if (instant) {
+      const face = element('div', undefined, 'pick-preview-art');
+      if (opened) {
+        const point = pointForSlot(slot, order);
+        face.append(cardArtwork(point));
+        mark.textContent = point.card.name;
+        mark.append(element('span', orientation(point), 'pick-preview-orientation'));
+      }
+      preview.append(face);
     }
     preview.append(mark, element('span', position[slot[0]], 'pick-preview-position'));
     return preview;
@@ -465,11 +505,17 @@ function updateSelection() {
   [...deckCards.children].forEach((button, index) => {
     const order = picks.indexOf(index);
     const selected = order >= 0;
+    const opened = instant && selected;
+    const drawn = selection.options[index];
+    if (opened && !button.classList.contains('is-open')) {
+      button.firstElementChild.replaceWith(cardArtwork(drawn));
+    }
+    const pickedName = opened ? `牌，${drawn.card.name}（${orientation(drawn)}）` : '蓋牌';
     button.setAttribute('aria-pressed', String(selected));
     button.setAttribute('aria-label', selected
-      ? `第 ${index + 1} 張蓋牌，已選為第 ${order + 1} 張，牌位${position[spread.slots[order][0]]}`
+      ? `第 ${index + 1} 張${pickedName}，已選為第 ${order + 1} 張，牌位${position[spread.slots[order][0]]}`
       : `選擇第 ${index + 1} 張蓋牌`);
-    button.classList.toggle('is-open', instant && selected);
+    button.classList.toggle('is-open', opened);
     button.lastElementChild.textContent = selected ? String(order + 1) : '';
     button.disabled = instant ? selected || complete : complete && !selected;
   });
@@ -478,7 +524,9 @@ function updateSelection() {
   const next = complete
     ? instant ? '牌都翻開了，可以看完整解讀。' : '現在可以翻牌，也可以點一張已選的牌取消。'
     : `下一張放在「${position[spread.slots[picks.length][0]]}」。`;
-  $('draw-status').textContent = `已選 ${picks.length}／${total} 張。 ${next}`;
+  const latest = instant && selection.options[picks.at(-1)];
+  const openedCard = latest ? `翻到${latest.card.name}（${orientation(latest)}）。 ` : '';
+  $('draw-status').textContent = `已選 ${picks.length}／${total} 張。 ${openedCard}${next}`;
   displayPickedPreview();
 }
 function clearReading() {

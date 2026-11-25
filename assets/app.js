@@ -199,9 +199,9 @@ function updateBoard() {
 function makeResultCard(entry, position) {
   const card = tarotDeck[entry.index];
   const article = node("article", "", "result-card");
-  const face = node("div", "", entry.reversed ? "face reversed" : "face");
-  face.setAttribute("aria-hidden", "true");
-  face.append(node("span", card.symbol));
+  const face = node("div", "", "face");
+  const illustration = window.MoonveilCardArt?.create?.(card.id, entry.reversed);
+  face.append(illustration ?? node("span", "牌面暫時無法載入", "tarot-art-fallback"));
   const orientation = entry.reversed ? "逆位" : "正位";
   article.append(
     face,

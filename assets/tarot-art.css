@@ -1,0 +1,125 @@
+.tarot-illustration {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.tarot-illustration.is-reversed {
+  transform: rotate(180deg);
+}
+
+.face {
+  display: block;
+  width: min(100%, 11rem);
+  aspect-ratio: 7 / 12;
+  background: #271920;
+}
+
+.face::before, .face::after,
+.multipoint-page .tile.is-revealed::before,
+.manual-deck .deck-card.is-open::before,
+.manual-deck .deck-card.is-open::after {
+  display: none;
+}
+
+.tarot-art-fallback {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  padding: 4px;
+  color: var(--muted);
+  font: .82rem/1.35 var(--sans);
+  text-align: center;
+  text-shadow: none;
+  overflow-wrap: anywhere;
+}
+
+.multipoint-page .tile.is-revealed,
+.result-gallery-face {
+  display: block;
+  padding: 0;
+  background: #271920;
+}
+
+.slot-card-caption {
+  display: grid;
+  gap: 2px;
+  margin-block: 3px 4px;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.slot-orientation {
+  color: var(--gold);
+  font-size: .875rem;
+}
+
+.pick-preview-art,
+.result-gallery-face {
+  width: 100%;
+  aspect-ratio: 7 / 12;
+  overflow: hidden;
+  border: 1px solid #b890705e;
+  border-radius: 7px;
+}
+
+.pick-preview-art {
+  width: min(100%, 3.4rem);
+  margin: 0 auto 2px;
+  background: linear-gradient(145deg, #492f3c, #2a1d29);
+}
+
+.manual-deck .picked-preview.has-card-art {
+  display: flex;
+  width: 100%;
+  padding-bottom: 5px;
+  overflow-x: auto;
+}
+
+.picked-preview.has-card-art .pick-preview-slot {
+  flex: 0 0 clamp(3.8rem, 14vw, 4.9rem);
+}
+
+.manual-deck .deck-card.is-open {
+  display: block;
+  padding: 0;
+  overflow: hidden;
+  border-color: var(--gold);
+  background: #271920;
+}
+
+.manual-deck .deck-card.is-open .deck-order {
+  box-shadow: 0 1px 5px #28171da0;
+}
+
+.result-gallery {
+  display: flex;
+  gap: clamp(7px, 1.6vw, 15px);
+  margin: 16px 0 20px;
+  padding: 2px 1px 7px;
+  overflow-x: auto;
+  scrollbar-color: #aa827e #35222e;
+  scrollbar-width: thin;
+  list-style: none;
+}
+
+.result-gallery li {
+  display: grid;
+  flex: 0 0 clamp(4.6rem, 9vw, 5.6rem);
+  align-content: start;
+  min-width: 0;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.result-gallery .card-name {
+  margin-block: 4px 1px;
+  font-size: .875rem;
+}
+
+.tarot-art-credit {
+  color: var(--gold);
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
