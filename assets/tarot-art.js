@@ -6,6 +6,7 @@
   function create(id, reversed) {
     const image = document.createElement('img');
     image.className = 'tarot-illustration';
+    image.dataset.suit = id.split('-', 1)[0];
     image.classList.toggle('is-reversed', reversed);
     image.alt = '';
     image.decoding = 'async';
