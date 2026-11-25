@@ -354,7 +354,7 @@
   padding-inline-start: 1.7em;
 }
 
-.natal-quadrant-section {
+.natal-quadrant-section, .natal-house-section {
   margin-top: clamp(27px, 5.2vw, 54px);
 }
 
@@ -394,6 +394,71 @@
   font-size: .86rem;
 }
 
+.natal-house-intro {
+  margin-bottom: 15px;
+}
+
+.natal-house-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(9px, 2vw, 16px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.natal-house-number {
+  color: var(--z-gold);
+  font-size: .87rem;
+  font-weight: 700;
+}
+
+.natal-house-card h4 {
+  margin: 4px 0 7px;
+  color: var(--z-cream);
+  font: 700 1.24rem/1.4 var(--serif);
+}
+
+.natal-house-topic {
+  color: var(--z-muted);
+  font-size: .94rem;
+}
+
+.natal-house-facts {
+  display: grid;
+  gap: 3px;
+  margin-block: 11px;
+  padding-block: 9px;
+  border-block: 1px solid var(--z-line);
+  font-size: .9rem;
+}
+
+.natal-house-facts div {
+  display: grid;
+  grid-template-columns: 4.25em minmax(0, 1fr);
+  gap: 4px 6px;
+}
+
+.natal-house-facts dt {
+  color: var(--z-gold);
+}
+
+.natal-house-facts dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.natal-house-summary {
+  color: #f5e5e4;
+  line-height: 1.8;
+}
+
+@media (max-width: 890px) {
+  .natal-house-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 770px) {
   .natal-hero-content, .natal-chart-grid, .natal-personality, .natal-personality-details {
     grid-template-columns: minmax(0, 1fr);
@@ -401,7 +466,7 @@
 }
 
 @media (max-width: 570px) {
-  .natal-keys, .natal-quadrants {
+  .natal-keys, .natal-quadrants, .natal-house-list {
     grid-template-columns: minmax(0, 1fr);
   }
 }

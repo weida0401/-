@@ -19,6 +19,7 @@
   const reading = window.MoonveilNatalReading;
   const personality = window.MoonveilPersonality;
   const relating = window.MoonveilPersonalityRelating;
+  const houseReading = window.MoonveilNatalHouses;
   const wheel = window.MoonveilNatalWheel;
   let currentChart;
 
@@ -159,6 +160,34 @@
     }));
   }
 
+  function displayHouses(chart) {
+    const readings = houseReading?.describe(chart) ?? [];
+    get('houses').hidden = !readings.length;
+    get('houses-link').hidden = !readings.length;
+    get('house-list').replaceChildren(...readings.map(({number, title, topic, summary}) => {
+      const card = element('li', '', 'natal-panel natal-house-card');
+      card.dataset.house = number;
+      const cusp = chart.cusps[number - 1];
+      const cuspRow = element('div', '');
+      const cuspValue = element('dd', '');
+      cuspValue.append(...placementText(cusp));
+      cuspRow.append(element('dt', '宮頭'), cuspValue);
+      const placements = chart.planets.filter(point => point.house === number);
+      const planetRow = element('div', '');
+      planetRow.append(element('dt', '落宮天體'), element('dd', placements.map(point => point.name).join('、') || '空宮'));
+      const facts = element('dl', '', 'natal-house-facts');
+      facts.append(cuspRow, planetRow);
+      card.append(
+        element('p', '第 ' + number + ' 宮', 'natal-house-number'),
+        element('h4', title),
+        element('p', topic, 'natal-house-topic'),
+        facts,
+        element('p', summary, 'natal-house-summary')
+      );
+      return card;
+    }));
+  }
+
   function displayChart(chart, place, instant) {
     currentChart = chart;
     const localTime = element('time', date.value.replaceAll('-', '/') + ' ' + time.value);
@@ -169,6 +198,7 @@
     displayKeys(chart);
     displayPlacements(chart);
     displayQuadrants(chart);
+    displayHouses(chart);
     result.hidden = false;
     drawWheel();
     get('result-title').focus({preventScroll:true});
