@@ -10,15 +10,16 @@
   <link rel="stylesheet" href="../../assets/style.css">
   <link rel="stylesheet" href="../../assets/moonveil-theme.css?v=warm-moon">
   <link rel="stylesheet" href="../../assets/zodiac.css?v=transits">
-  <link rel="stylesheet" href="../../assets/zodiac-natal.css?v=natal-personality">
+  <link rel="stylesheet" href="../../assets/zodiac-natal.css?v=natal-depth">
   <script defer src="../../assets/site-music.js?v=warm-moon"></script>
   <script defer src="../../assets/vendor/astronomy-engine-2.1.19.min.js"></script>
   <script defer src="../../assets/zodiac-birthplace.js?v=tw-counties"></script>
   <script defer src="../../assets/zodiac-natal.js?v=natal-chart"></script>
   <script defer src="../../assets/zodiac-natal-reading.js?v=natal-chart"></script>
   <script defer src="../../assets/zodiac-natal-wheel.js?v=natal-chart"></script>
-  <script defer src="../../assets/zodiac-personality.js?v=natal-personality"></script>
-  <script defer src="../../assets/zodiac-natal-page.js?v=tw-counties"></script>
+  <script defer src="../../assets/zodiac-personality.js?v=natal-depth"></script>
+  <script defer src="../../assets/zodiac-personality-relating.js?v=natal-depth"></script>
+  <script defer src="../../assets/zodiac-natal-page.js?v=natal-depth"></script>
 </head>
 <body class="zodiac-page natal-page">
   <header class="top">
@@ -109,6 +110,24 @@
           <p id="natal-personality-inner"></p>
           <p class="natal-personality-scene" id="natal-personality-scene"></p>
         </div>
+        <div class="natal-personality-details" id="natal-personality-details" hidden>
+          <section class="natal-personality-detail">
+            <h4>相處時，你怎麼表達在乎</h4>
+            <p id="natal-personality-relationships"></p>
+          </section>
+          <section class="natal-personality-detail">
+            <h4>壓力來時，你怎麼反應</h4>
+            <p id="natal-personality-pressure"></p>
+          </section>
+          <section class="natal-personality-detail">
+            <h4>容易被忽略的長處</h4>
+            <p id="natal-personality-strength"></p>
+          </section>
+        </div>
+        <details class="natal-personality-basis">
+          <summary>這段分析參考了哪些落點？</summary>
+          <ul id="natal-personality-basis"></ul>
+        </details>
       </section>
 
       <ul class="natal-keys" id="natal-keys" aria-label="上升、太陽與月亮"></ul>

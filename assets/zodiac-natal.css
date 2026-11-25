@@ -180,6 +180,50 @@
   color: #f4d9bd;
 }
 
+.natal-personality-details {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.natal-personality-detail {
+  min-width: 0;
+  padding: clamp(12px, 1.65vw, 20px);
+  border: 1px solid #e5b68e40;
+  border-radius: 11px;
+  background: #261921a6;
+  color: #f5e5e4;
+  font-size: .94rem;
+  line-height: 1.8;
+}
+
+.natal-personality-detail h4 {
+  margin: 0 0 6px;
+  color: var(--z-gold);
+  font: 700 1.08rem/1.45 var(--serif);
+}
+
+.natal-personality-basis {
+  grid-column: 1 / -1;
+  padding-bottom: 0;
+  border-bottom: 0;
+  color: var(--z-muted);
+  font-size: .9rem;
+}
+
+.natal-personality-basis summary {
+  color: var(--z-gold);
+}
+
+.natal-personality-basis ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 5px 12px;
+  margin-bottom: 0;
+  padding-inline-start: 1.3em;
+}
+
 .natal-keys {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -351,7 +395,7 @@
 }
 
 @media (max-width: 770px) {
-  .natal-hero-content, .natal-chart-grid, .natal-personality {
+  .natal-hero-content, .natal-chart-grid, .natal-personality, .natal-personality-details {
     grid-template-columns: minmax(0, 1fr);
   }
 }

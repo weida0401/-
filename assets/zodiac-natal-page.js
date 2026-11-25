@@ -18,6 +18,7 @@
   const birthplace = window.MoonveilBirthplace;
   const reading = window.MoonveilNatalReading;
   const personality = window.MoonveilPersonality;
+  const relating = window.MoonveilPersonalityRelating;
   const wheel = window.MoonveilNatalWheel;
   let currentChart;
 
@@ -104,6 +105,23 @@
     get('personality-impression').textContent = profile.firstImpression;
     get('personality-inner').textContent = profile.innerLife;
     get('personality-scene').textContent = profile.everydayScene;
+
+    const context = relating?.describe(chart);
+    const details = {relationships: context?.relationships, pressure: context?.pressure, strength: profile.strength};
+    get('personality-details').hidden = !Object.values(details).some(Boolean);
+    for (const [key, text] of Object.entries(details)) {
+      const paragraph = get('personality-' + key);
+      paragraph.textContent = text ?? '';
+      paragraph.parentElement.hidden = !text;
+    }
+
+    const bodies = context ? ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars'] : ['Sun', 'Moon'];
+    const references = [chart.ascendant, ...chart.planets.filter(point => bodies.includes(point.id))];
+    get('personality-basis').replaceChildren(...references.map(point => {
+      const item = element('li', '');
+      item.append(element('strong', point.name), ' · ', ...placementText(point), ' · 第 ' + point.house + ' 宮');
+      return item;
+    }));
   }
 
   function displayPlacements(chart) {
