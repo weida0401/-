@@ -24,6 +24,17 @@
   background: var(--z-mauve);
 }
 
+.zodiac-jump-links .natal-entry {
+  gap: 7px;
+  border-color: #f6d6ae;
+  background: linear-gradient(120deg, #f3d4ac, #dca878);
+  color: #2f1e25;
+}
+
+.zodiac-jump-links .natal-entry:hover {
+  background: #ffe4bf;
+}
+
 .zodiac-feature {
   padding-block: clamp(30px, 5vw, 56px);
   border-bottom: 1px solid var(--z-line);

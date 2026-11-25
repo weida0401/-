@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="用出生日期、時間和地點排出個人星盤，查看上升、太陽、月亮、十二宮與四個象限的解讀。">
+  <meta name="theme-color" content="#1c141b">
+  <title>個人出生星盤｜月隱塔羅</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23231830'/%3E%3Cpath d='M26 9a12 12 0 1 0 5 19A11 11 0 0 1 26 9Z' fill='%23f1cf9d'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/style.css">
+  <link rel="stylesheet" href="../../assets/moonveil-theme.css?v=warm-moon">
+  <link rel="stylesheet" href="../../assets/zodiac.css?v=transits">
+  <link rel="stylesheet" href="../../assets/zodiac-natal.css?v=natal-chart">
+  <script defer src="../../assets/site-music.js?v=warm-moon"></script>
+  <script defer src="../../assets/vendor/astronomy-engine-2.1.19.min.js"></script>
+  <script defer src="../../assets/zodiac-birthplace.js?v=natal-chart"></script>
+  <script defer src="../../assets/zodiac-natal.js?v=natal-chart"></script>
+  <script defer src="../../assets/zodiac-natal-reading.js?v=natal-chart"></script>
+  <script defer src="../../assets/zodiac-natal-wheel.js?v=natal-chart"></script>
+  <script defer src="../../assets/zodiac-natal-page.js?v=natal-chart"></script>
+</head>
+<body class="zodiac-page natal-page">
+  <header class="top">
+    <div class="container nav">
+      <a href="../../" class="brand"><span class="brand-icon" aria-hidden="true">☾</span><span>月隱塔羅<small>MOONVEIL TAROT</small></span></a>
+      <nav class="site-links" aria-label="主選單">
+        <a href="../../#reading">開始占卜</a>
+        <a href="../../multipoint/">多點牌陣</a>
+        <a href="../">十二星座</a>
+      </nav>
+      <div class="nav-actions">
+        <button id="music-toggle" class="music-toggle" type="button" aria-label="背景音樂" aria-pressed="false"><span class="music-icon" aria-hidden="true">♪</span><span>音樂</span></button>
+      </div>
+    </div>
+  </header>
+  <audio id="site-music" preload="none" loop src="../../assets/moonveil-night.mp3" hidden></audio>
+
+  <main>
+    <section class="zodiac-hero natal-hero" aria-labelledby="natal-title">
+      <div class="container natal-hero-content">
+        <div class="zodiac-heading natal-heading">
+          <a class="natal-back-link" href="../">← 返回十二星座</a>
+          <h1 id="natal-title">我的出生星盤</h1>
+          <p>看看出生那一刻，太陽、月亮和上升點落在哪裡，以及四個象限各自提醒你什麼。</p>
+        </div>
+        <form class="natal-panel natal-form" id="natal-form" aria-labelledby="natal-form-title" novalidate autocomplete="off">
+          <h2 id="natal-form-title">出生資料</h2>
+          <div class="natal-fields">
+            <label for="natal-date">出生日期
+              <input id="natal-date" type="date" required>
+            </label>
+            <label for="natal-time">出生時間
+              <input id="natal-time" type="time" required aria-describedby="natal-time-guide">
+            </label>
+            <p id="natal-time-guide" class="natal-note">請填出生地當地時間，盡量精確到分鐘。上升和宮位會隨時間改變。</p>
+            <label class="natal-field-wide" for="natal-city">出生地
+              <select id="natal-city" required>
+                <option value="">選擇出生城市</option>
+                <option value="custom">其他地點（輸入座標）</option>
+              </select>
+            </label>
+          </div>
+          <fieldset class="natal-custom" id="natal-custom" hidden>
+            <legend>出生地座標</legend>
+            <div class="natal-fields">
+              <label for="natal-latitude">緯度（北為正）
+                <input id="natal-latitude" type="number" step="any" min="-90" max="90" inputmode="decimal" placeholder="25.0330" />
+              </label>
+              <label for="natal-longitude">經度（東為正）
+                <input id="natal-longitude" type="number" step="any" min="-180" max="180" inputmode="decimal" placeholder="121.5654" />
+              </label>
+              <label class="natal-field-wide" for="natal-timezone">出生地時區
+                <input id="natal-timezone" type="text" list="natal-timezones" placeholder="Asia/Taipei" spellcheck="false" autocapitalize="none" />
+              </label>
+              <datalist id="natal-timezones"></datalist>
+            </div>
+          </fieldset>
+          <label class="natal-occurrence" id="natal-occurrence-field" for="natal-occurrence" hidden>選擇當時的 UTC 時差
+            <select id="natal-occurrence"></select>
+          </label>
+          <p id="natal-status" class="natal-status" role="status" hidden></p>
+          <div class="natal-form-actions">
+            <button class="primary" id="natal-submit" type="submit" disabled>生成我的星盤</button>
+            <p class="natal-note">出生資料只在瀏覽器內計算。</p>
+          </div>
+          <noscript><p>請啟用 JavaScript 以計算出生星盤。</p></noscript>
+        </form>
+      </div>
+    </section>
+
+    <section id="natal-result" class="container natal-result" aria-labelledby="natal-result-title" hidden>
+      <header class="natal-result-header">
+        <h2 id="natal-result-title" tabindex="-1">你的出生星盤</h2>
+        <p id="natal-result-meta"></p>
+      </header>
+
+      <ul class="natal-keys" id="natal-keys" aria-label="上升、太陽與月亮"></ul>
+
+      <div class="natal-chart-grid">
+        <section class="natal-panel natal-wheel-panel" aria-labelledby="natal-wheel-title">
+          <h3 id="natal-wheel-title">本命星盤</h3>
+          <canvas id="natal-wheel" width="480" height="480" aria-hidden="true"></canvas>
+          <p class="natal-note">AC 上升　MC 天頂　DC 下降　IC 天底</p>
+        </section>
+        <section class="natal-panel" aria-labelledby="natal-positions-title">
+          <h3 id="natal-positions-title">行星與宮位</h3>
+          <table class="natal-positions">
+            <thead><tr><th scope="col">天體／角點</th><th scope="col">星座與度數</th><th scope="col">宮位</th></tr></thead>
+            <tbody id="natal-placements"></tbody>
+          </table>
+          <details class="natal-cusp-details">
+            <summary>查看十二宮宮頭</summary>
+            <ol id="natal-cusps"></ol>
+          </details>
+        </section>
+      </div>
+
+      <section class="natal-quadrant-section" aria-labelledby="natal-quadrants-title">
+        <h3 id="natal-quadrants-title">四個象限的總結</h3>
+        <div class="natal-quadrants" id="natal-quadrants"></div>
+      </section>
+
+      <details class="natal-method">
+        <summary>出生星盤怎麼算？</summary>
+        <p>以出生地的時區換算當時的世界時間，依經緯度求出上升點與天頂，再用熱帶黃道與波菲里（Porphyry）宮位系統，劃出十二宮和四個象限。</p>
+        <p>預設城市採用市區座標，可用自訂座標排出更精確的宮位。座標資料採 CC BY 4.0 授權。<a href="https://www.geonames.org/">GeoNames</a> · <a href="https://creativecommons.org/licenses/by/4.0/">授權條款</a></p>
+      </details>
+    </section>
+  </main>
+  <footer><div class="container footer"><a href="../../" class="brand"><span class="brand-icon" aria-hidden="true">☾</span>月隱塔羅</a><p>星盤解讀供娛樂與自我觀察。</p></div></footer>
+</body>
+</html>
