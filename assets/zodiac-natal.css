@@ -122,6 +122,64 @@
   overflow-wrap: anywhere;
 }
 
+.natal-result-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 18px;
+  margin-top: 4px;
+}
+
+.natal-result-links a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 5px;
+  color: var(--z-gold);
+  font-size: .9rem;
+  text-decoration: underline;
+  text-underline-offset: .24em;
+}
+
+.natal-personality {
+  display: grid;
+  grid-template-columns: minmax(0, .85fr) minmax(0, 1.65fr);
+  align-items: start;
+  gap: clamp(13px, 3vw, 35px);
+  margin-top: 6px;
+  border-inline-start: 2px solid #e5b68e;
+  background:
+    radial-gradient(ellipse at 5% 0, #633b4e, transparent 72%),
+    linear-gradient(145deg, #3e2936, #291d27 67%);
+}
+
+.natal-result .natal-personality h3 {
+  margin: 0 0 8px;
+  color: var(--z-gold);
+  font: 700 1.05rem/1.45 var(--sans);
+}
+
+.natal-personality-headline {
+  color: var(--z-cream);
+  font: 700 clamp(1.42rem, 3vw, 2.1rem)/1.45 var(--serif);
+  text-wrap: pretty;
+}
+
+.natal-personality-story {
+  display: grid;
+  gap: 12px;
+  max-width: 37em;
+  color: #f5e5e4;
+  line-height: 1.85;
+}
+
+.natal-personality-scene {
+  padding: 9px 12px;
+  border-inline-start: 1px solid #e4b188;
+  border-radius: 0 7px 7px 0;
+  background: #21161f6e;
+  color: #f4d9bd;
+}
+
 .natal-keys {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -293,7 +351,7 @@
 }
 
 @media (max-width: 770px) {
-  .natal-hero-content, .natal-chart-grid {
+  .natal-hero-content, .natal-chart-grid, .natal-personality {
     grid-template-columns: minmax(0, 1fr);
   }
 }

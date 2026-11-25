@@ -3,21 +3,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="用出生日期、時間和地點排出個人星盤，查看上升、太陽、月亮、十二宮與四個象限的解讀。">
+  <meta name="description" content="用出生日期、時間和地點排出個人星盤，查看上升、太陽、月亮、個性與四個象限的解讀。">
   <meta name="theme-color" content="#1c141b">
   <title>個人出生星盤｜月隱塔羅</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23231830'/%3E%3Cpath d='M26 9a12 12 0 1 0 5 19A11 11 0 0 1 26 9Z' fill='%23f1cf9d'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../../assets/style.css">
   <link rel="stylesheet" href="../../assets/moonveil-theme.css?v=warm-moon">
   <link rel="stylesheet" href="../../assets/zodiac.css?v=transits">
-  <link rel="stylesheet" href="../../assets/zodiac-natal.css?v=natal-chart">
+  <link rel="stylesheet" href="../../assets/zodiac-natal.css?v=natal-personality">
   <script defer src="../../assets/site-music.js?v=warm-moon"></script>
   <script defer src="../../assets/vendor/astronomy-engine-2.1.19.min.js"></script>
   <script defer src="../../assets/zodiac-birthplace.js?v=natal-chart"></script>
   <script defer src="../../assets/zodiac-natal.js?v=natal-chart"></script>
   <script defer src="../../assets/zodiac-natal-reading.js?v=natal-chart"></script>
   <script defer src="../../assets/zodiac-natal-wheel.js?v=natal-chart"></script>
-  <script defer src="../../assets/zodiac-natal-page.js?v=natal-chart"></script>
+  <script defer src="../../assets/zodiac-personality.js?v=natal-personality"></script>
+  <script defer src="../../assets/zodiac-natal-page.js?v=natal-personality"></script>
 </head>
 <body class="zodiac-page natal-page">
   <header class="top">
@@ -41,7 +42,7 @@
         <div class="zodiac-heading natal-heading">
           <a class="natal-back-link" href="../">← 返回十二星座</a>
           <h1 id="natal-title">我的出生星盤</h1>
-          <p>看看出生那一刻，太陽、月亮和上升點落在哪裡，以及四個象限各自提醒你什麼。</p>
+          <p>看看出生那一刻太陽、月亮和上升點落在哪裡，讀懂自己的個性，以及四個象限的生活重點。</p>
         </div>
         <form class="natal-panel natal-form" id="natal-form" aria-labelledby="natal-form-title" novalidate autocomplete="off">
           <h2 id="natal-form-title">出生資料</h2>
@@ -92,11 +93,27 @@
       <header class="natal-result-header">
         <h2 id="natal-result-title" tabindex="-1">你的出生星盤</h2>
         <p id="natal-result-meta"></p>
+        <nav class="natal-result-links" aria-label="星盤結果導覽">
+          <a href="#natal-chart-data">看星盤與宮位 <span aria-hidden="true">↓</span></a>
+          <a href="#natal-quadrants-title">看四個象限 <span aria-hidden="true">↓</span></a>
+        </nav>
       </header>
+
+      <section class="natal-panel natal-personality" id="natal-personality" aria-labelledby="natal-personality-title" hidden>
+        <div class="natal-personality-lead">
+          <h3 id="natal-personality-title">你是怎樣的人</h3>
+          <p class="natal-personality-headline" id="natal-personality-headline"></p>
+        </div>
+        <div class="natal-personality-story">
+          <p id="natal-personality-impression"></p>
+          <p id="natal-personality-inner"></p>
+          <p class="natal-personality-scene" id="natal-personality-scene"></p>
+        </div>
+      </section>
 
       <ul class="natal-keys" id="natal-keys" aria-label="上升、太陽與月亮"></ul>
 
-      <div class="natal-chart-grid">
+      <div class="natal-chart-grid" id="natal-chart-data">
         <section class="natal-panel natal-wheel-panel" aria-labelledby="natal-wheel-title">
           <h3 id="natal-wheel-title">本命星盤</h3>
           <canvas id="natal-wheel" width="480" height="480" aria-hidden="true"></canvas>

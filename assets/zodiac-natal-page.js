@@ -17,6 +17,7 @@
   const ephemeris = window.MoonveilNatal;
   const birthplace = window.MoonveilBirthplace;
   const reading = window.MoonveilNatalReading;
+  const personality = window.MoonveilPersonality;
   const wheel = window.MoonveilNatalWheel;
   let currentChart;
 
@@ -95,6 +96,16 @@
     }));
   }
 
+  function displayPersonality(chart) {
+    const profile = personality?.describe(chart);
+    get('personality').hidden = !profile;
+    if (!profile) return;
+    get('personality-headline').textContent = profile.headline;
+    get('personality-impression').textContent = profile.firstImpression;
+    get('personality-inner').textContent = profile.innerLife;
+    get('personality-scene').textContent = profile.everydayScene;
+  }
+
   function displayPlacements(chart) {
     const {planets, ascendant, midheaven, descendant, imumCoeli, cusps} = chart;
     get('placements').replaceChildren(...[...planets, ascendant, midheaven, descendant, imumCoeli].map(point => {
@@ -136,6 +147,7 @@
     localTime.dateTime = instant.date.toISOString();
     get('result-meta').replaceChildren(localTime, ' · ' + place.name + ' · ' + instant.offsetLabel);
     result.dataset.utc = instant.date.toISOString();
+    displayPersonality(chart);
     displayKeys(chart);
     displayPlacements(chart);
     displayQuadrants(chart);
