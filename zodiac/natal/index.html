@@ -13,12 +13,12 @@
   <link rel="stylesheet" href="../../assets/zodiac-natal.css?v=natal-personality">
   <script defer src="../../assets/site-music.js?v=warm-moon"></script>
   <script defer src="../../assets/vendor/astronomy-engine-2.1.19.min.js"></script>
-  <script defer src="../../assets/zodiac-birthplace.js?v=natal-chart"></script>
+  <script defer src="../../assets/zodiac-birthplace.js?v=tw-counties"></script>
   <script defer src="../../assets/zodiac-natal.js?v=natal-chart"></script>
   <script defer src="../../assets/zodiac-natal-reading.js?v=natal-chart"></script>
   <script defer src="../../assets/zodiac-natal-wheel.js?v=natal-chart"></script>
   <script defer src="../../assets/zodiac-personality.js?v=natal-personality"></script>
-  <script defer src="../../assets/zodiac-natal-page.js?v=natal-personality"></script>
+  <script defer src="../../assets/zodiac-natal-page.js?v=tw-counties"></script>
 </head>
 <body class="zodiac-page natal-page">
   <header class="top">
@@ -56,7 +56,7 @@
             <p id="natal-time-guide" class="natal-note">請填出生地當地時間，盡量精確到分鐘。上升和宮位會隨時間改變。</p>
             <label class="natal-field-wide" for="natal-city">出生地
               <select id="natal-city" required>
-                <option value="">選擇出生城市</option>
+                <option value="">選擇出生地</option>
                 <option value="custom">其他地點（輸入座標）</option>
               </select>
             </label>
@@ -140,7 +140,7 @@
       <details class="natal-method">
         <summary>出生星盤怎麼算？</summary>
         <p>以出生地的時區換算當時的世界時間，依經緯度求出上升點與天頂，再用熱帶黃道與波菲里（Porphyry）宮位系統，劃出十二宮和四個象限。</p>
-        <p>預設城市採用市區座標，可用自訂座標排出更精確的宮位。座標資料採 CC BY 4.0 授權。<a href="https://www.geonames.org/">GeoNames</a> · <a href="https://creativecommons.org/licenses/by/4.0/">授權條款</a></p>
+        <p>內建選項採用所列地點的代表座標。可用自訂座標依實際出生地排盤。座標資料採 CC BY 4.0 授權。<a href="https://www.geonames.org/">GeoNames</a> · <a href="https://creativecommons.org/licenses/by/4.0/">授權條款</a></p>
       </details>
     </section>
   </main>

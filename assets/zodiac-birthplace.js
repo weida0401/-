@@ -10,21 +10,23 @@
     ["keelung", "基隆市", "台灣", 25.13089, 121.74094, "Asia/Taipei"], // GeoNames 1678228
     ["taoyuan", "桃園市", "台灣", 24.99368, 121.29696, "Asia/Taipei"], // GeoNames 6696918
     ["hsinchu", "新竹市", "台灣", 24.80361, 120.96861, "Asia/Taipei"], // GeoNames 1675151
-    ["miaoli", "苗栗市", "台灣", 24.56427, 120.82367, "Asia/Taipei"], // GeoNames 1671971
+    ["hsinchu-county", "新竹縣（竹北）", "台灣", 24.83833, 121.00778, "Asia/Taipei"], // GeoNames 1677112
+    ["miaoli", "苗栗縣（苗栗市）", "台灣", 24.56427, 120.82367, "Asia/Taipei"], // GeoNames 1671971
     ["taichung", "台中市", "台灣", 24.1469, 120.6839, "Asia/Taipei"], // GeoNames 1668399
-    ["changhua", "彰化市", "台灣", 24.07327, 120.56276, "Asia/Taipei"], // GeoNames 1679136
-    ["nantou", "南投市", "台灣", 23.91566, 120.66387, "Asia/Taipei"], // GeoNames 1671566
-    ["douliu", "雲林斗六", "台灣", 23.70944, 120.54333, "Asia/Taipei"], // GeoNames 1665196
+    ["changhua", "彰化縣（彰化市）", "台灣", 24.07327, 120.56276, "Asia/Taipei"], // GeoNames 1679136
+    ["nantou", "南投縣（南投市）", "台灣", 23.91566, 120.66387, "Asia/Taipei"], // GeoNames 1671566
+    ["douliu", "雲林縣（斗六）", "台灣", 23.70944, 120.54333, "Asia/Taipei"], // GeoNames 1665196
     ["chiayi", "嘉義市", "台灣", 23.47917, 120.44889, "Asia/Taipei"], // GeoNames 1678836
+    ["chiayi-county", "嘉義縣（太保）", "台灣", 23.45944, 120.33222, "Asia/Taipei"], // GeoNames 1668347
     ["tainan", "台南市", "台灣", 22.99259, 120.20507, "Asia/Taipei"], // GeoNames 1668355
     ["kaohsiung", "高雄市", "台灣", 22.61626, 120.31333, "Asia/Taipei"], // GeoNames 1673820
-    ["pingtung", "屏東市", "台灣", 22.67135, 120.48814, "Asia/Taipei"], // GeoNames 1670481
-    ["yilan", "宜蘭市", "台灣", 24.757, 121.753, "Asia/Taipei"], // GeoNames 1674199
-    ["hualien", "花蓮市", "台灣", 23.97694, 121.60444, "Asia/Taipei"], // GeoNames 1674504
-    ["taitung", "台東市", "台灣", 22.75991, 121.14457, "Asia/Taipei"], // GeoNames 1668295
-    ["magong", "澎湖馬公", "台灣", 23.5654, 119.58627, "Asia/Taipei"], // GeoNames 1672228
-    ["jincheng", "金門金城", "台灣", 24.43415, 118.31712, "Asia/Taipei"], // GeoNames 1678008
-    ["nangan", "馬祖南竿", "台灣", 26.15039, 119.93284, "Asia/Taipei"], // GeoNames 7552914
+    ["pingtung", "屏東縣（屏東市）", "台灣", 22.67135, 120.48814, "Asia/Taipei"], // GeoNames 1670481
+    ["yilan", "宜蘭縣（宜蘭市）", "台灣", 24.757, 121.753, "Asia/Taipei"], // GeoNames 1674199
+    ["hualien", "花蓮縣（花蓮市）", "台灣", 23.97694, 121.60444, "Asia/Taipei"], // GeoNames 1674504
+    ["taitung", "台東縣（台東市）", "台灣", 22.75991, 121.14457, "Asia/Taipei"], // GeoNames 1668295
+    ["magong", "澎湖縣（馬公）", "台灣", 23.5654, 119.58627, "Asia/Taipei"], // GeoNames 1672228
+    ["jincheng", "金門縣（金城）", "台灣", 24.43415, 118.31712, "Asia/Taipei"], // GeoNames 1678008
+    ["nangan", "連江縣（馬祖南竿）", "台灣", 26.15039, 119.93284, "Asia/Taipei"], // GeoNames 7552914
     ["hong-kong", "香港", "香港", 22.27832, 114.17469, "Asia/Hong_Kong"], // GeoNames 1819729
     ["macau", "澳門", "澳門", 22.20056, 113.54611, "Asia/Macau"], // GeoNames 1821274
     ["beijing", "北京", "中國大陸", 39.9075, 116.39723, "Asia/Shanghai"], // GeoNames 1816670

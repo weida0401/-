@@ -49,7 +49,7 @@
   function readBirthplace() {
     if (city.value !== 'custom') {
       const selected = birthplace.cities.find(({id}) => id === city.value);
-      if (!selected) fail('請選擇出生城市。', city);
+      if (!selected) fail('請選擇出生地。', city);
       return selected;
     }
 
