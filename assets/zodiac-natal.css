@@ -330,6 +330,14 @@
   margin-inline-start: 3px;
 }
 
+.natal-planet-link {
+  display: inline-block;
+  padding-block: 2px;
+  color: var(--z-gold);
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+
 .natal-cusp-details, .natal-method {
   margin-top: 16px;
   color: var(--z-muted);
@@ -354,7 +362,7 @@
   padding-inline-start: 1.7em;
 }
 
-.natal-quadrant-section, .natal-house-section {
+.natal-quadrant-section, .natal-house-section, .natal-planet-section {
   margin-top: clamp(27px, 5.2vw, 54px);
 }
 
@@ -398,7 +406,7 @@
   margin-bottom: 15px;
 }
 
-.natal-house-list {
+.natal-house-list, .natal-planet-list {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(9px, 2vw, 16px);
@@ -413,13 +421,13 @@
   font-weight: 700;
 }
 
-.natal-house-card h4 {
+.natal-house-card h4, .natal-planet-card h4 {
   margin: 4px 0 7px;
   color: var(--z-cream);
   font: 700 1.24rem/1.4 var(--serif);
 }
 
-.natal-house-topic {
+.natal-house-topic, .natal-planet-meaning {
   color: var(--z-muted);
   font-size: .94rem;
 }
@@ -448,13 +456,37 @@
   overflow-wrap: anywhere;
 }
 
-.natal-house-summary {
+.natal-house-summary, .natal-planet-summary {
   color: #f5e5e4;
   line-height: 1.8;
 }
 
+.natal-planet-card {
+  scroll-margin-block-start: 12px;
+}
+
+.natal-planet-card:target {
+  border-color: var(--z-gold);
+}
+
+.natal-planet-card h4 {
+  margin-top: 0;
+}
+
+.natal-planet-placement {
+  margin-bottom: 9px;
+  color: var(--z-gold);
+  font-size: .91rem;
+}
+
+.natal-planet-summary {
+  margin-top: 11px;
+  padding-top: 10px;
+  border-top: 1px solid var(--z-line);
+}
+
 @media (max-width: 890px) {
-  .natal-house-list {
+  .natal-house-list, .natal-planet-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -466,7 +498,7 @@
 }
 
 @media (max-width: 570px) {
-  .natal-keys, .natal-quadrants, .natal-house-list {
+  .natal-keys, .natal-quadrants, .natal-house-list, .natal-planet-list {
     grid-template-columns: minmax(0, 1fr);
   }
 }

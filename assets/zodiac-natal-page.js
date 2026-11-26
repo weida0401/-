@@ -20,6 +20,7 @@
   const personality = window.MoonveilPersonality;
   const relating = window.MoonveilPersonalityRelating;
   const houseReading = window.MoonveilNatalHouses;
+  const planetReading = window.MoonveilNatalPlanets;
   const wheel = window.MoonveilNatalWheel;
   let currentChart;
 
@@ -125,15 +126,26 @@
     }));
   }
 
-  function displayPlacements(chart) {
+  function planetAnchor(point) {
+    return 'natal-body-' + point.id.toLowerCase();
+  }
+
+  function displayPlacements(chart, linkedPlanets) {
     const {planets, ascendant, midheaven, descendant, imumCoeli, cusps} = chart;
     get('placements').replaceChildren(...[...planets, ascendant, midheaven, descendant, imumCoeli].map(point => {
       const row = element('tr', '');
       row.dataset.point = point.id;
       row.dataset.longitude = point.longitude;
       row.dataset.house = point.house;
-      const title = element('th', point.name);
+      const title = element('th', '');
       title.scope = 'row';
+      if (linkedPlanets.has(point.id)) {
+        const link = element('a', point.name, 'natal-planet-link');
+        link.href = '#' + planetAnchor(point);
+        title.append(link);
+      } else {
+        title.textContent = point.name;
+      }
       const placement = element('td', '');
       placement.append(...placementText(point));
       row.append(title, placement, element('td', '第 ' + point.house + ' 宮'));
@@ -145,6 +157,33 @@
       item.append(...placementText(point));
       return item;
     }));
+  }
+
+  function displayPlanets(chart) {
+    const explanations = new Map((planetReading?.describe(chart) ?? []).map(item => [item.id, item]));
+    const links = new Set();
+    const cards = chart.planets.flatMap(point => {
+      const explanation = explanations.get(point.id);
+      if (!explanation) return [];
+      links.add(point.id);
+      const card = element('li', '', 'natal-panel natal-planet-card');
+      card.id = planetAnchor(point);
+      card.dataset.point = point.id;
+      card.tabIndex = -1;
+      const placement = element('p', '', 'natal-planet-placement');
+      placement.append(...placementText(point), ' · 第 ' + point.house + ' 宮');
+      card.append(
+        element('h4', point.name),
+        placement,
+        element('p', explanation.meaning, 'natal-planet-meaning'),
+        element('p', explanation.summary, 'natal-planet-summary')
+      );
+      return [card];
+    });
+    get('planet-list').replaceChildren(...cards);
+    get('planets').hidden = !cards.length;
+    get('planets-link').hidden = !cards.length;
+    return links;
   }
 
   function displayQuadrants(chart) {
@@ -196,7 +235,7 @@
     result.dataset.utc = instant.date.toISOString();
     displayPersonality(chart);
     displayKeys(chart);
-    displayPlacements(chart);
+    displayPlacements(chart, displayPlanets(chart));
     displayQuadrants(chart);
     displayHouses(chart);
     result.hidden = false;

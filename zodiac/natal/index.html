@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="用出生日期、時間和地點排出個人星盤，查看上升、太陽、月亮、個性、十二宮與四個象限的解讀。">
+  <meta name="description" content="用出生日期、時間和地點排出個人星盤，查看上升、個性、十個天體、十二宮與四個象限的解讀。">
   <meta name="theme-color" content="#1c141b">
   <title>個人出生星盤｜月隱塔羅</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23231830'/%3E%3Cpath d='M26 9a12 12 0 1 0 5 19A11 11 0 0 1 26 9Z' fill='%23f1cf9d'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../../assets/style.css">
   <link rel="stylesheet" href="../../assets/moonveil-theme.css?v=warm-moon">
   <link rel="stylesheet" href="../../assets/zodiac.css?v=transits">
-  <link rel="stylesheet" href="../../assets/zodiac-natal.css?v=twelve-houses">
+  <link rel="stylesheet" href="../../assets/zodiac-natal.css?v=natal-planets">
   <script defer src="../../assets/site-music.js?v=warm-moon"></script>
   <script defer src="../../assets/vendor/astronomy-engine-2.1.19.min.js"></script>
   <script defer src="../../assets/zodiac-birthplace.js?v=tw-counties"></script>
@@ -20,7 +20,8 @@
   <script defer src="../../assets/zodiac-personality.js?v=natal-depth"></script>
   <script defer src="../../assets/zodiac-personality-relating.js?v=natal-depth"></script>
   <script defer src="../../assets/zodiac-natal-houses.js?v=twelve-houses"></script>
-  <script defer src="../../assets/zodiac-natal-page.js?v=twelve-houses"></script>
+  <script defer src="../../assets/zodiac-natal-planets.js?v=natal-planets"></script>
+  <script defer src="../../assets/zodiac-natal-page.js?v=natal-planets"></script>
 </head>
 <body class="zodiac-page natal-page">
   <header class="top">
@@ -97,6 +98,7 @@
         <p id="natal-result-meta"></p>
         <nav class="natal-result-links" aria-label="星盤結果導覽">
           <a href="#natal-chart-data">看星盤與宮位 <span aria-hidden="true">↓</span></a>
+          <a href="#natal-planets-title" id="natal-planets-link" hidden>看天體解讀 <span aria-hidden="true">↓</span></a>
           <a href="#natal-quadrants-title">看四個象限 <span aria-hidden="true">↓</span></a>
           <a href="#natal-houses-title" id="natal-houses-link" hidden>看十二宮解讀 <span aria-hidden="true">↓</span></a>
         </nav>
@@ -152,6 +154,11 @@
           </details>
         </section>
       </div>
+
+      <section class="natal-planet-section" id="natal-planets" aria-labelledby="natal-planets-title" hidden>
+        <h3 id="natal-planets-title">十個天體解讀</h3>
+        <ul class="natal-planet-list" id="natal-planet-list"></ul>
+      </section>
 
       <section class="natal-quadrant-section" aria-labelledby="natal-quadrants-title">
         <h3 id="natal-quadrants-title">四個象限的總結</h3>
