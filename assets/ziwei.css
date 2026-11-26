@@ -1,0 +1,279 @@
+.ziwei-page {
+  --ziwei-gold: #f0c99a;
+  --ziwei-muted: #dfc9cc;
+  --ziwei-edge: #d8aa9148;
+}
+
+.ziwei-hero {
+  position: relative;
+  isolation: isolate;
+  border-bottom: 1px solid var(--ziwei-edge);
+  background: #2b1b26;
+}
+
+.ziwei-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, #251823e8, #25182385 67%, #261921b8),
+    var(--night-image) center 28% / cover no-repeat;
+}
+
+.ziwei-hero-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 29rem);
+  align-items: center;
+  gap: clamp(24px, 6vw, 79px);
+  padding-block: clamp(34px, 5.8vw, 84px);
+}
+
+.ziwei-hero h1 {
+  margin: 0 0 15px;
+  font-size: clamp(2.65rem, 6.3vw, 5.05rem);
+  line-height: 1.16;
+}
+
+.ziwei-hero h1 span {
+  display: block;
+  color: var(--ziwei-gold);
+}
+
+.ziwei-hero-intro p {
+  max-width: 25em;
+  color: #f4dfdf;
+  font-size: 1.04rem;
+  line-height: 1.75;
+}
+
+.ziwei-start {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.ziwei-palace-map {
+  display: grid;
+  grid-template-areas:
+    "ming parents wellbeing property"
+    "siblings center center career"
+    "spouse center center friends"
+    "children wealth health travel";
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+  padding: 6px;
+  border: 1px solid #ae836c9b;
+  border-radius: 13px;
+  background: #271923;
+  box-shadow: 0 15px 38px #0d080e80;
+}
+
+.ziwei-palace-map a {
+  display: grid;
+  min-height: clamp(55px, 7vw, 89px);
+  align-content: center;
+  justify-items: center;
+  gap: 1px;
+  padding: 6px 2px;
+  border: 1px solid var(--ziwei-edge);
+  border-radius: 7px;
+  background: linear-gradient(146deg, #4a303d, #30212d);
+  color: #ffe8cf;
+  text-align: center;
+}
+
+.ziwei-palace-map a span {
+  color: var(--ziwei-muted);
+  font-size: .76rem;
+}
+
+.ziwei-palace-map a:hover, .ziwei-palace-map a:focus-visible {
+  border-color: var(--ziwei-gold);
+  background: #593843;
+}
+
+.ziwei-palace-map [href="#ming"] { grid-area: ming; }
+.ziwei-palace-map [href="#siblings"] { grid-area: siblings; }
+.ziwei-palace-map [href="#spouse"] { grid-area: spouse; }
+.ziwei-palace-map [href="#children"] { grid-area: children; }
+.ziwei-palace-map [href="#wealth"] { grid-area: wealth; }
+.ziwei-palace-map [href="#health"] { grid-area: health; }
+.ziwei-palace-map [href="#travel"] { grid-area: travel; }
+.ziwei-palace-map [href="#friends"] { grid-area: friends; }
+.ziwei-palace-map [href="#career"] { grid-area: career; }
+.ziwei-palace-map [href="#property"] { grid-area: property; }
+.ziwei-palace-map [href="#wellbeing"] { grid-area: wellbeing; }
+.ziwei-palace-map [href="#parents"] { grid-area: parents; }
+
+.ziwei-map-center {
+  grid-area: center;
+  display: grid;
+  place-content: center;
+  place-items: center;
+  gap: 3px;
+  border: 1px solid var(--ziwei-edge);
+  border-radius: 9px;
+  background:
+    radial-gradient(circle at center, transparent 59%, #d5a57227 60%, transparent 61%, transparent 69%, #d5a5721e 70%, transparent 71%),
+    radial-gradient(ellipse at center, #62384a, #31212e 80%);
+  color: #ffe8d2;
+  text-align: center;
+}
+
+.ziwei-map-symbol {
+  color: var(--ziwei-gold);
+  font: 1.55rem/1 Georgia, serif;
+  text-shadow: 0 0 11px #f3b98564;
+}
+
+.ziwei-map-center strong {
+  font: 700 clamp(1rem, 2.3vw, 1.42rem)/1.35 var(--serif);
+}
+
+.ziwei-map-center p {
+  color: var(--ziwei-muted);
+  font-size: .83rem;
+}
+
+.ziwei-palaces {
+  padding-block: clamp(29px, 5.2vw, 62px) clamp(37px, 6vw, 76px);
+}
+
+.ziwei-section-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0 13px;
+  margin-bottom: 10px;
+}
+
+.ziwei-return, .ziwei-related a {
+  color: var(--ziwei-gold);
+  text-decoration: underline;
+  text-underline-offset: .23em;
+}
+
+.ziwei-return {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  gap: 5px;
+  font-size: .9rem;
+}
+
+.ziwei-palace-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(10px, 1.85vw, 19px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ziwei-palace-card {
+  height: 100%;
+  padding: clamp(15px, 2.4vw, 26px);
+  scroll-margin-top: 10px;
+  border: 1px solid var(--ziwei-edge);
+  border-radius: 13px;
+  background: var(--warm-surface);
+  color: #f1e0e3;
+  line-height: 1.75;
+}
+
+.ziwei-palace-card:target {
+  border-color: var(--ziwei-gold);
+  box-shadow: inset 0 0 0 1px #f0c99a50;
+}
+
+.ziwei-palace-card h3 {
+  color: #ffeedb;
+  font: 700 1.38rem/1.35 var(--serif);
+}
+
+.ziwei-palace-card h3 small {
+  display: inline-block;
+  margin-inline-start: 5px;
+  color: var(--ziwei-muted);
+  font: 600 .84rem/1.35 var(--sans);
+}
+
+.ziwei-theme {
+  margin-block: 4px 9px;
+  color: var(--ziwei-gold);
+  font-size: .9rem;
+  font-weight: 700;
+}
+
+.ziwei-example {
+  margin-top: 12px;
+  padding-top: 9px;
+  border-top: 1px solid var(--ziwei-edge);
+  color: var(--ziwei-muted);
+  font-size: .94rem;
+}
+
+.ziwei-example strong {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--ziwei-gold);
+  font-size: .84rem;
+}
+
+.ziwei-related {
+  margin-top: clamp(25px, 5vw, 52px);
+  padding-top: 18px;
+  border-top: 1px solid var(--ziwei-edge);
+}
+
+.ziwei-related h2 {
+  font-size: clamp(1.35rem, 3vw, 1.7rem);
+}
+
+.ziwei-related p {
+  max-width: 48em;
+  margin-top: 9px;
+  color: var(--ziwei-muted);
+  line-height: 1.75;
+}
+
+@media (max-width: 850px) {
+  .ziwei-palace-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 740px) {
+  .ziwei-hero-inner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ziwei-palace-map {
+    width: min(100%, 29rem);
+  }
+
+  .ziwei-hero::before {
+    background:
+      linear-gradient(160deg, #231720bc, #30202ba1 59%, #261921ec),
+      var(--night-image) 33% 20% / cover no-repeat;
+  }
+}
+
+@media (max-width: 560px) {
+  .ziwei-palace-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 420px) {
+  .ziwei-page .nav .site-links {
+    gap: clamp(8px, 3vw, 13px);
+  }
+
+  .ziwei-palace-map a strong {
+    font-size: .92rem;
+  }
+}
