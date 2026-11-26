@@ -3,14 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="用生活例子認識紫微斗數十二宮，從命宮、夫妻宮、財帛宮到官祿宮，理解各宮在看什麼。">
+  <meta name="description" content="輸入出生日期與時間，排出自己的紫微斗數命盤，查看命宮、身宮、各宮主星與十二宮解讀。">
   <meta name="theme-color" content="#1c141b">
-  <title>紫微斗數十二宮｜月隱塔羅</title>
+  <title>紫微斗數排盤與十二宮解讀｜月隱塔羅</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23231830'/%3E%3Cpath d='M26 9a12 12 0 1 0 5 19A11 11 0 0 1 26 9Z' fill='%23f1cf9d'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../assets/style.css">
   <link rel="stylesheet" href="../assets/moonveil-theme.css?v=ziwei-nav">
   <link rel="stylesheet" href="../assets/ziwei.css?v=ziwei-guide">
+  <link rel="stylesheet" href="../assets/ziwei-chart.css?v=ziwei-chart">
   <script defer src="../assets/site-music.js?v=warm-moon"></script>
+  <script defer src="../assets/vendor/iztro-2.6.5.min.js"></script>
+  <script defer src="../assets/ziwei-chart.js?v=ziwei-chart"></script>
+  <script defer src="../assets/ziwei-chart-reading.js?v=ziwei-chart"></script>
+  <script defer src="../assets/ziwei-chart-page.js?v=ziwei-chart"></script>
 </head>
 <body class="ziwei-page">
   <header class="top">
@@ -34,8 +39,11 @@
       <div class="container ziwei-hero-inner">
         <div class="ziwei-hero-intro">
           <h1 id="ziwei-title">紫微斗數<span>十二宮</span></h1>
-          <p>個性、工作、感情和住家，在紫微斗數裡各有對應的宮位。從生活例子認識每一宮，讀命盤時就知道該看哪裡。</p>
-          <a class="primary ziwei-start" href="#ziwei-palaces">查看十二宮解讀 <span aria-hidden="true">↓</span></a>
+          <p>用出生日期與時間排出你的命盤，看看各宮有哪些主星，以及它們怎麼描述你的個性、感情、工作與日常。</p>
+          <div class="ziwei-hero-actions">
+            <a class="primary ziwei-start" href="#ziwei-chart">排我的紫微命盤 <span aria-hidden="true">↓</span></a>
+            <a class="ziwei-return" href="#ziwei-palaces">認識十二宮</a>
+          </div>
         </div>
         <nav class="ziwei-palace-map" id="ziwei-map" aria-label="十二宮導覽">
           <a href="#ming"><strong>命宮</strong><span>個性</span></a>
@@ -59,9 +67,60 @@
       </div>
     </section>
 
+    <section class="container ziwei-chart-section" id="ziwei-chart" aria-labelledby="ziwei-chart-title">
+      <header>
+        <h2 id="ziwei-chart-title">排我的紫微命盤</h2>
+        <p>請填寫出生地的當地日期與時間。</p>
+      </header>
+      <form class="ziwei-chart-form" id="ziwei-form" autocomplete="off" novalidate>
+        <div class="ziwei-chart-fields">
+          <label for="ziwei-date">國曆出生日期
+            <input type="date" id="ziwei-date" required>
+          </label>
+          <label for="ziwei-time">出生時間
+            <input type="time" id="ziwei-time" required>
+          </label>
+          <label for="ziwei-gender">排盤性別
+            <select id="ziwei-gender" required>
+              <option value="">請選擇</option>
+              <option value="male">男</option>
+              <option value="female">女</option>
+            </select>
+          </label>
+        </div>
+        <div class="ziwei-chart-actions">
+          <button class="primary" id="ziwei-submit" type="submit" disabled>排出命盤</button>
+          <p class="ziwei-chart-note">出生資料只在你的瀏覽器內計算。</p>
+        </div>
+        <p class="ziwei-chart-status" id="ziwei-status" role="status" hidden></p>
+        <noscript><p class="ziwei-chart-status">請開啟瀏覽器的 JavaScript 功能，即可使用個人排盤。</p></noscript>
+      </form>
+      <details class="ziwei-chart-method">
+        <summary>排盤方式</summary>
+        <p>以出生地的當地鐘錶時間排盤，農曆年以正月初一換年。23:00 至 23:59 的晚子時按隔日排盤，00:00 至 00:59 的早子時按當日排盤。閏月初一至十五沿用同名月份，十六起按後一個月安宮。</p>
+        <p>每個宮位的「大限」列出傳統命盤對應的十年區間，以虛歲表示。出生年的天干與排盤性別會決定大限順排或逆排。</p>
+        <p>本命盤依傳統紫微斗數規則計算，使用 <a href="https://github.com/SylarLong/iztro/tree/v2.6.5">iztro 2.6.5</a>。</p>
+      </details>
+      <section class="ziwei-chart-result" id="ziwei-chart-result" aria-labelledby="ziwei-chart-result-title" hidden>
+        <header class="ziwei-chart-overview">
+          <h3 id="ziwei-chart-result-title" tabindex="-1">你的紫微命盤</h3>
+          <p class="ziwei-chart-meta" id="ziwei-chart-meta"></p>
+          <dl class="ziwei-chart-facts" id="ziwei-chart-facts"></dl>
+        </header>
+        <nav class="ziwei-birth-grid" id="ziwei-birth-grid" aria-label="個人十二宮命盤"></nav>
+        <div>
+          <header class="ziwei-section-header">
+            <h3 id="ziwei-chart-reading-title">你的十二宮解讀</h3>
+            <a class="ziwei-return" href="#ziwei-birth-grid">回命盤 <span aria-hidden="true">↑</span></a>
+          </header>
+          <ol class="ziwei-palace-list" id="ziwei-chart-list" role="list"></ol>
+        </div>
+      </section>
+    </section>
+
     <section class="container ziwei-palaces" id="ziwei-palaces" aria-labelledby="palaces-title" tabindex="-1">
       <header class="ziwei-section-header">
-        <h2 id="palaces-title">十二宮解讀</h2>
+        <h2 id="palaces-title">認識十二宮</h2>
         <a class="ziwei-return" href="#ziwei-map">回宮位導覽 <span aria-hidden="true">↑</span></a>
       </header>
       <ol class="ziwei-palace-list" role="list">

@@ -1,0 +1,363 @@
+.ziwei-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px 16px;
+  margin-top: 19px;
+}
+
+.ziwei-hero-actions .primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 0;
+}
+
+.ziwei-chart-section {
+  padding-block-start: clamp(28px, 5.2vw, 62px);
+  scroll-margin-top: 10px;
+}
+
+.ziwei-chart-section > header p,
+.ziwei-chart-overview > p {
+  max-width: 43em;
+  margin-top: 6px;
+  color: var(--ziwei-muted);
+  line-height: 1.7;
+}
+
+.ziwei-chart-form {
+  display: grid;
+  gap: 13px;
+  margin-top: 15px;
+  padding: clamp(16px, 3vw, 29px);
+  border: 1px solid var(--ziwei-edge);
+  border-radius: 16px;
+  background: linear-gradient(145deg, #3d2938, #2b1f2d 67%);
+  box-shadow: 0 12px 27px #11091148;
+}
+
+.ziwei-chart-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 11px 16px;
+}
+
+.ziwei-chart-fields label {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+  color: #f1dedc;
+  font-size: .94rem;
+  font-weight: 650;
+}
+
+.ziwei-chart-fields :is(input, select) {
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 7px 10px;
+  border: 1px solid #ac8384;
+  border-radius: 8px;
+  background: #201622;
+  color: #fff0e3;
+  font: 400 1rem/1.45 var(--sans);
+}
+
+.ziwei-chart-fields select {
+  cursor: pointer;
+}
+
+.ziwei-chart-fields [aria-invalid="true"] {
+  border-color: #f4aaa3;
+}
+
+.ziwei-chart-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 13px;
+}
+
+.ziwei-chart-note,
+.ziwei-chart-status {
+  color: var(--ziwei-muted);
+  font-size: .9rem;
+  line-height: 1.6;
+}
+
+.ziwei-chart-status {
+  padding-inline-start: 9px;
+  border-inline-start: 2px solid #eeaaa2;
+  color: #ffdad2;
+}
+
+.ziwei-chart-result {
+  display: grid;
+  gap: clamp(13px, 2.6vw, 25px);
+  margin-top: clamp(23px, 4.6vw, 45px);
+  padding-top: clamp(20px, 3vw, 31px);
+  border-top: 1px solid var(--ziwei-edge);
+}
+
+.ziwei-chart-overview {
+  min-width: 0;
+}
+
+.ziwei-chart-overview h3,
+#ziwei-chart-reading-title {
+  color: #ffecd8;
+  font: 700 clamp(1.55rem, 3.5vw, 2.15rem)/1.3 var(--serif);
+}
+
+.ziwei-chart-overview > .ziwei-chart-meta {
+  font-size: .9rem;
+}
+
+.ziwei-chart-facts {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 6px 9px;
+  margin: 13px 0 0;
+}
+
+.ziwei-chart-facts > div {
+  min-width: 0;
+  padding: 8px 11px;
+  border: 1px solid var(--ziwei-edge);
+  border-radius: 8px;
+  background: #322332;
+}
+
+.ziwei-chart-facts dt {
+  color: var(--ziwei-gold);
+  font-size: .8rem;
+  font-weight: 700;
+}
+
+.ziwei-chart-facts dd {
+  margin: 1px 0 0;
+  color: #fff0e3;
+  font-size: .96rem;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+
+.ziwei-birth-grid {
+  display: grid;
+  grid-template-areas:
+    "si wu wei shen"
+    "chen center center you"
+    "mao center center xu"
+    "yin chou zi hai";
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(4, minmax(clamp(82px, 10vw, 125px), auto));
+  gap: clamp(3px, 1vw, 7px);
+  width: min(100%, 45rem);
+  margin-inline: auto;
+  padding: clamp(5px, 1.5vw, 12px);
+  border: 1px solid #c79b7699;
+  border-radius: 13px;
+  background: #221724;
+  box-shadow: 0 13px 37px #0d080e73, inset 0 0 0 2px #e8b48516;
+}
+
+.ziwei-birth-palace[data-branch="巳"] { grid-area: si; }
+.ziwei-birth-palace[data-branch="午"] { grid-area: wu; }
+.ziwei-birth-palace[data-branch="未"] { grid-area: wei; }
+.ziwei-birth-palace[data-branch="申"] { grid-area: shen; }
+.ziwei-birth-palace[data-branch="辰"] { grid-area: chen; }
+.ziwei-birth-palace[data-branch="酉"] { grid-area: you; }
+.ziwei-birth-palace[data-branch="卯"] { grid-area: mao; }
+.ziwei-birth-palace[data-branch="戌"] { grid-area: xu; }
+.ziwei-birth-palace[data-branch="寅"] { grid-area: yin; }
+.ziwei-birth-palace[data-branch="丑"] { grid-area: chou; }
+.ziwei-birth-palace[data-branch="子"] { grid-area: zi; }
+.ziwei-birth-palace[data-branch="亥"] { grid-area: hai; }
+
+.ziwei-birth-palace {
+  display: grid;
+  min-width: 0;
+  align-content: center;
+  justify-items: center;
+  gap: 2px;
+  padding: clamp(4px, 1vw, 10px) 3px;
+  border: 1px solid var(--ziwei-edge);
+  border-radius: 6px;
+  background: linear-gradient(145deg, #453043, #302333 73%);
+  color: #ffecda;
+  line-height: 1.35;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.ziwei-birth-palace > strong {
+  font: 700 clamp(.85rem, 2.2vw, 1.14rem)/1.35 var(--serif);
+}
+
+.ziwei-grid-branch {
+  color: #eac4a6;
+  font-size: clamp(.69rem, 1.5vw, .9rem);
+}
+
+.ziwei-grid-stars {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: .38em;
+  color: #efdaec;
+  font-size: clamp(.7rem, 1.6vw, .89rem);
+}
+
+.ziwei-birth-palace.is-life {
+  border-color: #edb376;
+  background: linear-gradient(145deg, #644338, #442c37 70%);
+}
+
+.ziwei-birth-palace.is-body {
+  box-shadow: inset 0 0 0 1px #d8b8eea1;
+  background: linear-gradient(145deg, #4e3f60, #35243e 73%);
+}
+
+.ziwei-birth-palace.is-life.is-body {
+  background: linear-gradient(145deg, #65443d, #442d48 76%);
+}
+
+.ziwei-birth-palace:hover,
+.ziwei-birth-palace:focus-visible {
+  z-index: 1;
+  border-color: var(--ziwei-gold);
+  background: #684455;
+  outline-offset: 2px;
+}
+
+.ziwei-grid-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px;
+  max-width: 100%;
+}
+
+.ziwei-grid-badge {
+  padding: 0 4px;
+  border: 1px solid #edb3769e;
+  border-radius: 999px;
+  background: #36212b;
+  color: #ffda9a;
+  font-size: .67rem;
+  font-weight: 700;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+.ziwei-grid-badge.is-body {
+  border-color: #d8b8ee9e;
+  background: #33243e;
+  color: #eedaff;
+}
+
+.ziwei-birth-center {
+  grid-area: center;
+  display: grid;
+  min-width: 0;
+  place-content: center;
+  place-items: center;
+  gap: 5px;
+  padding: 8px 6px;
+  border: 1px solid var(--ziwei-edge);
+  border-radius: 8px;
+  background:
+    radial-gradient(ellipse at center, transparent 55%, #dbab8624 56%, transparent 57%, transparent 67%, #dbab8619 68%, transparent 69%),
+    radial-gradient(ellipse at center, #614052, #332235 79%);
+  color: #ffecd9;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.ziwei-birth-center strong {
+  font: 700 clamp(1.03rem, 2.5vw, 1.57rem)/1.35 var(--serif);
+}
+
+.ziwei-birth-center :is(p, span) {
+  color: #ead1d7;
+  font-size: clamp(.74rem, 1.7vw, .94rem);
+  line-height: 1.5;
+}
+
+.ziwei-chart-card h4 {
+  color: #ffeedb;
+  font: 700 1.38rem/1.35 var(--serif);
+}
+
+.ziwei-chart-placement {
+  margin-block: 3px 7px;
+  color: var(--ziwei-gold);
+  font-size: .9rem;
+  font-weight: 700;
+}
+
+.ziwei-chart-stars {
+  color: #f0d7e9;
+  font-size: .92rem;
+}
+
+.ziwei-chart-aux-stars {
+  margin-top: 3px;
+  color: var(--ziwei-muted);
+  font-size: .84rem;
+  overflow-wrap: anywhere;
+}
+
+.ziwei-chart-summary {
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid var(--ziwei-edge);
+  color: #f5e5e6;
+}
+
+.ziwei-chart-method {
+  margin-top: 11px;
+  padding-inline: 13px;
+  border: 1px solid var(--ziwei-edge);
+  border-radius: 8px;
+  background: #281d2b;
+  color: var(--ziwei-muted);
+  font-size: .9rem;
+}
+
+.ziwei-chart-method summary {
+  min-height: 44px;
+  padding-block: 9px;
+  color: var(--ziwei-gold);
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.ziwei-chart-method p {
+  max-width: 50em;
+  margin-bottom: 11px;
+  line-height: 1.7;
+}
+
+.ziwei-chart-method a {
+  color: var(--ziwei-gold);
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+
+@media (max-width: 1060px) {
+  .ziwei-chart-facts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .ziwei-chart-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ziwei-chart-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
