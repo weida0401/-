@@ -1,0 +1,536 @@
+.bazi-page {
+  --bazi-gold: #f2c693;
+  --bazi-muted: #e0c5b5;
+  --bazi-edge: #c99c784f;
+  --bazi-surface: linear-gradient(143deg, #3f2c28, #2d2124 67%);
+  background: radial-gradient(ellipse at 50% 14rem, #36251f 0, #20161a 52%, #1c1419 100%);
+}
+
+.bazi-page .nav .site-links {
+  flex-wrap: wrap;
+  row-gap: 0;
+}
+
+.bazi-hero {
+  position: relative;
+  isolation: isolate;
+  border-bottom: 1px solid var(--bazi-edge);
+  background: #33231f;
+}
+
+.bazi-hero::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    linear-gradient(90deg, #2a1b1af5 0%, #30201ab8 49%, #2d201a86),
+    var(--night-image) center 35% / cover no-repeat;
+}
+
+.bazi-hero-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 30rem);
+  align-items: center;
+  gap: clamp(23px, 5.9vw, 78px);
+  padding-block: clamp(33px, 6vw, 86px);
+}
+
+.bazi-hero h1 {
+  margin: 0 0 15px;
+  color: #fff0dc;
+  font-size: clamp(2.55rem, 6vw, 4.85rem);
+  line-height: 1.16;
+  letter-spacing: .055em;
+}
+
+.bazi-hero h1 span {
+  display: block;
+  color: var(--bazi-gold);
+}
+
+.bazi-hero-intro p {
+  max-width: 27em;
+  color: #fae3d1;
+  line-height: 1.8;
+}
+
+.bazi-hero-intro .primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 19px;
+}
+
+.bazi-hero-art {
+  min-width: 0;
+  margin: 0;
+  padding: clamp(13px, 2.55vw, 26px);
+  border: 1px solid #e5b68788;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #4c3326eb, #2d2023f0 81%);
+  box-shadow: 0 15px 42px #110a0bbb, inset 0 0 0 4px #35232377;
+}
+
+.bazi-hero-art figcaption {
+  margin-bottom: 10px;
+  color: var(--bazi-gold);
+  font: 700 1.04rem/1.4 var(--serif);
+}
+
+.bazi-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(5px, 1.3vw, 13px);
+}
+
+.bazi-preview-grid > div {
+  display: grid;
+  min-height: clamp(80px, 10vw, 137px);
+  place-content: center;
+  gap: 6px;
+  padding: 6px 2px;
+  border: 1px solid #ca9a6e86;
+  border-radius: 7px;
+  background: linear-gradient(158deg, #644633, #3c2a25 74%);
+  color: #ffe9cf;
+  text-align: center;
+}
+
+.bazi-preview-grid > .is-day {
+  border-color: #edbd86;
+  background: linear-gradient(159deg, #7e5538, #4e3530 75%);
+}
+
+.bazi-preview-grid span {
+  color: #f2caa0;
+  font-size: .78rem;
+}
+
+.bazi-preview-grid strong {
+  font: 700 clamp(1.22rem, 3vw, 2.3rem)/1.23 var(--serif);
+}
+
+.bazi-hero-art p {
+  margin-top: 10px;
+  color: var(--bazi-muted);
+  font-size: .84rem;
+}
+
+.bazi-section {
+  padding-block-start: clamp(28px, 5.2vw, 62px);
+  scroll-margin-top: 10px;
+}
+
+.bazi-section > header p,
+.bazi-guide > header p,
+.bazi-result-header p,
+.bazi-elements p,
+.bazi-reading > p,
+.bazi-reading > header p {
+  max-width: 44em;
+  margin-top: 6px;
+  color: var(--bazi-muted);
+  line-height: 1.75;
+}
+
+.bazi-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(13rem, .49fr);
+  align-items: end;
+  gap: 13px clamp(14px, 2.4vw, 26px);
+  margin-top: 15px;
+  padding: clamp(16px, 3vw, 30px);
+  border: 1px solid var(--bazi-edge);
+  border-radius: 15px;
+  background: var(--bazi-surface);
+  box-shadow: 0 12px 28px #13090e4f;
+}
+
+.bazi-form > :is(.bazi-note, .bazi-status, noscript) {
+  grid-column: 1 / -1;
+}
+
+.bazi-form-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 14px;
+}
+
+.bazi-form-fields label {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+  color: #ffe3cb;
+  font-size: .94rem;
+  font-weight: 650;
+}
+
+.bazi-form-fields input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 7px 10px;
+  border: 1px solid #b18a72;
+  border-radius: 8px;
+  background: #211719;
+  color: #fff1e2;
+  font: 400 1rem/1.45 var(--sans);
+}
+
+.bazi-form-fields [aria-invalid="true"] {
+  border-color: #f5aaa0;
+}
+
+.bazi-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 13px;
+}
+
+.bazi-note,
+.bazi-status {
+  color: var(--bazi-muted);
+  font-size: .9rem;
+  line-height: 1.65;
+}
+
+.bazi-status {
+  padding-inline-start: 9px;
+  border-inline-start: 2px solid #eea39a;
+  color: #ffdcd2;
+}
+
+.bazi-method {
+  margin-top: 11px;
+  padding-inline: 13px;
+  border: 1px solid var(--bazi-edge);
+  border-radius: 8px;
+  background: #2c2022;
+  color: var(--bazi-muted);
+  font-size: .9rem;
+}
+
+.bazi-method summary {
+  min-height: 44px;
+  padding-block: 9px;
+  color: var(--bazi-gold);
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.bazi-method p {
+  max-width: 49em;
+  margin-bottom: 10px;
+  line-height: 1.75;
+}
+
+.bazi-method a {
+  color: var(--bazi-gold);
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+
+.bazi-result {
+  display: grid;
+  gap: clamp(13px, 2.6vw, 26px);
+  margin-top: clamp(23px, 4.8vw, 47px);
+  padding-top: clamp(20px, 3vw, 31px);
+  border-top: 1px solid var(--bazi-edge);
+}
+
+.bazi-result-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 7px 14px;
+}
+
+.bazi-result-header h3 {
+  color: #fff0dc;
+  font: 700 clamp(1.62rem, 3.6vw, 2.2rem)/1.35 var(--serif);
+}
+
+.bazi-result-header .bazi-day-master {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 7px;
+  margin-top: 0;
+  padding: 6px 12px;
+  border: 1px solid #dac09367;
+  border-radius: 8px;
+  background: #423027;
+  color: #f6d2ab;
+}
+
+.bazi-day-master strong {
+  color: #ffd8a7;
+  font: 700 clamp(1.4rem, 3vw, 1.9rem)/1.2 var(--serif);
+}
+
+.bazi-pillar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(8px, 1.7vw, 17px);
+}
+
+.bazi-pillar {
+  min-width: 0;
+  padding: clamp(10px, 2vw, 22px);
+  border: 1px solid var(--bazi-edge);
+  border-radius: 12px;
+  background: var(--bazi-surface);
+}
+
+.bazi-pillar:is([data-pillar="day"], [data-pillar="日柱"]) {
+  border-color: #e5b584c7;
+  background: linear-gradient(145deg, #59392c, #36262a 75%);
+}
+
+.bazi-pillar h4,
+.bazi-elements h4,
+.bazi-reading h4 {
+  margin: 0;
+  color: #ffe9d4;
+  font: 700 clamp(1.13rem, 2.45vw, 1.54rem)/1.4 var(--serif);
+}
+
+.bazi-pillar h4 {
+  margin-bottom: 8px;
+}
+
+.bazi-page :is([data-element="木"], [data-element="wood"]) { --element-ink: #c4d5a4; }
+.bazi-page :is([data-element="火"], [data-element="fire"]) { --element-ink: #ffb096; }
+.bazi-page :is([data-element="土"], [data-element="earth"]) { --element-ink: #eec58e; }
+.bazi-page :is([data-element="金"], [data-element="metal"]) { --element-ink: #f5e2af; }
+.bazi-page :is([data-element="水"], [data-element="water"]) { --element-ink: #bddde9; }
+
+.bazi-pillar-stem,
+.bazi-pillar-branch {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(6px, 1.3vw, 13px);
+  padding: 5px clamp(6px, 1vw, 11px);
+  border: 1px solid #d9aa803c;
+  border-radius: 7px;
+  background: #271c1c8f;
+  color: var(--element-ink, var(--bazi-gold));
+}
+
+.bazi-pillar-stem + .bazi-pillar-branch {
+  margin-top: 5px;
+}
+
+:is(.bazi-pillar-stem, .bazi-pillar-branch) strong {
+  font: 700 clamp(1.82rem, 4vw, 2.75rem)/1.25 var(--serif);
+}
+
+:is(.bazi-pillar-stem, .bazi-pillar-branch) span {
+  font-size: clamp(.75rem, 1.45vw, .93rem);
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+
+.bazi-pillar-details {
+  display: grid;
+  gap: 6px;
+  margin: 9px 0 0;
+  color: #f4dccb;
+  font-size: .84rem;
+  line-height: 1.5;
+}
+
+.bazi-pillar-details dt {
+  color: var(--bazi-gold);
+  font-weight: 700;
+}
+
+.bazi-pillar-details dd {
+  margin: 1px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.bazi-pillar-note {
+  margin-top: -5px;
+  color: var(--bazi-muted);
+  font-size: .86rem;
+  line-height: 1.65;
+}
+
+.bazi-elements {
+  min-width: 0;
+  padding: clamp(13px, 2.55vw, 25px);
+  border: 1px solid var(--bazi-edge);
+  border-radius: 13px;
+  background: var(--bazi-surface);
+}
+
+.bazi-element-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(4px, 1.2vw, 12px);
+  margin: 11px 0 0;
+}
+
+.bazi-element {
+  min-width: 0;
+  padding: clamp(5px, 1.4vw, 12px) clamp(4px, 1.35vw, 13px);
+  border: 1px solid var(--bazi-edge);
+  border-radius: 7px;
+  background: #2b1f22;
+  color: var(--element-ink, var(--bazi-gold));
+  text-align: center;
+}
+
+.bazi-element dt {
+  font: 700 clamp(1rem, 2.8vw, 1.48rem)/1.3 var(--serif);
+}
+
+.bazi-element dd {
+  margin: 3px 0 0;
+  color: #fbe4d4;
+  font-size: clamp(.72rem, 1.4vw, .94rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.bazi-element-meter {
+  display: block;
+  width: 100%;
+  height: 5px;
+  margin-top: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #9c7e6d57;
+}
+
+.bazi-element-meter > span {
+  display: block;
+  width: var(--bazi-element-fill, 0%);
+  max-width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--element-ink, var(--bazi-gold));
+}
+
+.bazi-reading-grid,
+.bazi-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(9px, 1.8vw, 18px);
+  margin-top: 12px;
+}
+
+.bazi-reading-grid > :is(article, section),
+.bazi-guide-card {
+  min-width: 0;
+  padding: clamp(14px, 2.4vw, 25px);
+  border: 1px solid var(--bazi-edge);
+  border-radius: 12px;
+  background: var(--bazi-surface);
+  color: #f2ddd4;
+  line-height: 1.75;
+}
+
+.bazi-reading-grid h5,
+.bazi-conclusion h5,
+.bazi-guide-card h3 {
+  margin: 0 0 5px;
+  color: #ffdfb8;
+  font: 700 1.17rem/1.45 var(--serif);
+}
+
+.bazi-reading > .bazi-reading-headline {
+  margin-top: 8px;
+  color: #ffdeb6;
+  font: 700 clamp(1.19rem, 2.6vw, 1.68rem)/1.55 var(--serif);
+}
+
+.bazi-reading-grid p + p,
+.bazi-conclusion p + p {
+  margin-top: 7px;
+}
+
+.bazi-conclusion {
+  padding: clamp(15px, 2.85vw, 27px);
+  border: 1px solid var(--bazi-edge);
+  border-inline-start: 3px solid #dfad77;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #553829, #34262a 74%);
+  color: #f9e7d5;
+  line-height: 1.8;
+}
+
+.bazi-reading .bazi-conclusion {
+  margin-top: 12px;
+}
+
+.bazi-conclusion p {
+  max-width: 46em;
+  margin-top: 5px;
+}
+
+.bazi-guide {
+  padding-block: clamp(28px, 5.4vw, 62px) clamp(38px, 6vw, 75px);
+}
+
+.bazi-guide-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.bazi-return {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 44px;
+  color: var(--bazi-gold);
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+
+@media (max-width: 840px) {
+  .bazi-form,
+  .bazi-hero-inner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bazi-hero-art {
+    width: min(100%, 30rem);
+  }
+
+  .bazi-hero::before {
+    background:
+      linear-gradient(155deg, #2a1b1ac9, #30201ab4 48%, #251b1cde),
+      var(--night-image) 36% 23% / cover no-repeat;
+  }
+
+  .bazi-guide-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .bazi-pillar-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bazi-reading-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 460px) {
+  .bazi-page .nav .site-links {
+    column-gap: clamp(4px, 1.6vw, 7px);
+    font-size: clamp(.8125rem, 4.05vw, .875rem);
+  }
+
+  .bazi-form-fields,
+  .bazi-guide-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

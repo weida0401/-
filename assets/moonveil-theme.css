@@ -40,7 +40,7 @@ body {
   color: #e8d3cf;
 }
 
-.nav .site-links:has(.nav-ziwei-link) {
+.nav .site-links:has(.nav-ziwei-link, .nav-bazi-link) {
   flex-wrap: wrap;
   row-gap: 0;
 }

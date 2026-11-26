@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="輸入國曆出生日期與時間，排出自己的八字四柱，查看日主、十神、藏干、五行分布與白話解讀。">
+  <meta name="theme-color" content="#1c141b">
+  <title>八字排盤與四柱解讀｜月隱塔羅</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23231830'/%3E%3Cpath d='M26 9a12 12 0 1 0 5 19A11 11 0 0 1 26 9Z' fill='%23f1cf9d'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../assets/moonveil-theme.css?v=bazi-nav">
+  <link rel="stylesheet" href="../assets/bazi.css?v=bazi-chart">
+  <script defer src="../assets/site-music.js?v=warm-moon"></script>
+  <script defer src="../assets/vendor/lunar-javascript-1.7.8.js"></script>
+  <script defer src="../assets/bazi-chart.js?v=bazi-chart"></script>
+  <script defer src="../assets/bazi-reading.js?v=bazi-chart"></script>
+  <script defer src="../assets/bazi-page.js?v=bazi-chart"></script>
+</head>
+<body class="bazi-page">
+  <header class="top">
+    <div class="container nav">
+      <a href="../" class="brand"><span class="brand-icon" aria-hidden="true">☾</span><span>月隱塔羅<small>MOONVEIL TAROT</small></span></a>
+      <nav class="site-links" aria-label="主選單">
+        <a href="../#reading">開始占卜</a>
+        <a href="../multipoint/">多點牌陣</a>
+        <a href="../zodiac/">十二星座</a>
+        <a href="../ziwei/">紫微斗數</a>
+        <a class="nav-bazi-link" href="./" aria-current="page">八字排盤</a>
+      </nav>
+      <div class="nav-actions">
+        <button id="music-toggle" class="music-toggle" type="button" aria-label="背景音樂" aria-pressed="false"><span class="music-icon" aria-hidden="true">♪</span><span>音樂</span></button>
+      </div>
+    </div>
+  </header>
+  <audio id="site-music" preload="none" loop src="../assets/moonveil-night.mp3" hidden></audio>
+
+  <main>
+    <section class="bazi-hero" aria-labelledby="bazi-title">
+      <div class="container bazi-hero-inner">
+        <div class="bazi-hero-intro">
+          <h1 id="bazi-title">八字<span>四柱命盤</span></h1>
+          <p>出生的年、月、日、時，各對應一組天干地支。排出自己的八字，從日主認識你習慣怎麼做事、和人來往。</p>
+          <a class="primary bazi-start" href="#bazi-chart">排我的八字 <span aria-hidden="true">↓</span></a>
+        </div>
+        <figure class="bazi-hero-art">
+          <figcaption>四柱示意</figcaption>
+          <div class="bazi-preview-grid">
+            <div><span>年柱</span><strong>甲辰</strong></div>
+            <div><span>月柱</span><strong>丙寅</strong></div>
+            <div class="is-day"><span>日柱</span><strong>甲辰</strong></div>
+            <div><span>時柱</span><strong>庚午</strong></div>
+          </div>
+          <p>每柱由天干、地支各一字組成。</p>
+        </figure>
+      </div>
+    </section>
+
+    <section class="container bazi-section" id="bazi-chart" aria-labelledby="bazi-form-title">
+      <header>
+        <h2 id="bazi-form-title">排我的八字</h2>
+        <p>請填寫東八區（UTC+8）標準時間。臺灣目前使用這個時區。</p>
+      </header>
+      <form class="bazi-form" id="bazi-form" autocomplete="off" novalidate>
+        <div class="bazi-form-fields">
+          <label for="bazi-date">國曆出生日期
+            <input type="date" id="bazi-date" min="1900-01-01" max="2100-12-31" required>
+          </label>
+          <label for="bazi-time">出生時間（UTC+8）
+            <input type="time" id="bazi-time" required>
+          </label>
+        </div>
+        <div class="bazi-form-actions">
+          <button class="primary" id="bazi-submit" type="submit" disabled>排出八字</button>
+          <p class="bazi-note">出生資料只在你的瀏覽器內計算。</p>
+        </div>
+        <p class="bazi-status" id="bazi-status" role="status" hidden></p>
+        <noscript><p class="bazi-status">請開啟瀏覽器的 JavaScript 功能，即可使用八字排盤。</p></noscript>
+      </form>
+      <details class="bazi-method">
+        <summary>排盤方式</summary>
+        <p>支援國曆 1900 至 2100 年。出生時間以東八區標準時間為準。</p>
+        <p>年柱在立春交節時換年，月柱在每月的起始節氣交節時換月，例如驚蟄進入卯月。年柱與月柱以出生當下的東八區時間計算。</p>
+        <p>本頁採子初換日。23:00 至 23:59 已進入子時，日柱與時柱依隔日的日干支計算。</p>
+        <p>如果出生時使用夏令時間，請填寫換算後的標準時間。節氣時刻透過 <a href="https://github.com/6tail/lunar-javascript/tree/v1.7.8">lunar-javascript 1.7.8</a> 計算，輸入時間以該分鐘的起點為準。</p>
+      </details>
+
+      <section class="bazi-result" id="bazi-result" aria-labelledby="bazi-result-title" hidden>
+        <header class="bazi-result-header">
+          <div>
+            <h3 id="bazi-result-title" tabindex="-1">你的八字命盤</h3>
+            <p id="bazi-result-meta"></p>
+          </div>
+          <p class="bazi-day-master" id="bazi-day-master"></p>
+        </header>
+        <div class="bazi-pillar-grid" id="bazi-pillars"></div>
+        <p class="bazi-pillar-note">十神描述天干和日主的關係，藏干則是傳統上歸在每個地支裡的天干。</p>
+
+        <section class="bazi-elements" aria-labelledby="bazi-elements-title">
+          <h4 id="bazi-elements-title">五行分布</h4>
+          <p>四柱的八個字各算一次。地支藏干另外列在各柱。</p>
+          <dl class="bazi-element-grid" id="bazi-elements"></dl>
+        </section>
+
+        <section class="bazi-reading" id="bazi-reading" aria-labelledby="bazi-reading-title">
+          <h4 id="bazi-reading-title">你的八字解讀</h4>
+          <p id="bazi-reading-headline" class="bazi-reading-headline"></p>
+          <p id="bazi-reading-intro"></p>
+          <div class="bazi-reading-grid" id="bazi-reading-sections"></div>
+          <div class="bazi-conclusion">
+            <h5>讀完這張八字</h5>
+            <p id="bazi-conclusion"></p>
+          </div>
+        </section>
+      </section>
+    </section>
+
+    <section class="container bazi-guide" aria-labelledby="bazi-guide-title">
+      <header><h2 id="bazi-guide-title">四柱各在看什麼？</h2></header>
+      <div class="bazi-guide-grid">
+        <article class="bazi-guide-card">
+          <h3>年柱</h3>
+          <p>常用來看家族背景和早年接觸的環境，例如從長輩身上耳濡目染的習慣。</p>
+        </article>
+        <article class="bazi-guide-card">
+          <h3>月柱</h3>
+          <p>出生的節令落在這一柱，也常用來看成長環境，以及你在學校或工作團隊裡習慣怎麼做事。</p>
+        </article>
+        <article class="bazi-guide-card">
+          <h3>日柱</h3>
+          <p>上面的天干叫「日主」，代表命盤中的自己。下面的地支則常用來理解親近關係裡的相處模式。</p>
+        </article>
+        <article class="bazi-guide-card">
+          <h3>時柱</h3>
+          <p>常用來理解長期想投入的事、對未來的想法，以及自己和晚輩相處的方式。</p>
+        </article>
+      </div>
+    </section>
+  </main>
+  <footer><div class="container footer"><a href="../" class="brand"><span class="brand-icon" aria-hidden="true">☾</span>月隱塔羅</a><a class="bazi-return" href="#bazi-chart">回到排盤 <span aria-hidden="true">↑</span></a></div></footer>
+</body>
+</html>
