@@ -286,6 +286,7 @@
 }
 
 .ziwei-chart-card h4 {
+  margin: 0;
   color: #ffeedb;
   font: 700 1.38rem/1.35 var(--serif);
 }
