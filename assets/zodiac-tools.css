@@ -143,6 +143,68 @@
   gap: clamp(13px, 2.6vw, 25px);
 }
 
+.forecast-index-panel {
+  grid-column: 1 / -1;
+}
+
+.forecast-index-panel h3 {
+  margin-bottom: 9px;
+  color: var(--z-cream);
+  font: 700 1.2rem/1.45 var(--serif);
+}
+
+.forecast-indices {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(8px, 1.5vw, 14px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.forecast-index {
+  min-width: 0;
+  padding: clamp(10px, 1.8vw, 17px);
+  border: 1px solid var(--z-line);
+  border-radius: 11px;
+  background: linear-gradient(145deg, #422b39, #2a1c27 78%);
+}
+
+.forecast-index-heading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 2px 8px;
+  color: var(--z-cream);
+}
+
+.forecast-index-score {
+  color: var(--z-gold);
+  font-size: .9rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.forecast-index-stars {
+  position: relative;
+  display: inline-block;
+  margin-top: 4px;
+  color: #a98d9a;
+  font: 1.19rem/1.2 system-ui, sans-serif;
+  letter-spacing: .045em;
+  white-space: nowrap;
+}
+
+.forecast-index-stars::before {
+  content: "★★★★★";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--star-fill);
+  overflow: hidden;
+  color: var(--z-gold);
+}
+
 .astro-card {
   min-width: 0;
   padding: clamp(16px, 3.2vw, 32px);
@@ -315,6 +377,12 @@
 @media (max-width: 745px) {
   .forecast-layout {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .forecast-indices {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

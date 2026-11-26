@@ -10,13 +10,13 @@
   <link rel="stylesheet" href="../assets/style.css">
   <link rel="stylesheet" href="../assets/moonveil-theme.css?v=warm-moon">
   <link rel="stylesheet" href="../assets/zodiac.css?v=transits">
-  <link rel="stylesheet" href="../assets/zodiac-tools.css?v=natal-chart">
+  <link rel="stylesheet" href="../assets/zodiac-tools.css?v=forecast-stars">
   <script defer src="../assets/site-music.js?v=warm-moon"></script>
   <script defer src="../assets/vendor/astronomy-engine-2.1.19.min.js"></script>
-  <script defer src="../assets/zodiac-transits.js?v=transits"></script>
+  <script defer src="../assets/zodiac-transits.js?v=forecast-stars"></script>
   <script defer src="../assets/zodiac-horoscope.js?v=transits"></script>
   <script defer src="../assets/zodiac-match.js?v=transits"></script>
-  <script defer src="../assets/zodiac-tools.js?v=transits"></script>
+  <script defer src="../assets/zodiac-tools.js?v=forecast-stars"></script>
   <script defer src="../assets/zodiac.js?v=transits"></script>
 </head>
 <body class="zodiac-page">
@@ -91,6 +91,10 @@
       <p class="astro-status" id="forecast-status" role="status" hidden></p>
       <noscript><p>請啟用 JavaScript 以計算行星位置與運勢。</p></noscript>
       <div class="forecast-layout" id="forecast-results" hidden>
+        <section class="forecast-index-panel" id="forecast-index-panel" aria-labelledby="forecast-indices-title" hidden>
+          <h3 id="forecast-indices-title">四項運勢指數</h3>
+          <ul class="forecast-indices" id="forecast-indices" role="list"></ul>
+        </section>
         <article class="astro-card" aria-labelledby="forecast-headline">
           <p class="astro-caption" id="forecast-caption"></p>
           <h3 id="forecast-headline"></h3>
@@ -115,6 +119,7 @@
       <details class="astro-method">
         <summary>行星位置與運勢怎麼算？</summary>
         <p>盤面採台灣時間每日中午的地心黃道位置。每週運勢取週一至週日各一天的盤面，找出與所選太陽星座中點較接近的相位。個人出生星盤則需要出生時間與地點。</p>
+        <p>星等以 3 星為中間值，四項對各天體採用不同的比重。六合和三分相加分，四分相和對分相扣分，越接近精確角度影響越大。每週先平均七天的原始分數，再以半顆星為單位顯示。</p>
       </details>
       <p id="forecast-announcement" class="astro-sr-only" role="status"></p>
     </section>

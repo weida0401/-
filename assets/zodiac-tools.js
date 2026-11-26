@@ -87,6 +87,25 @@
     get('forecast-highlights').replaceChildren(...items);
   }
 
+  function renderIndices(indices) {
+    const list = get('forecast-indices');
+    get('forecast-index-panel').hidden = !indices.length;
+    list.replaceChildren(...indices.map(({id, label, stars}) => {
+      const item = textElement('li', '', 'forecast-index');
+      item.dataset.area = id;
+      const heading = textElement('div', '', 'forecast-index-heading');
+      const score = textElement('span', stars + ' / 5', 'forecast-index-score');
+      score.setAttribute('aria-hidden', 'true');
+      heading.append(textElement('strong', label), score);
+      const meter = textElement('span', '★★★★★', 'forecast-index-stars');
+      meter.setAttribute('role', 'img');
+      meter.setAttribute('aria-label', stars + ' 顆星，滿分 5 顆星');
+      meter.style.setProperty('--star-fill', stars / 5 * 100 + '%');
+      item.append(heading, meter);
+      return item;
+    }));
+  }
+
   function renderForecast(announce = false) {
     const sign = signs.find(({id}) => id === forecastSign.value);
     if (!sign) return;
@@ -105,6 +124,8 @@
 
     setStatus('forecast-status', '');
     renderForecastDate(forecast.startDate, forecast.endDate);
+    const indices = forecast.indices ?? [];
+    renderIndices(indices);
     writeFields('forecast-', {
       caption: sign.name + ' · ' + periodName + '運勢',
       headline: reading.headline,
@@ -117,7 +138,10 @@
     renderHighlights(forecast.highlights, sign);
     renderSky(forecast.sky);
     forecastResults.hidden = false;
-    if (announce) get('forecast-announcement').textContent = sign.name + periodName + '運勢已更新。' + reading.headline;
+    if (announce) {
+      const ratings = indices.map(({label, stars}) => label + ' ' + stars + ' 星').join('，');
+      get('forecast-announcement').textContent = sign.name + periodName + '運勢已更新。' + (ratings ? ratings + '。' : '') + reading.headline;
+    }
   }
 
   function weeklyMatchNote(firstId, secondId) {
