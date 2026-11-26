@@ -12,6 +12,7 @@
   const engine = window.MoonveilBaziChart;
   const reader = window.MoonveilBaziReading;
   const boneWeight = window.MoonveilBaziBoneWeight;
+  const boneGuide = window.MoonveilBaziBoneGuide;
   const pillarNames = { year: '年柱', month: '月柱', day: '日柱', hour: '時柱' };
   const elements = ['木', '火', '土', '金', '水'];
 
@@ -96,6 +97,15 @@
       entry.querySelector('dt').append(create('span', value, 'bazi-bone-birth'));
       return entry;
     }));
+
+    const guide = boneGuide?.describe(total);
+    get('bone-guide').hidden = !guide;
+    if (guide) {
+      get('bone-guide-heading').textContent = `${displayWeight(total)}要留意什麼？`;
+      get('bone-guide-title').textContent = guide.title;
+      get('bone-guide-watch').textContent = guide.watch;
+      get('bone-guide-action').textContent = guide.action;
+    }
   }
 
   function renderElements(counts) {

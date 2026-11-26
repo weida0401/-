@@ -626,7 +626,7 @@
 }
 
 .bazi-bone-method a {
-  display: flex;
+  display: inline-flex;
   width: fit-content;
   min-height: 44px;
   align-items: center;
@@ -668,4 +668,47 @@ details.bazi-bone-method {
   .bazi-bone-parts {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+.bazi-bone-guide {
+  display: grid;
+  gap: 7px;
+  margin-top: 13px;
+  padding: clamp(12px, 2.35vw, 22px);
+  border: 1px solid var(--bazi-edge);
+  border-inline-start: 2px solid #d9a775;
+  border-radius: 9px;
+  background: #302428;
+  color: #f3ded4;
+  line-height: 1.75;
+}
+
+.bazi-bone-guide h5 {
+  margin: 0;
+  color: var(--bazi-gold);
+  font: 700 clamp(1.04rem, 2vw, 1.24rem)/1.45 var(--serif);
+}
+
+.bazi-bone-guide p {
+  max-width: 45em;
+  overflow-wrap: anywhere;
+}
+
+.bazi-bone-guide-title {
+  color: #fff0de;
+  font-size: clamp(1rem, 1.65vw, 1.125rem);
+  font-weight: 700;
+}
+
+.bazi-bone-guide-action {
+  margin-top: 2px;
+  padding-top: 8px;
+  border-top: 1px solid var(--bazi-edge);
+}
+
+.bazi-bone-guide-action strong {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--bazi-gold);
+  font-size: .88rem;
 }
