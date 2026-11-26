@@ -534,3 +534,138 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+.bazi-bone {
+  padding: clamp(13px, 2.65vw, 26px);
+  border: 1px solid #d0a07986;
+  border-radius: 13px;
+  background: linear-gradient(145deg, #52372b, #342529 70%);
+}
+
+.bazi-bone-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px 15px;
+}
+
+.bazi-bone-header h4 {
+  margin: 0;
+  color: #ffe9d4;
+  font: 700 clamp(1.13rem, 2.45vw, 1.54rem)/1.4 var(--serif);
+}
+
+.bazi-bone-header p:not(.bazi-bone-total),
+.bazi-bone-context {
+  max-width: 45em;
+  margin-top: 5px;
+  color: var(--bazi-muted);
+  font-size: .92rem;
+  line-height: 1.7;
+}
+
+.bazi-bone-total {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  justify-self: start;
+  padding: 6px clamp(12px, 3vw, 23px);
+  border: 1px solid #edbb88;
+  border-radius: 9px;
+  background: linear-gradient(147deg, #6e4b34, #493029 75%);
+  box-shadow: inset 0 0 0 2px #33221f45;
+  color: #ffdfaa;
+  font: 700 clamp(1.45rem, 4.4vw, 2.28rem)/1.25 var(--serif);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.bazi-bone-context {
+  margin-top: 10px;
+}
+
+.bazi-bone-parts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(5px, 1.2vw, 11px);
+  margin: 11px 0 0;
+}
+
+.bazi-bone-parts > [data-bone-part] {
+  display: grid;
+  min-width: 0;
+  align-content: start;
+  gap: 3px;
+  padding: clamp(7px, 1.25vw, 13px);
+  border: 1px solid var(--bazi-edge);
+  border-radius: 8px;
+  background: #2d2124;
+  overflow-wrap: anywhere;
+}
+
+.bazi-bone-parts dt {
+  color: #f5cda5;
+  font-size: .89rem;
+  font-weight: 700;
+}
+
+.bazi-bone-birth {
+  display: block;
+  margin-top: 1px;
+  color: var(--bazi-muted);
+  font-size: .79rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.bazi-bone-parts dd {
+  margin: 0;
+  color: #ffe8ce;
+  font: 700 clamp(1rem, 1.85vw, 1.16rem)/1.4 var(--serif);
+}
+
+.bazi-bone-method a {
+  display: flex;
+  width: fit-content;
+  min-height: 44px;
+  align-items: center;
+  margin-top: 2px;
+  color: var(--bazi-gold);
+  font-size: .89rem;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+
+details.bazi-bone-method {
+  margin-top: 9px;
+  color: var(--bazi-muted);
+  font-size: .89rem;
+  line-height: 1.7;
+}
+
+.bazi-bone-method summary {
+  min-height: 44px;
+  padding-block: 8px;
+  color: var(--bazi-gold);
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.bazi-bone-method p {
+  max-width: 45em;
+}
+
+.bazi-bone-method p + p {
+  margin-top: 7px;
+}
+
+@media (max-width: 540px) {
+  .bazi-bone-header {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bazi-bone-parts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

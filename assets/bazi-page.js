@@ -11,6 +11,7 @@
   const required = { date: '請填寫國曆出生日期。', time: '請填寫出生時間。' };
   const engine = window.MoonveilBaziChart;
   const reader = window.MoonveilBaziReading;
+  const boneWeight = window.MoonveilBaziBoneWeight;
   const pillarNames = { year: '年柱', month: '月柱', day: '日柱', hour: '時柱' };
   const elements = ['木', '火', '土', '金', '水'];
 
@@ -76,6 +77,27 @@
     }));
   }
 
+  function displayWeight(weight) {
+    const liang = Math.floor(weight / 10);
+    const qian = weight % 10;
+    if (!liang) return `${qian} 錢`;
+    return qian ? `${liang} 兩 ${qian} 錢` : `${liang} 兩`;
+  }
+
+  function renderBoneWeight({ total, parts, min, max }) {
+    const position = (total - min) / (max - min);
+    const band = position < 1 / 3 ? '偏輕' : position < 2 / 3 ? '中段' : '偏重';
+    get('bone-total').textContent = displayWeight(total);
+    get('bone-context').textContent = `你的稱骨重量落在「${band}」區段。本表範圍是 ${displayWeight(min)}到 ${displayWeight(max)}。`;
+
+    get('bone-parts').replaceChildren(...parts.map(({ id, label, value, weight }) => {
+      const entry = detail(label, displayWeight(weight));
+      entry.dataset.bonePart = id;
+      entry.querySelector('dt').append(create('span', value, 'bazi-bone-birth'));
+      return entry;
+    }));
+  }
+
   function renderElements(counts) {
     get('elements').replaceChildren(...elements.map((element) => {
       const count = counts[element];
@@ -104,7 +126,7 @@
     get('conclusion').textContent = reading.conclusion;
   }
 
-  if (!engine || !reader || !window.Solar?.fromYmdHms) {
+  if (!engine || !reader || !boneWeight || !window.Solar?.fromYmdHms) {
     showError('排盤功能暫時無法載入，請重新整理頁面。');
     return;
   }
@@ -122,6 +144,7 @@
     try {
       const chart = engine.calculate(fields.date.value, fields.time.value);
       renderPillars(chart);
+      renderBoneWeight(boneWeight.calculate(chart));
       renderElements(chart.elementCounts);
       renderReading(reader.describe(chart));
     } catch (error) {
