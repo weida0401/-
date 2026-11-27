@@ -221,6 +221,7 @@
     openSign(signsById.get(link.dataset.sign));
   });
   get('profile-forecast-link')?.addEventListener('click', () => window.MoonveilZodiacTools?.selectSign(activeId));
+  get('profile-match-link')?.addEventListener('click', () => window.MoonveilZodiacTools?.selectMatchSign?.(activeId));
   window.addEventListener('hashchange', updateFromHash);
 
   month.append(...Array.from({length:12}, (_, index) => new Option((index + 1) + ' 月', String(index + 1))));

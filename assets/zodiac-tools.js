@@ -6,6 +6,7 @@
   const periods = get('forecast-period');
   const matchFirst = get('match-first');
   const matchSecond = get('match-second');
+  const matchSwap = get('match-swap');
   const forecastResults = get('forecast-results');
   const matchResult = get('match-result');
   const colors = {
@@ -148,36 +149,59 @@
     try {
       const now = new Date();
       const firstWeek = window.MoonveilTransits.forecast(firstId, 'weekly', now);
-      const secondWeek = window.MoonveilTransits.forecast(secondId, 'weekly', now);
+      const secondWeek = firstId === secondId ? firstWeek : window.MoonveilTransits.forecast(secondId, 'weekly', now);
       return window.MoonveilZodiacMatch.transitNote?.(firstId, secondId, firstWeek, secondWeek) ?? '';
     } catch {
       return '';
     }
   }
 
+  function renderMatchScenes(first, second) {
+    const scenes = window.MoonveilZodiacMatchScenes?.describe(first, second) ?? [];
+    get('match-scenes').hidden = !scenes.length;
+    get('match-scene-grid').replaceChildren(...scenes.map(({id, title, text}) => {
+      const card = textElement('article', '', 'match-scene');
+      card.dataset.scene = id;
+      card.append(textElement('h5', title), textElement('p', text));
+      return card;
+    }));
+  }
+
   function renderMatch(announce = false) {
     const first = signs.find(({id}) => id === matchFirst.value);
     const second = signs.find(({id}) => id === matchSecond.value);
+    matchSwap.disabled = !first || !second || first === second;
     const match = first && second ? window.MoonveilZodiacMatch?.compare(first.id, second.id) : null;
     matchResult.hidden = !match;
     if (!match) {
-      setStatus('match-status', first && second ? '暫時無法載入配對，請重新整理後再試。' : '');
+      setStatus('match-status', first && second ? '暫時無法載入配對，請重新整理後再試。' : '選好兩個星座後，這裡會顯示配對解讀。');
+      get('match-announcement').textContent = '';
       return;
     }
 
     setStatus('match-status', '');
     const note = weeklyMatchNote(first.id, second.id);
+    const pairName = first.name + ' × ' + second.name;
     writeFields('match-', {
-      caption: first.name + ' × ' + second.name,
+      caption: pairName,
       headline: match.headline,
       overview: match.overview,
       strength: match.strength,
       friction: match.friction,
       next: match.nextStep,
+      'first-glyph': first.glyph,
+      'second-glyph': second.glyph,
       transit: note
     });
     get('match-transit-row').hidden = !note;
-    if (announce) get('match-announcement').textContent = '配對已更新。' + match.headline;
+    renderMatchScenes(first, second);
+    if (announce) get('match-announcement').textContent = pairName + '的配對已更新。' + match.headline;
+  }
+
+  function selectMatchSign(signId, announce = false) {
+    matchFirstChanged = true;
+    matchFirst.value = signId;
+    renderMatch(announce);
   }
 
   function initialize(zodiacSigns) {
@@ -185,13 +209,19 @@
     for (const select of [forecastSign, matchFirst, matchSecond]) {
       select.append(...signs.map(sign => new Option(sign.name, sign.id)));
     }
+    matchFirst.disabled = false;
+    matchSecond.disabled = false;
     forecastSign.addEventListener('change', () => renderForecast(true));
     periods.addEventListener('change', () => renderForecast(true));
-    matchFirst.addEventListener('change', () => {
+    matchFirst.addEventListener('change', () => selectMatchSign(matchFirst.value, true));
+    matchSecond.addEventListener('change', () => renderMatch(true));
+    matchSwap.addEventListener('click', () => {
+      const firstId = matchFirst.value;
+      matchFirst.value = matchSecond.value;
+      matchSecond.value = firstId;
       matchFirstChanged = true;
       renderMatch(true);
     });
-    matchSecond.addEventListener('change', () => renderMatch(true));
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) return;
       renderForecast();
@@ -208,5 +238,5 @@
     }
   }
 
-  window.MoonveilZodiacTools = { initialize, selectSign };
+  window.MoonveilZodiacTools = { initialize, selectMatchSign, selectSign };
 })();

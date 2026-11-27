@@ -11,13 +11,15 @@
   <link rel="stylesheet" href="../assets/moonveil-theme.css?v=bazi-nav">
   <link rel="stylesheet" href="../assets/zodiac.css?v=transits">
   <link rel="stylesheet" href="../assets/zodiac-tools.css?v=forecast-stars">
+  <link rel="stylesheet" href="../assets/zodiac-match.css?v=pairing">
   <script defer src="../assets/site-music.js?v=warm-moon"></script>
   <script defer src="../assets/vendor/astronomy-engine-2.1.19.min.js"></script>
   <script defer src="../assets/zodiac-transits.js?v=forecast-stars"></script>
   <script defer src="../assets/zodiac-horoscope.js?v=transits"></script>
   <script defer src="../assets/zodiac-match.js?v=transits"></script>
-  <script defer src="../assets/zodiac-tools.js?v=forecast-stars"></script>
-  <script defer src="../assets/zodiac.js?v=transits"></script>
+  <script defer src="../assets/zodiac-match-scenes.js?v=pairing"></script>
+  <script defer src="../assets/zodiac-tools.js?v=pairing"></script>
+  <script defer src="../assets/zodiac.js?v=pairing"></script>
 </head>
 <body class="zodiac-page">
   <header class="top">
@@ -69,11 +71,52 @@
     </section>
 
     <nav class="container zodiac-jump-links" aria-label="星座頁導覽">
+      <a class="zodiac-match-entry" href="#zodiac-match">星座配對 <span aria-hidden="true">↓</span></a>
       <a class="natal-entry" href="./natal/">我的出生星盤 <span aria-hidden="true">↗</span></a>
       <a href="#zodiac-forecast">每日與每週運勢</a>
-      <a href="#zodiac-match">星座配對</a>
       <a href="#zodiac-explore">認識十二星座</a>
     </nav>
+
+    <section class="container zodiac-feature" id="zodiac-match" aria-labelledby="match-title" tabindex="-1">
+      <header class="astro-heading">
+        <h2 id="match-title">星座配對</h2>
+        <p>選兩個太陽星座，看看感情、友情和工作合作中，哪些地方容易合拍，哪些需要多說清楚一點。</p>
+      </header>
+      <div class="astro-controls match-controls">
+        <label class="astro-field" for="match-first">你的星座
+          <select id="match-first" disabled></select>
+        </label>
+        <label class="astro-field" for="match-second">對方的星座
+          <select id="match-second" disabled><option value="">選擇星座</option></select>
+        </label>
+        <button class="secondary match-swap" id="match-swap" type="button" disabled><span aria-hidden="true">⇄</span> 交換星座</button>
+      </div>
+      <p class="astro-status" id="match-status" role="status" hidden></p>
+      <noscript><p class="astro-status">請開啟瀏覽器的 JavaScript 功能，即可使用星座配對。</p></noscript>
+      <article class="astro-card match-result" id="match-result" aria-labelledby="match-headline" hidden>
+        <header class="match-pair-header">
+          <div class="match-pair-symbols" aria-hidden="true">
+            <span class="match-glyph" id="match-first-glyph"></span><span class="match-pair-cross">×</span><span class="match-glyph" id="match-second-glyph"></span>
+          </div>
+          <div>
+            <p class="astro-caption" id="match-caption"></p>
+            <h3 id="match-headline"></h3>
+          </div>
+        </header>
+        <p id="match-overview" class="astro-overview"></p>
+        <dl class="astro-details match-details">
+          <div><dt>容易合拍的地方</dt><dd id="match-strength"></dd></div>
+          <div><dt>需要協調的地方</dt><dd id="match-friction"></dd></div>
+          <div><dt>可以試試的做法</dt><dd id="match-next"></dd></div>
+          <div id="match-transit-row" hidden><dt>本週相處提醒</dt><dd id="match-transit"></dd></div>
+        </dl>
+        <section class="match-scenes" id="match-scenes" aria-labelledby="match-scenes-title" hidden>
+          <h4 id="match-scenes-title">三種相處情境</h4>
+          <div class="match-scene-grid" id="match-scene-grid"></div>
+        </section>
+      </article>
+      <p id="match-announcement" class="astro-sr-only" role="status"></p>
+    </section>
 
     <section class="container zodiac-feature" id="zodiac-forecast" aria-labelledby="forecast-title">
       <header class="astro-heading">
@@ -127,34 +170,6 @@
       <p id="forecast-announcement" class="astro-sr-only" role="status"></p>
     </section>
 
-    <section class="container zodiac-feature" id="zodiac-match" aria-labelledby="match-title">
-      <header class="astro-heading">
-        <h2 id="match-title">星座配對</h2>
-        <p>選兩個太陽星座，看看相處時容易合拍和需要協調的地方。</p>
-      </header>
-      <div class="astro-controls match-controls">
-        <label class="astro-field" for="match-first">第一個星座
-          <select id="match-first"></select>
-        </label>
-        <label class="astro-field" for="match-second">第二個星座
-          <select id="match-second"><option value="">選擇星座</option></select>
-        </label>
-      </div>
-      <p class="astro-status" id="match-status" role="status" hidden></p>
-      <article class="astro-card match-result" id="match-result" aria-labelledby="match-headline" hidden>
-        <p class="astro-caption" id="match-caption"></p>
-        <h3 id="match-headline"></h3>
-        <p id="match-overview" class="astro-overview"></p>
-        <dl class="astro-details">
-          <div><dt>容易合拍的地方</dt><dd id="match-strength"></dd></div>
-          <div><dt>需要協調的地方</dt><dd id="match-friction"></dd></div>
-          <div><dt>可以試試的做法</dt><dd id="match-next"></dd></div>
-          <div id="match-transit-row" hidden><dt>本週相處提醒</dt><dd id="match-transit"></dd></div>
-        </dl>
-      </article>
-      <p id="match-announcement" class="astro-sr-only" role="status"></p>
-    </section>
-
     <section class="container zodiac-explorer" id="zodiac-explore" aria-labelledby="explorer-title">
       <div class="zodiac-selector">
         <h2 id="explorer-title">查看星座</h2>
@@ -175,7 +190,10 @@
           <div><dt>相處</dt><dd id="sign-relationship"></dd></div>
           <div><dt>練習</dt><dd id="sign-practice"></dd></div>
         </dl>
-        <a class="astro-profile-link" id="profile-forecast-link" href="#zodiac-forecast">看這個星座的運勢 <span aria-hidden="true">↑</span></a>
+        <div class="astro-profile-links">
+          <a class="astro-profile-link" id="profile-forecast-link" href="#zodiac-forecast">看這個星座的運勢 <span aria-hidden="true">↑</span></a>
+          <a class="astro-profile-link" id="profile-match-link" href="#zodiac-match">用這個星座配對 <span aria-hidden="true">↑</span></a>
+        </div>
       </article>
     </section>
   </main>
