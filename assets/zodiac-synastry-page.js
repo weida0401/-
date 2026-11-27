@@ -13,7 +13,7 @@
   const natal = window.MoonveilNatal;
   const synastry = window.MoonveilZodiacSynastry;
   const ready = Boolean(window.Astronomy && birthplaces && natal && synastry);
-  const planetsToShow = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars'];
+  const planetsToShow = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn'];
   const unavailable = '暫時無法載入星盤計算，請重新整理後再試。';
 
   function element(tag, text = '', className) {
@@ -169,6 +169,63 @@
     return section;
   }
 
+  function pointPair(detail) {
+    return `你的${detail.first.name}在${detail.first.signName}，對方的${detail.second.name}在${detail.second.signName}`;
+  }
+
+  function impactText(contribution) {
+    if (contribution === 0) return '對分數影響為 0';
+    const amount = Math.abs(contribution);
+    const direction = contribution < 0 ? '扣' : '加';
+    if (amount < .05) return `${direction}不到 0.1 分`;
+    return `${direction} ${amount.toFixed(1)} 分`;
+  }
+
+  function evidence(title, detail) {
+    const block = element('div', '', 'synastry-evidence-item');
+    const reading = window.MoonveilSynastryExplain?.describe(detail);
+    block.append(
+      element('h5', title),
+      element('p', `${pointPair(detail)}。${detail.name}，${impactText(detail.contribution)}。`, 'synastry-area-basis'),
+    );
+    if (reading) {
+      block.append(element('p', reading.summary), element('p', reading.action));
+    }
+    return block;
+  }
+
+  function renderArea({id, title, score, weight, text, details, matchedCount, possibleCount}) {
+    const article = element('article', '', 'match-scene synastry-area');
+    article.dataset.area = id;
+    article.append(
+      element('h4', title),
+      element('p', `${score} / 100 · 占總分 ${weight}%`, 'synastry-area-score'),
+      element('p', `${possibleCount} 組落點裡，有 ${matchedCount} 組算進分數`, 'synastry-area-basis'),
+      element('p', text),
+    );
+    const supportive = details.filter(detail => detail.contribution > 0)
+      .sort((a, b) => b.contribution - a.contribution)[0];
+    const challenging = details.filter(detail => detail.contribution < 0)
+      .sort((a, b) => a.contribution - b.contribution)[0];
+    if (supportive) article.append(evidence('哪裡合拍', supportive));
+    if (challenging) article.append(evidence('哪裡容易卡住', challenging));
+    return article;
+  }
+
+  function renderAspectList(areas) {
+    const aspects = areas.flatMap(area => area.details.map(detail => {
+      const item = element('li');
+      item.dataset.area = area.id;
+      item.append(
+        element('strong', `${area.title} · ${detail.name}`),
+        element('p', pointPair(detail)),
+        element('p', `相隔 ${detail.distance.toFixed(1)}°，離標準角度 ${detail.differenceFromExact.toFixed(1)}°，容許 ${detail.orb}°。比重 ${detail.contactWeight}，對這一項${impactText(detail.contribution)}。`),
+      );
+      return item;
+    }));
+    get('synastry-aspects').replaceChildren(...(aspects.length ? aspects : [element('li', '這次採入的主要相位是 0 組。')]));
+  }
+
   function renderComparison(first, second, comparison) {
     const firstSun = first.planets.find(point => point.id === 'Sun');
     const secondSun = second.planets.find(point => point.id === 'Sun');
@@ -176,27 +233,14 @@
     get('synastry-score').textContent = comparison.score;
     const headline = get('synastry-headline');
     headline.textContent = comparison.headline;
+    get('synastry-coverage').textContent = `對照 ${comparison.possibleCount} 組落點，其中 ${comparison.matchedCount} 組符合相位容許度。可參考的相位較少時，分數會靠近起始的 65 分。`;
     get('synastry-conclusion').textContent = comparison.conclusion;
-    get('synastry-areas').replaceChildren(...comparison.areas.map(({id, title, score, text, details}) => {
-      const article = element('article', '', 'match-scene');
-      article.dataset.area = id;
-      article.append(element('h4', title), element('p', score + ' / 100', 'synastry-area-score'));
-      const basis = details[0];
-      if (basis) {
-        article.append(element('p', '你的' + basis.first.name + '在' + basis.first.signName +
-          '，對方的' + basis.second.name + '在' + basis.second.signName + '。', 'synastry-area-basis'));
-      }
-      article.append(element('p', text));
-      return article;
-    }));
+    get('synastry-areas').replaceChildren(...comparison.areas.map(renderArea));
     get('synastry-placements').replaceChildren(
       renderPlacements(first, '你的落點', 'first'),
       renderPlacements(second, '對方的落點', 'second')
     );
-    const aspects = comparison.areas.flatMap(({details}) => details).map(detail =>
-      element('li', '你的' + detail.first.name + '與對方的' + detail.second.name + '呈' +
-        detail.name + '（' + detail.distance.toFixed(1) + '°）'));
-    get('synastry-aspects').replaceChildren(...(aspects.length ? aspects : [element('li', '這次比較的落點沒有形成主要相位。')]));
+    renderAspectList(comparison.areas);
     result.hidden = false;
     headline.focus({preventScroll:true});
     result.scrollIntoView({block:'start'});

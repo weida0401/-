@@ -167,6 +167,20 @@
     }));
   }
 
+  function renderMatchFactors(factors = []) {
+    get('match-score-breakdown').hidden = factors.length === 0;
+    get('match-score-factors').replaceChildren(...factors.map(({id, title, score, weight, text}) => {
+      const card = textElement('article', '', 'match-scene');
+      card.dataset.factor = id;
+      card.append(
+        textElement('h5', title),
+        textElement('p', `${score} / 100 · 占總分 ${weight}%`, 'match-factor-score'),
+        textElement('p', text),
+      );
+      return card;
+    }));
+  }
+
   function renderMatch(announce = false) {
     const first = signs.find(({id}) => id === matchFirst.value);
     const second = signs.find(({id}) => id === matchSecond.value);
@@ -195,6 +209,7 @@
       transit: note
     });
     get('match-transit-row').hidden = !note;
+    renderMatchFactors(match.factors);
     renderMatchScenes(first, second);
     if (announce) get('match-announcement').textContent = `${pairName}，配對 ${match.score} 分，滿分 100。${match.headline}`;
   }

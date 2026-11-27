@@ -16,8 +16,76 @@
     pisces: { element: "water", modality: "mutable" }
   };
 
-  const distanceScores = [84, 69, 84, 66, 91, 67, 76];
-  const complementaryElements = ["air-fire", "earth-water"];
+  const sameElements = {
+    fire: "同是火象，容易接得上彼此想試試看的心情，興致一來可以留點時間問對方想怎麼做。",
+    earth: "同是土象，通常比較能理解彼此想把時間、花費和做法講清楚再答應。",
+    air: "同是風象，聊天時容易接上對方的話，也能一起從不同角度想同一件事。",
+    water: "同是水象，常能察覺話裡的情緒，留一點時間讓對方慢慢講會更容易聽懂。"
+  };
+  const mixedElements = {
+    "air-earth": {
+      score: 70,
+      text: "風象常想多聊幾個選項，土象比較在意到底行不行，挑一個能試的小做法比較好繼續。"
+    },
+    "air-fire": {
+      score: 90,
+      text: "火象願意先試一個做法，風象容易再補個點子，聊過之後比較有機會真的去做。"
+    },
+    "air-water": {
+      score: 70,
+      text: "風象可能先問事情怎麼發生，水象可能想先聊當下的感覺，慢一點比較能聽懂彼此在意什麼。"
+    },
+    "earth-fire": {
+      score: 70,
+      text: "火象可能想趁有興趣趕快做，土象想把時間和花費先弄清楚，約個短時間試做能照顧到兩邊。"
+    },
+    "earth-water": {
+      score: 90,
+      text: "土象常先想到怎麼安排，水象容易察覺對方覺得方不方便，約時間時能補上彼此沒想到的地方。"
+    },
+    "fire-water": {
+      score: 70,
+      text: "火象可能很快說出想法，水象有時需要多一點時間消化，讓對方講完再決定比較容易談下去。"
+    }
+  };
+
+  const rhythmRules = {
+    "cardinal-cardinal": {
+      score: 74,
+      text: "兩個都偏開創，碰到要決定的事可能都想先帶頭，可以先說好誰負責哪一步。"
+    },
+    "cardinal-fixed": {
+      score: 84,
+      text: "開創型容易先開頭，固定型能把說好的事做下去，一開始就講清楚哪一段還可以改會比較省事。"
+    },
+    "cardinal-mutable": {
+      score: 90,
+      text: "開創型容易先提議，變動型擅長跟著情況調整，講好今天要做到哪一步就能少重來幾次。"
+    },
+    "fixed-fixed": {
+      score: 72,
+      text: "兩個都偏固定，說好的事可以一起做久一點，行程臨時要改時先講理由會比較好談。"
+    },
+    "fixed-mutable": {
+      score: 86,
+      text: "固定型能讓約好的事繼續，變動型遇到變化容易想到其他做法，想改安排時可以先商量。"
+    },
+    "mutable-mutable": {
+      score: 80,
+      text: "兩個都偏變動，安排有變時常能一起調整，先留一個真的做得到的時間會比較容易成行。"
+    }
+  };
+
+  // Indexed by the shorter number of signs between the two Sun signs.
+  const spacingRules = [
+    { score: 84, text: "兩個星座相同，容易理解彼此的習慣，遇到都不熟的情況也可以一起找人問。" },
+    { score: 66, text: "兩個星座在黃道上相鄰，可能先注意到不同的細節，約時間或分工時可以把各自的想法說出來。" },
+    { score: 91, text: "兩個星座相隔兩格，做法容易互補，例如有人想出可以去哪裡，有人接著找到去得成的時間。" },
+    { score: 62, text: "兩個星座相隔三格，遇到要馬上決定的事可能各有主張，先說好兩人都想把什麼做好會比較好談。" },
+    { score: 96, text: "兩個星座相隔四格，通常比較容易理解對方為什麼這樣想，聊起共同有興趣的事也容易接得上。" },
+    { score: 64, text: "兩個星座相隔五格，同一句話可能各自聽成不同意思，拿一個實際例子確認會比較好懂。" },
+    { score: 75, text: "兩個星座在黃道上相對，常能看見對方注意到而自己沒想到的事，一起做決定時可以把兩邊的理由都聽完。" }
+  ];
 
   const transitCues = {
     Mercury: {
@@ -58,12 +126,18 @@
     const first = signs[firstId];
     const second = signs[secondId];
     const gap = Math.abs(firstIndex - secondIndex);
-    const elementPair = pairKey(first.element, second.element);
-    const elements = first.element === second.element ? 2 : complementaryElements.includes(elementPair) ? 1 : -1;
-    const rhythm = first.modality === second.modality ? -1
-      : pairKey(first.modality, second.modality) === "cardinal-mutable" ? 1 : 0;
-    const score = distanceScores[Math.min(gap, 12 - gap)] + elements + rhythm;
-    return { ...reading, score };
+    const element = first.element === second.element
+      ? { score: 96, text: sameElements[first.element] }
+      : mixedElements[pairKey(first.element, second.element)];
+    const rhythm = rhythmRules[pairKey(first.modality, second.modality)];
+    const spacing = spacingRules[Math.min(gap, zodiacOrder.length - gap)];
+    const factors = [
+      { id: "element", title: "元素互動", score: element.score, weight: 40, text: element.text },
+      { id: "rhythm", title: "相處步調", score: rhythm.score, weight: 25, text: rhythm.text },
+      { id: "spacing", title: "看法與互補", score: spacing.score, weight: 35, text: spacing.text }
+    ];
+    const score = Math.round(factors.reduce((sum, factor) => sum + factor.score * factor.weight, 0) / 100);
+    return { ...reading, score, factors };
   }
 
   function transitNote(firstId, secondId, firstWeek, secondWeek) {

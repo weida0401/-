@@ -11,20 +11,21 @@
   <link rel="stylesheet" href="../assets/moonveil-theme.css?v=bazi-nav">
   <link rel="stylesheet" href="../assets/zodiac.css?v=transits">
   <link rel="stylesheet" href="../assets/zodiac-tools.css?v=forecast-stars">
-  <link rel="stylesheet" href="../assets/zodiac-match.css?v=plain-match">
+  <link rel="stylesheet" href="../assets/zodiac-match.css?v=match-details">
   <script defer src="../assets/site-music.js?v=warm-moon"></script>
   <script defer src="../assets/vendor/astronomy-engine-2.1.19.min.js"></script>
   <script defer src="../assets/zodiac-transits.js?v=forecast-stars"></script>
   <script defer src="../assets/zodiac-horoscope.js?v=transits"></script>
   <script defer src="../assets/zodiac-match-dialogue.js?v=plain-match"></script>
-  <script defer src="../assets/zodiac-match.js?v=plain-match"></script>
+  <script defer src="../assets/zodiac-match.js?v=match-details"></script>
   <script defer src="../assets/zodiac-match-scenes.js?v=plain-match"></script>
-  <script defer src="../assets/zodiac-tools.js?v=plain-match"></script>
+  <script defer src="../assets/zodiac-tools.js?v=match-details"></script>
   <script defer src="../assets/zodiac.js?v=pairing"></script>
   <script defer src="../assets/zodiac-birthplace.js?v=tw-counties"></script>
   <script defer src="../assets/zodiac-natal.js?v=natal-chart"></script>
-  <script defer src="../assets/zodiac-synastry.js?v=plain-match"></script>
-  <script defer src="../assets/zodiac-synastry-page.js?v=plain-match"></script>
+  <script defer src="../assets/zodiac-synastry.js?v=match-details"></script>
+  <script defer src="../assets/zodiac-synastry-explain.js?v=match-details"></script>
+  <script defer src="../assets/zodiac-synastry-page.js?v=match-details"></script>
 </head>
 <body class="zodiac-page">
   <header class="top">
@@ -121,13 +122,19 @@
             <div><dt>下次可以怎麼做</dt><dd id="match-next"></dd></div>
             <div id="match-transit-row" hidden><dt>這週可以試試</dt><dd id="match-transit"></dd></div>
           </dl>
+          <section class="match-scenes match-score-breakdown" id="match-score-breakdown" aria-labelledby="match-score-breakdown-title" hidden>
+            <h4 id="match-score-breakdown-title">這個分數怎麼算出來？</h4>
+            <p class="match-score-note">下面三項按各自比重合成總分。</p>
+            <div class="match-scene-grid" id="match-score-factors"></div>
+          </section>
           <section class="match-scenes" id="match-scenes" aria-labelledby="match-scenes-title" hidden>
             <h4 id="match-scenes-title">約會、交朋友和一起做事</h4>
             <div class="match-scene-grid" id="match-scene-grid"></div>
           </section>
           <details class="astro-method match-method" id="match-score-method">
-            <summary>配對分數怎麼來的？</summary>
-            <p>本站用兩個太陽星座在星盤上隔幾格、火土風水怎麼搭，以及兩人的做事步調，換算成相處參考分數。</p>
+            <summary>為什麼跟其他網站分數不同？</summary>
+            <p>這裡用太陽星座的元素互動、相處步調與兩個星座在黃道上的位置，算出本站的參考分數。元素與位置本來就有關聯，分數由這三個角度綜合而來。各網站選用的比重和尺度不同，同一組配對也會有不同分數。</p>
+            <p>想對照兩人出生當下的行星角度，可以切換到雙人星盤配對。</p>
           </details>
         </article>
         <p id="match-announcement" class="astro-sr-only" role="status"></p>
@@ -167,6 +174,7 @@
             </div>
             <p class="match-score"><span>配對分數</span><span><strong id="synastry-score"></strong> / 100</span></p>
           </header>
+          <p class="match-score-note" id="synastry-coverage"></p>
           <div class="match-scene-grid" id="synastry-areas"></div>
           <div class="synastry-conclusion">
             <h4>先試這件事</h4>
@@ -175,11 +183,14 @@
           <details class="astro-method match-method">
             <summary>看兩張星盤的落點和相位</summary>
             <div class="synastry-placements" id="synastry-placements"></div>
+            <p class="match-score-note">下面的加扣分是各相位對所屬項目的影響。加總時使用未四捨五入的數字。</p>
             <ul class="synastry-aspects" id="synastry-aspects"></ul>
           </details>
           <details class="astro-method match-method" id="synastry-score-method">
             <summary>星盤配對分數怎麼來的？</summary>
-            <p>用出生地的時區與座標排出兩張星盤，再看太陽、月亮、水星、金星、火星和上升點彼此隔了幾度。每項從 70 分起算，比較合拍的角度加分，容易磨合的角度扣分。總分是情緒、溝通和感情互動三項分數的平均。</p>
+            <p>先用出生地的時區與座標排出兩張熱帶黃道星盤，再看兩個落點實際相隔幾度。越接近相位的標準角度，影響越大。同樣是合相，金星遇到火星和金星遇到土星，對相處的影響也不同。</p>
+            <p>各項以 65 分為起點。相位越接近容許度的邊緣，加扣分就越小。合相、六合、四分相、三分相、對分相的容許度依序為 7°、4°、6°、6°、7°，涉及太陽或月亮時依序為 9°、5°、7°、8°、9°。</p>
+            <p>總分由情緒、溝通、感情互動、長期配合四項依比重算出。各網站採用的星體、容許度與權重不同，對照時可以先看出生時區和列出的相位。 <a href="https://cafeastrology.com/compatibility-report-scores.html">Cafe Astrology 評分說明</a> · <a href="https://www.astro-seek.com/faq">Astro-Seek 容許度</a></p>
             <p>縣市與城市使用代表座標。<a href="https://www.geonames.org/">GeoNames</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></p>
           </details>
         </article>

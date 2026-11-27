@@ -78,6 +78,22 @@
   text-underline-offset: .2em;
 }
 
+.match-score-note {
+  max-width: 49em;
+  margin: 0 0 10px;
+  color: var(--z-muted);
+  font-size: .91rem;
+  line-height: 1.65;
+}
+
+.match-factor-score,
+.synastry-area-score {
+  margin-block: 2px 6px;
+  color: var(--z-gold);
+  font-size: .88rem;
+  font-variant-numeric: tabular-nums;
+}
+
 .match-controls {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 12rem)) auto;
@@ -305,17 +321,25 @@
   margin-top: 11px;
 }
 
-.synastry-area-score {
-  margin-block: 2px 6px;
-  color: var(--z-gold);
-  font-size: .88rem;
-  font-variant-numeric: tabular-nums;
+.synastry-result .match-scene-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
 }
 
 .synastry-area-basis {
   margin-bottom: 5px;
   color: var(--z-muted);
   font-size: .88rem;
+}
+
+.synastry-evidence-item {
+  margin-top: 11px;
+  padding-top: 9px;
+  border-top: 1px solid var(--z-line);
+}
+
+.synastry-evidence-item p + p {
+  margin-top: 4px;
 }
 
 .synastry-conclusion {
@@ -325,6 +349,11 @@
   background: #2c1d2a85;
   color: var(--z-cream);
   line-height: 1.7;
+}
+
+.synastry-conclusion h4,
+.synastry-placements h4 {
+  margin: 0 0 5px;
 }
 
 .synastry-placements dl {
@@ -346,10 +375,19 @@
 
 .synastry-aspects {
   display: grid;
-  gap: 3px;
+  gap: 7px;
   margin: 8px 0 0;
   padding-inline-start: 1.2em;
   overflow-wrap: anywhere;
+}
+
+.synastry-aspects li {
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--z-line);
+}
+
+.synastry-aspects strong {
+  color: var(--z-gold);
 }
 
 .astro-profile-links {
@@ -365,7 +403,7 @@
 }
 
 @media (max-width: 730px) {
-  .match-scene-grid, .synastry-people {
+  .match-scene-grid, .synastry-people, .synastry-result .match-scene-grid {
     grid-template-columns: minmax(0, 1fr);
   }
 }
