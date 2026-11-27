@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="查看月隱塔羅 78 張牌的圖面、關鍵詞、正位與逆位牌義。可按牌組篩選或搜尋中英文牌名。">
+  <meta name="theme-color" content="#1c141b">
+  <title>塔羅牌義圖鑑｜月隱塔羅</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23231830'/%3E%3Cpath d='M26 9a12 12 0 1 0 5 19A11 11 0 0 1 26 9Z' fill='%23f1cf9d'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../assets/moonveil-theme.css?v=bazi-nav">
+  <link rel="stylesheet" href="../assets/tarot-art.css?v=magic-reveal">
+  <link rel="stylesheet" href="../assets/tarot-library.css?v=magic-reveal">
+  <script defer src="../assets/tarot-art.js?v=magic-reveal"></script>
+  <script defer src="../assets/tarot-library.js?v=magic-reveal"></script>
+  <script defer src="../assets/site-music.js?v=warm-moon"></script>
+</head>
+<body class="tarot-library-page">
+  <header class="top">
+    <div class="container nav">
+      <a href="../" class="brand"><span class="brand-icon" aria-hidden="true">☾</span><span>月隱塔羅<small>MOONVEIL TAROT</small></span></a>
+      <nav class="site-links" aria-label="主選單">
+        <a href="../#reading">開始占卜</a>
+        <a href="../multipoint/">多點牌陣</a>
+        <a class="nav-card-library-link" href="./" aria-current="page">牌義圖鑑</a>
+        <a href="../zodiac/">十二星座</a>
+        <a class="nav-bazi-link" href="../bazi/">八字排盤</a>
+        <a class="nav-almanac-link" href="../almanac/">黃曆</a>
+      </nav>
+      <div class="nav-actions">
+        <button id="music-toggle" class="music-toggle" type="button" aria-label="背景音樂" aria-pressed="false"><span class="music-icon" aria-hidden="true">♪</span><span>音樂</span></button>
+      </div>
+    </div>
+  </header>
+  <audio id="site-music" preload="none" loop src="../assets/moonveil-night.mp3" hidden></audio>
+
+  <main>
+    <section class="library-hero" aria-labelledby="library-title">
+      <div class="container library-hero-inner">
+        <div>
+          <h1 id="library-title">塔羅牌義圖鑑</h1>
+          <p>抽到了哪一張牌？從 78 張牌中找出它，看看圖面和正位、逆位分別在說什麼。</p>
+          <a class="primary library-start" href="#library-browser">找一張牌 <span aria-hidden="true">↓</span></a>
+        </div>
+        <div class="library-hero-art" aria-hidden="true">
+          <img src="../assets/cards/major-02.webp" alt="" width="340" height="580" decoding="async">
+          <img src="../assets/cards/major-19.webp" alt="" width="340" height="580" decoding="async">
+          <img src="../assets/cards/major-17.webp" alt="" width="340" height="580" decoding="async">
+        </div>
+      </div>
+    </section>
+
+    <section class="container library-detail" id="card-meaning" aria-labelledby="meaning-title" hidden>
+      <figure class="library-detail-art" id="meaning-art"></figure>
+      <div class="library-detail-copy">
+        <header>
+          <p class="library-card-kind" id="meaning-kind"></p>
+          <h2 id="meaning-title" tabindex="-1"></h2>
+          <p class="library-keyword" id="meaning-keyword"></p>
+        </header>
+        <div class="library-meanings" id="meaning-sides">
+          <section class="library-side" data-orientation="upright" aria-labelledby="meaning-upright-title">
+            <h3 id="meaning-upright-title">正位</h3>
+            <p id="meaning-upright"></p>
+          </section>
+          <section class="library-side" data-orientation="reversed" aria-labelledby="meaning-reversed-title">
+            <h3 id="meaning-reversed-title">逆位</h3>
+            <p id="meaning-reversed"></p>
+          </section>
+        </div>
+        <a class="tarot-meaning-link" href="#library-browser">回牌卡列表 <span aria-hidden="true">↓</span></a>
+      </div>
+    </section>
+
+    <section class="container library-browser" id="library-browser" aria-labelledby="library-browser-title" tabindex="-1">
+      <div class="library-browser-header">
+        <h2 id="library-browser-title">瀏覽牌卡</h2>
+        <label for="library-search">搜尋牌名或關鍵詞
+          <input id="library-search" type="search" placeholder="例如 愚者、The Fool、寶劍" autocomplete="off" disabled>
+        </label>
+      </div>
+      <div class="library-filters" id="library-filters" role="group" aria-label="按牌組篩選">
+        <button type="button" data-suit="all" aria-pressed="true" disabled>全部</button>
+        <button type="button" data-suit="major" aria-pressed="false" disabled>大阿爾克納</button>
+        <button type="button" data-suit="wands" aria-pressed="false" disabled>權杖</button>
+        <button type="button" data-suit="cups" aria-pressed="false" disabled>聖杯</button>
+        <button type="button" data-suit="swords" aria-pressed="false" disabled>寶劍</button>
+        <button type="button" data-suit="pentacles" aria-pressed="false" disabled>錢幣</button>
+      </div>
+      <p class="library-status" id="library-status" role="status"></p>
+      <button class="secondary" id="library-retry" type="button" hidden>重新載入牌卡</button>
+      <noscript><p class="library-status">開啟瀏覽器的 JavaScript 功能，就能查閱 78 張牌的意思。</p></noscript>
+      <p class="library-count" id="library-count" role="status"></p>
+      <ul class="library-grid" id="library-grid" role="list"></ul>
+    </section>
+  </main>
+  <footer><div class="container footer"><a href="../" class="brand"><span class="brand-icon" aria-hidden="true">☾</span>月隱塔羅</a><a class="tarot-meaning-link" href="../#reading">開始抽牌 <span aria-hidden="true">↗</span></a></div></footer>
+</body>
+</html>

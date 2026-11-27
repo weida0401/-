@@ -207,3 +207,13 @@
   text-decoration: underline;
   text-underline-offset: .2em;
 }
+.tarot-meaning-link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 5px;
+  color: #f0c99a;
+  font-size: .9rem;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}

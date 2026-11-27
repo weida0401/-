@@ -314,6 +314,7 @@ const clear = $('clear');
 const manualDeck = $('manual-deck');
 const deckTitle = $('deck-title');
 const shuffleStage = $('shuffle-stage');
+const revealStage = $('reveal-stage');
 const deckPicking = $('deck-picking');
 const deckCards = $('deck-cards');
 const deckViewport = $('deck-viewport');
@@ -323,6 +324,7 @@ const reveal = $('reveal');
 const cardsPerRow = 13;
 let selection;
 let revealedPoints;
+let revealRun;
 const number = value => value.toFixed(1);
 const signed = (value, digits = 0) => {
   const rounded = Number(value.toFixed(digits));
@@ -412,6 +414,13 @@ function displayReading(points, question, theme) {
       metric,
       element('p', multiPointReading.perCard(point))
     );
+    const href = window.MoonveilCardArt?.meaningUrl?.(point.card.id, point.reversed);
+    if (href) {
+      const link = element('a', '看這張牌的牌義', 'tarot-meaning-link');
+      link.href = href;
+      link.setAttribute('aria-label', `查看${point.card.name}${orientation(point)}牌義`);
+      line.append(link);
+    }
     return line;
   }));
   const pointDetails = element('ul');
@@ -448,7 +457,9 @@ function makeDeckButton(index) {
   order.setAttribute('aria-hidden', 'true');
   button.append(sigil, order);
   button.addEventListener('click', () => {
+    if (!selection || revealRun) return;
     const picked = selection.picks.indexOf(index);
+    const openNow = picked < 0 && selection.mode === 'instant' && selection.picks.length < selection.spread.slots.length;
     if (picked >= 0) {
       if (selection.mode === 'instant') return;
       selection.picks.splice(picked, 1);
@@ -456,6 +467,10 @@ function makeDeckButton(index) {
       selection.picks.push(index);
     }
     updateSelection();
+    if (openNow) {
+      window.MoonveilTarotReveal?.accent(button);
+      window.MoonveilTarotReveal?.accent(pickedPreview.children[selection.picks.length - 1].querySelector('.pick-preview-art'));
+    }
     if (!reveal.disabled) reveal.focus({preventScroll:true});
     else if (selection.mode === 'instant') {
       const buttons = [...deckCards.children];
@@ -530,6 +545,10 @@ function updateSelection() {
   displayPickedPreview();
 }
 function clearReading() {
+  if (revealRun) {
+    revealRun.abort();
+    revealRun = undefined;
+  }
   selection = undefined;
   revealedPoints = undefined;
   displayCards(activeSpread());
@@ -578,18 +597,41 @@ form.addEventListener('submit', async event => {
   reveal.hidden = false;
   updateSelection();
 });
-reveal.addEventListener('click', () => {
-  if (!selection || selection.picks.length !== selection.spread.slots.length) return;
+reveal.addEventListener('click', async () => {
+  if (!selection || revealRun || selection.picks.length !== selection.spread.slots.length) return;
 
-  const {spread} = selection;
-  revealedPoints = spread.slots.map(pointForSlot);
+  const {spread, mode} = selection;
+  const points = spread.slots.map(pointForSlot);
+  if (mode === 'batch') {
+    const run = new AbortController();
+    revealRun = run;
+    reveal.disabled = true;
+    draw.disabled = true;
+    draw.textContent = '翻牌中…';
+    clear.textContent = '取消翻牌';
+    deckPicking.hidden = true;
+    deckTitle.textContent = '翻牌中';
+    $('draw-status').textContent = '正在依序翻開你選的牌。';
+    deckTitle.focus();
+    const entries = points.map(({card, reversed}) => ({id:card.id, name:card.name, reversed}));
+    try {
+      await window.MoonveilTarotReveal?.play(revealStage, entries, run.signal);
+    } catch {
+      // Show the reading even when the effect cannot play.
+    }
+    if (revealRun !== run) return;
+    revealRun = undefined;
+  }
+  revealedPoints = points;
   selection = undefined;
   manualDeck.hidden = true;
   deckCards.replaceChildren();
   pickedPreview.replaceChildren();
   flipMode.disabled = false;
   reveal.disabled = true;
+  draw.disabled = false;
   draw.textContent = '再抽一次';
+  clear.textContent = '清除結果';
   displayCards(spread, revealedPoints);
   renderResult();
   $('result-title').focus({preventScroll:true});

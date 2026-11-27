@@ -9,6 +9,7 @@ const drawTitle = byId("draw-title");
 const result = byId("result");
 const board = byId("card-board");
 const shuffleStage = byId("shuffle-stage");
+const revealStage = byId("reveal-stage");
 const reshuffle = byId("reshuffle");
 const reveal = byId("reveal");
 const suggestions = byId("suggestions");
@@ -47,6 +48,7 @@ const themes = {
 let theme = "general";
 let session;
 let shuffleRun;
+let revealRun;
 let tarotDeck;
 let records = [];
 let savedLocally = true;
@@ -92,6 +94,10 @@ function updateCount() {
 }
 
 function show(stage, focusId) {
+  if (stage !== "draw" && revealRun) {
+    revealRun.abort();
+    revealRun = undefined;
+  }
   if (stage !== "draw" && shuffleRun) {
     shuffleRun = undefined;
     shuffleStage.hidden = true;
@@ -127,7 +133,7 @@ function selectTheme(key, focusId) {
 }
 
 async function shuffle() {
-  if (shuffleRun || draw.hidden) return;
+  if (shuffleRun || revealRun || draw.hidden) return;
   const run = session;
   shuffleRun = run;
   drawTitle.textContent = "洗牌";
@@ -171,7 +177,7 @@ function createBack(index) {
   order.setAttribute("aria-hidden", "true");
   button.append(motif, order);
   button.addEventListener("click", () => {
-    if (shuffleRun || draw.hidden || button.parentNode !== board) return;
+    if (shuffleRun || revealRun || draw.hidden || button.parentNode !== board) return;
     const orderIndex = session.picks.indexOf(index);
     if (orderIndex >= 0) session.picks.splice(orderIndex, 1);
     else if (session.picks.length < session.count) session.picks.push(index);
@@ -209,6 +215,13 @@ function makeResultCard(entry, position) {
     node("h3", card.name_zh_hant + "｜" + card.keyword_zh_hant),
     node("p", entry.reversed ? card.reversed_zh_hant : card.upright_zh_hant)
   );
+  const href = window.MoonveilCardArt?.meaningUrl?.(card.id, entry.reversed);
+  if (href) {
+    const link = node("a", "看這張牌的牌義", "tarot-meaning-link");
+    link.href = href;
+    link.setAttribute("aria-label", `查看${card.name_zh_hant}${orientation}牌義`);
+    article.append(link);
+  }
   return article;
 }
 
@@ -288,14 +301,32 @@ themeSelect.addEventListener("change", () => selectTheme(themeSelect.value));
 byId("edit-question").addEventListener("click", () => show("form", "question"));
 byId("start-over").addEventListener("click", () => show("form", "question"));
 reshuffle.addEventListener("click", shuffle);
-reveal.addEventListener("click", () => {
-  if (!session || shuffleRun || session.picks.length !== session.count || draw.hidden) return;
+reveal.addEventListener("click", async () => {
+  if (!session || shuffleRun || revealRun || session.picks.length !== session.count || draw.hidden) return;
+  const run = new AbortController();
+  revealRun = run;
   const reading = {
     theme:session.theme,
     question:session.question,
     entries:session.picks.map((index) => session.options[index]),
     at:Date.now()
   };
+  reveal.disabled = true;
+  reshuffle.disabled = true;
+  board.hidden = true;
+  drawTitle.textContent = "翻牌中";
+  byId("draw-status").textContent = "正在翻開你選的牌。";
+  drawTitle.focus();
+  const entries = reading.entries.map(({index, reversed}) => ({
+    id:tarotDeck[index].id, name:tarotDeck[index].name_zh_hant, reversed
+  }));
+  try {
+    await window.MoonveilTarotReveal?.play(revealStage, entries, run.signal);
+  } catch {
+    // A failed visual effect still allows the selected reading to open.
+  }
+  if (revealRun !== run) return;
+  revealRun = undefined;
   records = [reading, ...records].slice(0, 20);
   persistHistory();
   displayReading(reading);
