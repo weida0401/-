@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="月隱塔羅的三點、五點與七點牌陣，從牌位權重、相鄰配對和牌義看見推力與阻力。">
+  <meta name="description" content="依問題選擇時間之流、盲點、卡關、二選一或關係牌陣，再用牌位與牌義看出下一步。">
   <meta name="theme-color" content="#1c141b">
   <title>多點塔羅牌陣｜月隱塔羅</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23231830'/%3E%3Cpath d='M26 9a12 12 0 1 0 5 19A11 11 0 0 1 26 9Z' fill='%23f1cf9d'/%3E%3C/svg%3E">
@@ -13,10 +13,14 @@
   <link rel="stylesheet" href="../assets/moonveil-theme.css?v=bazi-nav">
   <link rel="stylesheet" href="../assets/tarot-art.css?v=magic-reveal">
   <link rel="stylesheet" href="../assets/tarot-reveal.css?v=magic-reveal">
+  <link rel="stylesheet" href="../assets/tarot-spread-guide.css?v=role-reading">
   <script defer src="../assets/tarot-shuffle.js?v=shuffle-stage"></script>
   <script defer src="../assets/tarot-art.js?v=magic-reveal"></script>
   <script defer src="../assets/tarot-reveal.js?v=magic-reveal"></script>
-  <script defer src="../assets/multipoint.js?v=magic-reveal"></script>
+  <script defer src="../assets/tarot-spread-guide.js?v=role-reading"></script>
+  <script defer src="../assets/tarot-reading-language.js?v=role-reading"></script>
+  <script defer src="../assets/tarot-spread-reading.js?v=role-reading"></script>
+  <script defer src="../assets/multipoint.js?v=role-reading"></script>
   <script defer src="../assets/site-music.js?v=warm-moon"></script>
 </head>
 <body class="multipoint-page">
@@ -38,7 +42,7 @@
     <section class="hero multipoint-hero" aria-labelledby="multipoint-title">
       <div class="container multipoint-hero-inner">
         <h1 id="multipoint-title">多點塔羅牌陣</h1>
-        <p class="intro">從三點、五點或七點牌陣，整理眼前的推力、阻力與下一步。</p>
+        <p class="intro">想看走向、找卡點，還是比較兩個選擇？先選適合問題的牌陣，再依牌位讀出下一步。</p>
       </div>
     </section>
     <div class="container multipoint-content">
@@ -77,6 +81,15 @@
               <button class="secondary" id="clear" type="button" hidden>清除結果</button>
             </div>
           </div>
+          <div class="spread-guidance" id="spread-guidance" hidden>
+            <p id="spread-suggestion" role="status"></p>
+            <button class="secondary" id="apply-spread-suggestion" type="button">套用建議牌陣</button>
+          </div>
+          <fieldset class="spread-option-labels" id="spread-option-labels" hidden>
+            <legend>想比較的兩個選項（選填）</legend>
+            <label for="option-a">選項 A <input id="option-a" name="option-a" type="text" maxlength="28" autocomplete="off" placeholder="例如 留在現在的工作"></label>
+            <label for="option-b">選項 B <input id="option-b" name="option-b" type="text" maxlength="28" autocomplete="off" placeholder="例如 接受新工作"></label>
+          </fieldset>
         </form>
         <section class="spread-board" aria-labelledby="board-title">
           <h2 id="board-title" tabindex="-1">五點牌陣</h2>
@@ -84,6 +97,10 @@
           <ol class="positions" id="cards"></ol>
           <p class="text-muted text-small" id="hint"></p>
         </section>
+        <details class="spread-method">
+          <summary>牌陣和解讀依據</summary>
+          <p>先選好每張牌要回答的問題，再依牌位讀正逆位。走向代表照目前情況可能有的發展，行動牌會給出可以試的做法。<a href="https://sannie.tw/tarot-spreads/">參考珊妮療癒所的牌陣教學</a></p>
+        </details>
         <noscript><p>請啟用瀏覽器的 JavaScript 以使用抽牌功能。</p></noscript>
       </section>
 
@@ -122,8 +139,8 @@
             <p id="conclusion-next"></p>
           </div>
         </section>
-        <div class="reading-overview">
-          <div class="score-body">
+        <div class="reading-overview" id="reading-overview">
+          <div class="score-body" id="score-panel">
             <h3 class="kicker">牌面加權分數</h3>
             <p class="score-value"><span id="score"></span><span class="score-scale"> / 100</span></p>
             <p id="band"></p>
@@ -132,6 +149,7 @@
           <section class="reading-section" aria-labelledby="overview-title">
             <h3 id="overview-title">整體解讀</h3>
             <p id="summary"></p>
+            <div id="reading-connections"></div>
             <p id="pairing"></p>
           </section>
         </div>

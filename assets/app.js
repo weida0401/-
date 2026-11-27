@@ -10,6 +10,9 @@ const result = byId("result");
 const board = byId("card-board");
 const shuffleStage = byId("shuffle-stage");
 const revealStage = byId("reveal-stage");
+const spreadLink = byId("home-spread-link");
+const spreadLinkDetail = byId("home-spread-link-detail");
+const defaultSpreadLinkDetail = spreadLinkDetail.textContent;
 const reshuffle = byId("reshuffle");
 const reveal = byId("reveal");
 const suggestions = byId("suggestions");
@@ -20,27 +23,32 @@ const retryDeck = byId("retry-deck");
 const historyKey = "moonveil-readings-v1";
 const themes = {
   general: {
-    name: "自由占卜", count: 3, slots: ["過去", "現在", "可能方向"],
+    name: "自由占卜", count: 3, spreadId: "timeline",
+    slots: [{ role: "past", label: "過去" }, { role: "present", label: "現在" }, { role: "direction", label: "可能方向" }],
     examples: ["我可以怎麼理解這段關係？","我適合換個工作方向嗎？","面對兩個選擇，我該留意什麼？"],
     reflection: "回到你的問題，這些牌意裡哪個部分最貼近你現在的感受？你能在這週做哪一件小事，驗證自己的想法？"
   },
   love: {
-    name: "感情塔羅", count: 3, slots: ["我的感受", "關係現況", "相處方向"],
+    name: "感情塔羅", count: 3, spreadId: "home-love",
+    slots: [{ role: "self-state", label: "我的感受" }, { role: "present", label: "關係現況" }, { role: "relationship-direction", label: "相處方向" }],
     examples: ["我可以怎麼改善我們的溝通？","這段關係裡，我真正需要的是什麼？"],
     reflection: "關於這段關係，你希望對方了解你的哪一項需要？想一句可以從「我感受到……」開始的話。"
   },
   work: {
-    name: "工作塔羅", count: 3, slots: ["目前處境", "值得留意的事", "下一步"],
+    name: "工作塔羅", count: 3, spreadId: "home-work",
+    slots: [{ role: "present", label: "目前處境" }, { role: "obstacle", label: "值得留意的事" }, { role: "action", label: "下一步" }],
     examples: ["我適合換個工作方向嗎？","我該怎麼準備下一步的職涯發展？"],
     reflection: "哪一項工作條件對你最重要？在做決定前，你可以向誰了解情況，或先試做哪件小事？"
   },
   choice: {
-    name: "選擇指引", count: 3, slots: ["選項 A", "選項 B", "取捨重點"],
+    name: "選擇指引", count: 3, spreadId: "home-choice",
+    slots: [{ role: "option-a", label: "選項 A" }, { role: "option-b", label: "選項 B" }, { role: "criterion", label: "取捨重點" }],
     examples: ["我該留在原職，還是嘗試新的機會？","我該現在開始，還是等準備好再行動？"],
     reflection: "把兩個選項都寫下來，想想各自最吸引你的地方、需要付出的代價，以及一個能幫你比較它們的標準。"
   },
   daily: {
-    name: "今日一牌", count: 1, slots: ["今日主題", "值得留意的事", "今日行動"],
+    name: "今日一牌", count: 1, spreadId: "home-daily",
+    slots: [{ role: "present", label: "今日主題" }, { role: "obstacle", label: "值得留意的事" }, { role: "action", label: "今日行動" }],
     examples: ["今天我最值得留意的是什麼？","今天我可以怎麼照顧自己？"],
     reflection: "從牌義挑一個今天想留意的詞。晚上回顧時，看看哪個片刻讓你想到它。"
   }
@@ -50,6 +58,7 @@ let session;
 let shuffleRun;
 let revealRun;
 let tarotDeck;
+let canonicalMeanings = {};
 let records = [];
 let savedLocally = true;
 
@@ -57,6 +66,9 @@ async function loadDeck(fromRetry = false) {
   retryDeck.disabled = true;
   byId("deck-status").textContent = "正在載入塔羅牌…";
   try {
+    const meaningsRequest = Promise.resolve()
+      .then(() => window.MoonveilTarotSpreadGuide?.loadMeanings?.())
+      .catch(() => undefined);
     const response = await fetch("./data/cards.json");
     if (!response.ok) throw new Error("Card data request failed");
     const cards = await response.json();
@@ -68,6 +80,7 @@ async function loadDeck(fromRetry = false) {
       throw new Error("Invalid card data");
     }
     tarotDeck = cards;
+    canonicalMeanings = (await meaningsRequest) ?? {};
   } catch {
     byId("deck-status").textContent = "暫時無法載入牌卡資料，請再試一次。";
     retryDeck.hidden = false;
@@ -89,8 +102,35 @@ function node(tag, value, className) {
   return element;
 }
 
-function updateCount() {
+function selectedSpreadCount() {
+  return Number(form.querySelector('input[name="spread"]:checked').value);
+}
+
+function spreadFor(themeKey, count) {
+  if (count === 1) {
+    return { spreadId: "single", slots: [{ role: "action", label: themeKey === "daily" ? "今日指引" : "當下指引" }] };
+  }
+  return themes[themeKey];
+}
+
+function describePositions({slots}) {
+  return (slots.length === 1 ? "牌位是" : "牌位依序是") + slots.map(({label}) => label).join("、") + "。";
+}
+
+function updateSpreadPreview() {
+  byId("home-spread-preview").textContent = describePositions(spreadFor(theme, selectedSpreadCount()));
+}
+
+function updateSpreadRecommendation() {
+  const enteredQuestion = question.value.trim();
+  const preset = enteredQuestion && window.MoonveilTarotSpreadGuide?.recommend?.(enteredQuestion, theme);
+  spreadLink.setAttribute("href", preset ? `./multipoint/?spread=${encodeURIComponent(preset.id)}#spread-select` : "./multipoint/#spread-select");
+  spreadLinkDetail.textContent = preset ? `${preset.name} · ${preset.description ?? preset.reason}` : defaultSpreadLinkDetail;
+}
+
+function updateQuestion() {
   byId("question-count").textContent = question.value.length + " / 160";
+  updateSpreadRecommendation();
 }
 
 function show(stage, focusId) {
@@ -115,7 +155,7 @@ function setSuggestions() {
     button.type = "button";
     button.addEventListener("click", () => {
       question.value = example;
-      updateCount();
+      updateQuestion();
       question.focus();
     });
     return button;
@@ -129,6 +169,8 @@ function selectTheme(key, focusId) {
   themeSelect.value = theme;
   form.querySelector('input[value="' + config.count + '"]').checked = true;
   setSuggestions();
+  updateSpreadPreview();
+  updateSpreadRecommendation();
   show("form", focusId);
 }
 
@@ -202,27 +244,53 @@ function updateBoard() {
     : "從 " + session.options.length + " 張牌中選 " + count + " 張，目前已選 " + picks.length + " 張。";
 }
 
-function makeResultCard(entry, position) {
-  const card = tarotDeck[entry.index];
+function makeResultCard({cardId, name, keyword, reversed, label, meaning}, summary) {
   const article = node("article", "", "result-card");
   const face = node("div", "", "face");
-  const illustration = window.MoonveilCardArt?.create?.(card.id, entry.reversed);
+  const illustration = window.MoonveilCardArt?.create?.(cardId, reversed);
   face.append(illustration ?? node("span", "牌面暫時無法載入", "tarot-art-fallback"));
-  const orientation = entry.reversed ? "逆位" : "正位";
+  const orientation = reversed ? "逆位" : "正位";
   article.append(
     face,
-    node("p", position + " · " + orientation, "kicker"),
-    node("h3", card.name_zh_hant + "｜" + card.keyword_zh_hant),
-    node("p", entry.reversed ? card.reversed_zh_hant : card.upright_zh_hant)
+    node("p", label + " · " + orientation, "kicker"),
+    node("h3", name + "｜" + keyword),
+    node("p", summary || meaning)
   );
-  const href = window.MoonveilCardArt?.meaningUrl?.(card.id, entry.reversed);
+  const href = window.MoonveilCardArt?.meaningUrl?.(cardId, reversed);
   if (href) {
     const link = node("a", "看這張牌的牌義", "tarot-meaning-link");
     link.href = href;
-    link.setAttribute("aria-label", `查看${card.name_zh_hant}${orientation}牌義`);
+    link.setAttribute("aria-label", `查看${name}${orientation}牌義`);
     article.append(link);
   }
   return article;
+}
+
+function analyzeForDisplay(reading, {spreadId, slots}) {
+  const entries = reading.entries.map(({index, reversed}, position) => {
+    const card = tarotDeck[index];
+    const orientation = reversed ? "reversed" : "upright";
+    const canonical = canonicalMeanings[card.id]?.[orientation];
+    return {
+      ...slots[position],
+      cardId: card.id,
+      name: card.name_zh_hant,
+      keyword: card.keyword_zh_hant,
+      reversed,
+      meaning: typeof canonical === "string" && canonical.trim() ? canonical : card[`${orientation}_zh_hant`]
+    };
+  });
+  let analysis;
+  try {
+    analysis = window.MoonveilSpreadReading?.analyze?.({spreadId, entries, theme:reading.theme, question:reading.question});
+  } catch {
+    // The existing reading is still available if the role analysis fails.
+  }
+  if (!analysis) {
+    const labels = slots.map(({label}) => label);
+    analysis = buildReadingAnalysis(reading.theme, reading.entries, labels, tarotDeck);
+  }
+  return {entries, analysis};
 }
 
 function displayReading(reading) {
@@ -231,15 +299,22 @@ function displayReading(reading) {
   themeSelect.value = theme;
   question.value = reading.question;
   form.querySelector('input[value="' + reading.entries.length + '"]').checked = true;
-  updateCount();
+  updateQuestion();
+  updateSpreadPreview();
   setSuggestions();
-  const positions = reading.entries.length === 1 ? [theme === "daily" ? "今日指引" : "當下指引"] : config.slots.length === 3 ? config.slots : themes.general.slots;
+  const {entries, analysis} = analyzeForDisplay(reading, spreadFor(theme, reading.entries.length));
   byId("result-question").textContent = config.name + (reading.question ? "｜" + reading.question : "");
-  byId("result-cards").replaceChildren(...reading.entries.map((entry, index) => makeResultCard(entry, positions[index])));
-  const {paragraphs, conclusion} = buildReadingAnalysis(reading.theme, reading.entries, positions, tarotDeck);
-  byId("reading-synthesis").replaceChildren(...paragraphs.map((paragraph) => node("p", paragraph)));
-  byId("reading-conclusion").textContent = conclusion;
-  byId("reflection-text").textContent = config.reflection;
+  byId("result-cards").replaceChildren(...entries.map((entry, index) => makeResultCard(entry, analysis.cardReadings?.[index]?.summary)));
+  const paragraphs = analysis.paragraphs.map((paragraph) => node("p", paragraph));
+  if (analysis.headline) {
+    const headline = node("p", "", "spread-reading-headline");
+    headline.append(node("strong", analysis.headline));
+    paragraphs.unshift(headline);
+  }
+  byId("reading-synthesis").replaceChildren(...paragraphs);
+  byId("reading-conclusion").textContent = analysis.conclusion;
+  byId("reflection-title").textContent = analysis.nextStep ? "可以先做的一件事" : "給自己的提問";
+  byId("reflection-text").textContent = analysis.nextStep || config.reflection;
   show("result", "result-title");
 }
 
@@ -290,13 +365,15 @@ function displayHistory() {
 form.addEventListener("submit", (event) => {
   event.preventDefault();
   if (!tarotDeck || form.hidden) return;
-  session = {question:question.value.trim(), theme, count:Number(new FormData(form).get("spread"))};
+  session = {question:question.value.trim(), theme, count:selectedSpreadCount()};
   byId("draw-question").textContent = session.question || themes[theme].name;
+  byId("draw-spread-preview").textContent = describePositions(spreadFor(session.theme, session.count));
   show("draw");
   shuffle();
   drawTitle.focus();
 });
-question.addEventListener("input", updateCount);
+question.addEventListener("input", updateQuestion);
+form.querySelector(".spread").addEventListener("change", updateSpreadPreview);
 themeSelect.addEventListener("change", () => selectTheme(themeSelect.value));
 byId("edit-question").addEventListener("click", () => show("form", "question"));
 byId("start-over").addEventListener("click", () => show("form", "question"));
@@ -356,6 +433,7 @@ byId("confirm-delete").addEventListener("click", () => {
 });
 
 setSuggestions();
-updateCount();
+updateQuestion();
+updateSpreadPreview();
 retryDeck.addEventListener("click", () => loadDeck(true));
 loadDeck();

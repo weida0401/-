@@ -1,0 +1,122 @@
+.multipoint-controls .spread-field {
+  flex: 1 1 12rem;
+  max-width: 17rem;
+}
+
+.spread-guidance,
+.spread-option-labels {
+  grid-column: 1;
+  min-width: 0;
+}
+
+.spread-guidance {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem .85rem;
+  padding: .6rem .75rem;
+  border: 1px solid #cda37957;
+  border-radius: .65rem;
+  background: #20151d54;
+}
+
+.spread-guidance p {
+  flex: 1 1 12rem;
+  min-width: 0;
+  margin: 0;
+  color: #e9d6cd;
+  font-size: .9rem;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.spread-guidance .secondary {
+  padding-inline: .8rem;
+}
+
+.spread-option-labels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .7rem;
+  margin: 0;
+  padding: .5rem .75rem .75rem;
+  border: 1px solid #bf927173;
+  border-radius: .75rem;
+  background: #3d2a35;
+}
+
+.spread-option-labels legend {
+  padding-inline: .3rem;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.spread-option-labels label {
+  display: block;
+  min-width: 0;
+  color: var(--text);
+  font-size: .9rem;
+  overflow-wrap: anywhere;
+}
+
+.spread-option-labels input {
+  min-width: 0;
+}
+
+.multipoint-page .positions[data-count="4"] {
+  --columns: 4;
+}
+
+.multipoint-page .slot-title {
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.multipoint-result .reading-overview.is-role-reading {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+
+.multipoint-result .reading-overview.is-role-reading .reading-section p {
+  max-width: 48rem;
+}
+
+.spread-method a {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 44px;
+  color: var(--gold);
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+
+.home-spread-preview {
+  margin: .65rem 0 0;
+  color: var(--muted);
+  font-size: .87rem;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.reading-synthesis .spread-reading-headline {
+  color: #ffe3c0;
+  font: 700 clamp(1.05rem, 2.2vw, 1.2rem)/1.5 var(--serif);
+}
+
+@media (max-width: 520px) {
+  .multipoint-page .positions[data-count="4"] {
+    --columns: 2;
+  }
+}
+
+@media (max-width: 480px) {
+  .multipoint-controls .spread-field {
+    flex-basis: 100%;
+    max-width: none;
+  }
+
+  .spread-option-labels {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

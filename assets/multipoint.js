@@ -264,6 +264,16 @@ const spreads = {
   5:{name:'五點', desc:'看看事情的根基和現況，找出卡住的地方以及下一步。',slots:[['root',15],['now',25],['obstacle',20],['action',25],['trend',15]]},
   7:{name:'七點', desc:'加入內在與外在點位，檢查兩者如何影響下一步。',slots:[['root',10],['now',20],['obstacle',15],['inner',10],['outer',10],['action',20],['trend',15]]}
 };
+const spreadGuide = window.MoonveilTarotSpreadGuide;
+const guidedSpreads = Object.values(spreadGuide?.presets ?? {}).map(preset => ({
+  id: preset.id,
+  name: preset.name,
+  desc: preset.description,
+  slots: preset.slots.map(([role]) => [role]),
+  labels: Object.fromEntries(preset.slots),
+}));
+for (const spread of guidedSpreads) spreads[spread.id] = spread;
+const readingRoles = {now: 'present', trend: 'direction'};
 const deck = [
   ...major.map(([name, , ...values], i) => ({
     id: 'major-' + String(i).padStart(2, '0'), name, values
@@ -320,11 +330,14 @@ const deckCards = $('deck-cards');
 const deckViewport = $('deck-viewport');
 const pickedPreview = $('picked-preview');
 const flipMode = $('flip-mode');
+const spreadSelect = $('spread-select');
 const reveal = $('reveal');
 const cardsPerRow = 13;
 let selection;
-let revealedPoints;
+let revealedReading;
 let revealRun;
+let meanings = {};
+spreadGuide?.loadMeanings().then(value => { meanings = value; });
 const number = value => value.toFixed(1);
 const signed = (value, digits = 0) => {
   const rounded = Number(value.toFixed(digits));
@@ -348,7 +361,17 @@ function cardCaption(point) {
     element('span', orientation(point), 'slot-orientation')
   ];
 }
-function displayCards(spread, points) {
+function labelFor(spread, key, settings) {
+  const label = spread.labels?.[key] ?? position[key];
+  if (spread.id === 'options') {
+    const option = key.startsWith('option-a') ? settings?.optionA
+      : key.startsWith('option-b') ? settings?.optionB : '';
+    if (option) return `${label} · ${option}`;
+  }
+  return label;
+}
+
+function displayCards(spread, points, settings) {
   $('board-title').textContent = spread.name + '牌陣';
   $('board-desc').textContent = spread.desc;
   cards.dataset.count = spread.slots.length;
@@ -356,7 +379,7 @@ function displayCards(spread, points) {
     const slot = element('li', undefined, 'slot');
     const point = points?.[i];
     const tile = element('div', undefined, 'tile');
-    slot.append(tile, element('span', position[key], 'slot-title'));
+    slot.append(tile, element('span', labelFor(spread, key, settings), 'slot-title'));
     if (point) {
       tile.classList.add('is-revealed');
       tile.append(cardArtwork(point));
@@ -368,8 +391,8 @@ function displayCards(spread, points) {
       symbol.setAttribute('aria-hidden', 'true');
       tile.append(symbol);
     }
-    slot.append(element('span', weight + '% 權重', 'weight text-small text-muted'));
-    if (point) {
+    if (weight !== undefined) slot.append(element('span', weight + '% 權重', 'weight text-small text-muted'));
+    if (point && weight !== undefined) {
       const contribution = element('span', '貢獻 ' + signed(point.contribution, 2), 'contribution');
       contribution.dataset.direction = direction(point);
       slot.append(contribution);
@@ -386,34 +409,60 @@ function displayCards(spread, points) {
   }));
   gallery.scrollLeft = 0;
   $('hint').textContent = points
-    ? '已依牌陣順序完成抽牌。展開計算明細可核對每項貢獻。'
+    ? spread.id ? '已依牌位順序完成抽牌。' : '已依牌陣順序完成抽牌。展開計算明細可核對每項貢獻。'
     : '從整副 78 張蓋牌中挑選。你選牌的順序，就是它們進入牌位的順序。';
 }
-function displayReading(points, question, theme) {
-  const calc = calculate(points);
-  const answer = multiPointReading.answer(points, theme, question, calc.index);
-  const band = calc.index < 40 ? '牌面提醒先處理卡點' : calc.index >= 60 ? '牌面有較多助力' : '牌面有助力也有顧慮';
+function displayReading({spread, points, question, theme, optionA, optionB}) {
+  const entries = points.map(point => ({
+    role: readingRoles[point.key] ?? point.key,
+    label: point.label,
+    cardId: point.card.id,
+    name: point.card.name,
+    reversed: point.reversed,
+    meaning: meanings[point.card.id]?.[point.reversed ? 'reversed' : 'upright'] ?? point.meaning,
+  }));
+  let analysis;
+  try {
+    analysis = window.MoonveilSpreadReading?.analyze?.({
+      spreadId: spread.id ?? 'weighted', entries, theme, question, optionA, optionB,
+    });
+  } catch {
+    // Fall back to the selected cards if the role analysis cannot run.
+  }
+  const calc = spread.id ? undefined : calculate(points);
+  const action = points.find(point => point.key === 'action') ?? points.find(point => point.key === 'criterion') ?? points.at(-1);
+  const answer = analysis ? {headline: analysis.headline, body: analysis.conclusion, nextStep: analysis.nextStep}
+    : calc ? multiPointReading.answer(points, theme, question, calc.index) : {
+    headline: '先從可以調整的地方開始',
+    body: '從各牌位的提醒回頭看一遍，先把能做的第一步找出來。',
+    nextStep: action.meaning + '。',
+  };
+  $('result-title').textContent = spread.id ? `${spread.name}牌陣解讀` : '牌陣解讀';
   $('conclusion-headline').textContent = answer.headline;
   $('conclusion').textContent = answer.body;
   $('conclusion-next').textContent = answer.nextStep;
-  $('score').textContent = number(calc.index);
-  $('bar').style.width = calc.index + '%';
-  $('bar').parentElement.setAttribute('aria-valuenow', calc.index);
-  $('band').textContent = band;
-  $('summary').textContent = multiPointReading.summary(points, theme, question);
-  $('pairing').textContent = multiPointReading.pairing(calc);
+  $('reading-overview').classList.toggle('is-role-reading', !calc);
+  $('score-panel').hidden = !calc;
+  $('trace').hidden = !calc;
+  $('trace').open = false;
+  $('pairing').hidden = !calc;
+  $('summary').textContent = analysis?.paragraphs?.[0] ?? (calc
+    ? multiPointReading.summary(points, theme, question) : '先依牌位看每張牌回答的是哪一部分。');
+  $('reading-connections').replaceChildren(...(analysis?.paragraphs?.slice(1) ?? []).map(text => element('p', text)));
   $('reading-question').hidden = question.length === 0;
   $('reading-question').textContent = question ? '本次占問 · ' + question : '';
-  $('reading').replaceChildren(...points.map(point => {
-    const label = position[point.key];
+  $('reading').replaceChildren(...points.map((point, index) => {
     const line = element('li');
-    const metric = element('span', `權重 ${point.weight}% · 貢獻 ${signed(point.contribution, 2)}`, 'point-metric');
-    metric.dataset.direction = direction(point);
-    line.append(
-      element('strong', `${label} · ${point.card.name}（${orientation(point)}）`),
-      metric,
-      element('p', multiPointReading.perCard(point))
-    );
+    line.dataset.role = entries[index].role;
+    line.append(element('strong', `${point.label} · ${point.card.name}（${orientation(point)}）`));
+    if (calc) {
+      const metric = element('span', `權重 ${point.weight}% · 貢獻 ${signed(point.contribution, 2)}`, 'point-metric');
+      metric.dataset.direction = direction(point);
+      line.append(metric);
+    }
+    const description = analysis?.cardReadings?.[index]?.summary ?? (calc
+      ? multiPointReading.perCard(point) : entries[index].meaning);
+    line.append(element('p', description));
     const href = window.MoonveilCardArt?.meaningUrl?.(point.card.id, point.reversed);
     if (href) {
       const link = element('a', '看這張牌的牌義', 'tarot-meaning-link');
@@ -423,27 +472,56 @@ function displayReading(points, question, theme) {
     }
     return line;
   }));
+  if (calc) displayCalculation(points, calc);
+  result.hidden = false;
+  $('status').textContent = '抽牌完成。' + answer.headline;
+}
+
+function displayCalculation(points, calc) {
+  const band = calc.index < 40 ? '牌面提醒先處理卡點' : calc.index >= 60 ? '牌面有較多助力' : '牌面有助力也有顧慮';
+  $('score').textContent = number(calc.index);
+  $('bar').style.width = calc.index + '%';
+  $('bar').parentElement.setAttribute('aria-valuenow', calc.index);
+  $('band').textContent = band;
+  $('pairing').textContent = multiPointReading.pairing(calc);
   const pointDetails = element('ul');
-  pointDetails.append(...points.map(p => element('li', `${position[p.key]} · ${signed(p.score)} × ${p.weight}% ＝ ${signed(p.contribution, 2)}`)));
+  pointDetails.append(...points.map(p => element('li', `${p.label} · ${signed(p.score)} × ${p.weight}% ＝ ${signed(p.contribution, 2)}`)));
   const pairDetails = element('ul');
   pairDetails.append(...calc.pairs.map(p => element('li',
-    `${position[p.left.key]} × ${position[p.right.key]} · ${signed(p.score, 1)} × (${p.weight} / ${calc.pairWeights}) ≈ ${signed(p.contribution, 3)}`)));
+    `${p.left.label} × ${p.right.label} · ${signed(p.score, 1)} × (${p.weight} / ${calc.pairWeights}) ≈ ${signed(p.contribution, 3)}`)));
   $('trace-body').replaceChildren(
     element('p', '點位加權值 ＝ ' + signed(calc.base, 2)), pointDetails,
     element('p', '配對加權值 ≈ ' + signed(calc.adjacent, 3)), pairDetails,
     element('p', `混合值 ≈ (${signed(calc.base, 2)}) × 0.85 ＋ (${signed(calc.adjacent, 3)}) × 0.15 ＝ ${signed(calc.combined, 3)}`),
     element('p', `指數 ≈ 50 ＋ 25 × (${signed(calc.combined, 3)}) ＝ ${number(calc.index)}`));
-  $('trace').open = false;
-  result.hidden = false;
-  $('status').textContent = '抽牌完成。' + answer.headline;
 }
+
 function activeSpread() {
-  return spreads[new FormData(form).get('spread')];
+  return spreads[spreadSelect.value];
 }
-function renderResult() {
+
+function readSettings() {
   const settings = new FormData(form);
-  displayReading(revealedPoints, settings.get('question').trim(), settings.get('theme'));
+  return {
+    spread: activeSpread(),
+    question: settings.get('question').trim(),
+    theme: settings.get('theme'),
+    optionA: settings.get('option-a').trim(),
+    optionB: settings.get('option-b').trim(),
+  };
 }
+
+function updateSpreadGuidance() {
+  const {spread, question, theme} = readSettings();
+  $('spread-option-labels').hidden = spread.id !== 'options';
+  const suggested = spreadGuide?.recommend(question, theme);
+  $('spread-guidance').hidden = !suggested;
+  if (suggested) {
+    $('spread-suggestion').textContent = `建議「${suggested.name}」。${suggested.reason}`;
+    $('apply-spread-suggestion').disabled = spread.id === suggested.id;
+  }
+}
+
 function makeDeckButton(index) {
   const button = element('button', undefined, 'deck-card');
   button.type = 'button';
@@ -483,7 +561,8 @@ function makeDeckButton(index) {
 function pointForSlot([key, weight], order) {
   const {card, reversed} = selection.options[selection.picks[order]];
   const [score, meaning] = card.values.slice(reversed ? 2 : 0);
-  return {key, weight, card, reversed, score, meaning, contribution: score * weight / 100};
+  const point = {key, label:labelFor(selection.spread, key, selection), card, reversed, score, meaning};
+  return weight === undefined ? point : {...point, weight, contribution:score * weight / 100};
 }
 function displayPickedPreview() {
   const {spread, picks, mode} = selection;
@@ -508,7 +587,7 @@ function displayPickedPreview() {
       }
       preview.append(face);
     }
-    preview.append(mark, element('span', position[slot[0]], 'pick-preview-position'));
+    preview.append(mark, element('span', labelFor(spread, slot[0], selection), 'pick-preview-position'));
     return preview;
   }));
 }
@@ -528,7 +607,7 @@ function updateSelection() {
     const pickedName = opened ? `牌，${drawn.card.name}（${orientation(drawn)}）` : '蓋牌';
     button.setAttribute('aria-pressed', String(selected));
     button.setAttribute('aria-label', selected
-      ? `第 ${index + 1} 張${pickedName}，已選為第 ${order + 1} 張，牌位${position[spread.slots[order][0]]}`
+      ? `第 ${index + 1} 張${pickedName}，已選為第 ${order + 1} 張，牌位${labelFor(spread, spread.slots[order][0], selection)}`
       : `選擇第 ${index + 1} 張蓋牌`);
     button.classList.toggle('is-open', opened);
     button.lastElementChild.textContent = selected ? String(order + 1) : '';
@@ -538,7 +617,7 @@ function updateSelection() {
   reveal.disabled = !complete;
   const next = complete
     ? instant ? '牌都翻開了，可以看完整解讀。' : '現在可以翻牌，也可以點一張已選的牌取消。'
-    : `下一張放在「${position[spread.slots[picks.length][0]]}」。`;
+    : `下一張放在「${labelFor(spread, spread.slots[picks.length][0], selection)}」。`;
   const latest = instant && selection.options[picks.at(-1)];
   const openedCard = latest ? `翻到${latest.card.name}（${orientation(latest)}）。 ` : '';
   $('draw-status').textContent = `已選 ${picks.length}／${total} 張。 ${openedCard}${next}`;
@@ -550,8 +629,10 @@ function clearReading() {
     revealRun = undefined;
   }
   selection = undefined;
-  revealedPoints = undefined;
-  displayCards(activeSpread());
+  revealedReading = undefined;
+  const settings = readSettings();
+  displayCards(settings.spread, undefined, settings);
+  updateSpreadGuidance();
   manualDeck.hidden = true;
   shuffleStage.hidden = true;
   deckPicking.hidden = true;
@@ -571,7 +652,7 @@ form.addEventListener('submit', async event => {
   if (draw.disabled) return;
 
   clearReading();
-  const currentSelection = {spread: activeSpread(), options: shuffleDeck(), picks: [], mode: flipMode.value};
+  const currentSelection = {...readSettings(), options: shuffleDeck(), picks: [], mode: flipMode.value};
   selection = currentSelection;
   draw.disabled = true;
   draw.textContent = '洗牌中…';
@@ -600,7 +681,7 @@ form.addEventListener('submit', async event => {
 reveal.addEventListener('click', async () => {
   if (!selection || revealRun || selection.picks.length !== selection.spread.slots.length) return;
 
-  const {spread, mode} = selection;
+  const {spread, mode, question, theme, optionA, optionB} = selection;
   const points = spread.slots.map(pointForSlot);
   if (mode === 'batch') {
     const run = new AbortController();
@@ -622,7 +703,7 @@ reveal.addEventListener('click', async () => {
     if (revealRun !== run) return;
     revealRun = undefined;
   }
-  revealedPoints = points;
+  revealedReading = {spread, points, question, theme, optionA, optionB};
   selection = undefined;
   manualDeck.hidden = true;
   deckCards.replaceChildren();
@@ -632,14 +713,35 @@ reveal.addEventListener('click', async () => {
   draw.disabled = false;
   draw.textContent = '再抽一次';
   clear.textContent = '清除結果';
-  displayCards(spread, revealedPoints);
-  renderResult();
+  displayCards(spread, points, revealedReading);
+  displayReading(revealedReading);
   $('result-title').focus({preventScroll:true});
   result.scrollIntoView({block:'start'});
 });
 form.addEventListener('change', event => {
   if (event.target.name === 'spread' || (event.target === flipMode && selection)) clearReading();
-  if (event.target.name === 'theme' && revealedPoints) renderResult();
+  if (event.target.name === 'theme') {
+    updateSpreadGuidance();
+    if (revealedReading && !revealedReading.spread.id) {
+      revealedReading.theme = readSettings().theme;
+      displayReading(revealedReading);
+    }
+  }
+});
+form.addEventListener('input', event => {
+  if (event.target.name === 'question') updateSpreadGuidance();
+  if (!selection && !revealedReading && ['option-a', 'option-b'].includes(event.target.name)) {
+    const settings = readSettings();
+    displayCards(settings.spread, undefined, settings);
+  }
+});
+$('apply-spread-suggestion').addEventListener('click', () => {
+  const {question, theme} = readSettings();
+  const preset = spreadGuide?.recommend(question, theme);
+  if (!preset) return;
+  spreadSelect.value = preset.id;
+  clearReading();
+  spreadSelect.focus();
 });
 deckCards.addEventListener('keydown', event => {
   const steps = {ArrowLeft: -1, ArrowRight: 1, ArrowUp: -cardsPerRow, ArrowDown: cardsPerRow};
@@ -660,6 +762,16 @@ clear.addEventListener('click', () => {
   clearReading();
   draw.focus();
 });
-displayCards(activeSpread());
+if (guidedSpreads.length) {
+  const choices = element('optgroup');
+  choices.label = '依問題選擇';
+  choices.append(...guidedSpreads.map(({id, name, slots}) => new Option(`${name}（${slots.length} 張）`, id)));
+  spreadSelect.append(choices);
+  const suggestedId = new URLSearchParams(location.search).get('spread');
+  if (guidedSpreads.some(({id}) => id === suggestedId)) spreadSelect.value = suggestedId;
+}
+const initialSettings = readSettings();
+displayCards(initialSettings.spread, undefined, initialSettings);
+updateSpreadGuidance();
 
 })();

@@ -12,11 +12,15 @@
 <link rel="stylesheet" href="./assets/moonveil-theme.css?v=bazi-nav">
 <link rel="stylesheet" href="./assets/tarot-art.css?v=magic-reveal">
 <link rel="stylesheet" href="./assets/tarot-reveal.css?v=magic-reveal">
+<link rel="stylesheet" href="./assets/tarot-spread-guide.css?v=spread-reading">
 <script defer src="./assets/interpretation.js?v=manual-deck"></script>
 <script defer src="./assets/tarot-shuffle.js?v=shuffle-stage"></script>
 <script defer src="./assets/tarot-art.js?v=magic-reveal"></script>
 <script defer src="./assets/tarot-reveal.js?v=magic-reveal"></script>
-<script defer src="./assets/app.js?v=magic-reveal"></script>
+<script defer src="./assets/tarot-reading-language.js?v=spread-reading"></script>
+<script defer src="./assets/tarot-spread-reading.js?v=spread-reading"></script>
+<script defer src="./assets/tarot-spread-guide.js?v=spread-reading"></script>
+<script defer src="./assets/app.js?v=spread-reading"></script>
 <script defer src="./assets/site-music.js?v=warm-moon"></script>
 </head>
 <body class="home-page">
@@ -65,14 +69,16 @@
             <fieldset class="spread"><legend>牌陣</legend><label><input type="radio" name="spread" value="1"><span>單張指引</span></label><label><input type="radio" name="spread" value="3" checked><span>三張牌陣</span></label></fieldset>
             <button class="primary" type="submit" id="start-draw" disabled><span aria-hidden="true">✦</span> 洗牌並展開</button>
           </div>
-          <a class="multipoint-entry" href="./multipoint/">
+          <p class="home-spread-preview" id="home-spread-preview" aria-live="polite">牌位依序是過去、現在、可能方向。</p>
+          <a class="multipoint-entry" id="home-spread-link" href="./multipoint/#spread-select">
             <span class="multipoint-entry-icon" aria-hidden="true">◇</span>
-            <span><strong>多點牌陣</strong><span class="multipoint-entry-detail">三點、五點、七點 · 看牌位權重與相鄰牌卡</span></span>
+            <span><strong>看牌陣怎麼選</strong><span class="multipoint-entry-detail" id="home-spread-link-detail">多點牌陣適合把問題拆開看，或比較兩個選項。</span></span>
           </a>
         </form>
         <div id="draw" hidden>
           <div class="step-head"><div><p class="kicker">抽牌</p><h2 tabindex="-1" id="draw-title">選擇你的牌</h2></div><button class="text-button" id="edit-question" type="button">返回提問</button></div>
           <p class="draw-question" id="draw-question"></p>
+          <p class="home-spread-preview" id="draw-spread-preview"></p>
           <p class="draw-status" id="draw-status" role="status"></p>
           <div class="tarot-shuffle" id="shuffle-stage" aria-hidden="true" hidden></div>
           <div class="tarot-reveal-stage" id="reveal-stage" aria-hidden="true" hidden></div>
@@ -87,7 +93,7 @@
             <h3 id="reading-synthesis-title">綜合解讀</h3>
             <div id="reading-synthesis"></div>
           </section>
-          <div class="reflection"><h3>給自己的提問</h3><p id="reflection-text"></p></div>
+          <div class="reflection"><h3 id="reflection-title">給自己的提問</h3><p id="reflection-text"></p></div>
           <section class="reading-conclusion" aria-labelledby="reading-conclusion-title">
             <h3 id="reading-conclusion-title">結語</h3>
             <p id="reading-conclusion"></p>
