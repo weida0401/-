@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="查太陽星座、排個人出生星盤，並查看星座配對與每日、每週運勢。">
+  <meta name="description" content="查太陽星座、排個人出生星盤，做星座配對或雙人星盤配對，並查看每日、每週運勢。">
   <meta name="theme-color" content="#1c141b">
   <title>十二星座｜月隱塔羅</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23231830'/%3E%3Cpath d='M26 9a12 12 0 1 0 5 19A11 11 0 0 1 26 9Z' fill='%23f1cf9d'/%3E%3C/svg%3E">
@@ -11,15 +11,20 @@
   <link rel="stylesheet" href="../assets/moonveil-theme.css?v=bazi-nav">
   <link rel="stylesheet" href="../assets/zodiac.css?v=transits">
   <link rel="stylesheet" href="../assets/zodiac-tools.css?v=forecast-stars">
-  <link rel="stylesheet" href="../assets/zodiac-match.css?v=pairing">
+  <link rel="stylesheet" href="../assets/zodiac-match.css?v=plain-match">
   <script defer src="../assets/site-music.js?v=warm-moon"></script>
   <script defer src="../assets/vendor/astronomy-engine-2.1.19.min.js"></script>
   <script defer src="../assets/zodiac-transits.js?v=forecast-stars"></script>
   <script defer src="../assets/zodiac-horoscope.js?v=transits"></script>
-  <script defer src="../assets/zodiac-match.js?v=transits"></script>
-  <script defer src="../assets/zodiac-match-scenes.js?v=pairing"></script>
-  <script defer src="../assets/zodiac-tools.js?v=pairing"></script>
+  <script defer src="../assets/zodiac-match-dialogue.js?v=plain-match"></script>
+  <script defer src="../assets/zodiac-match.js?v=plain-match"></script>
+  <script defer src="../assets/zodiac-match-scenes.js?v=plain-match"></script>
+  <script defer src="../assets/zodiac-tools.js?v=plain-match"></script>
   <script defer src="../assets/zodiac.js?v=pairing"></script>
+  <script defer src="../assets/zodiac-birthplace.js?v=tw-counties"></script>
+  <script defer src="../assets/zodiac-natal.js?v=natal-chart"></script>
+  <script defer src="../assets/zodiac-synastry.js?v=plain-match"></script>
+  <script defer src="../assets/zodiac-synastry-page.js?v=plain-match"></script>
 </head>
 <body class="zodiac-page">
   <header class="top">
@@ -80,42 +85,105 @@
     <section class="container zodiac-feature" id="zodiac-match" aria-labelledby="match-title" tabindex="-1">
       <header class="astro-heading">
         <h2 id="match-title">星座配對</h2>
-        <p>選兩個太陽星座，看看感情、友情和工作合作中，哪些地方容易合拍，哪些需要多說清楚一點。</p>
+        <p>選兩個星座快速看默契，或填兩人的出生資料，看看兩張星盤怎麼互動。</p>
       </header>
-      <div class="astro-controls match-controls">
-        <label class="astro-field" for="match-first">你的星座
-          <select id="match-first" disabled></select>
-        </label>
-        <label class="astro-field" for="match-second">對方的星座
-          <select id="match-second" disabled><option value="">選擇星座</option></select>
-        </label>
-        <button class="secondary match-swap" id="match-swap" type="button" disabled><span aria-hidden="true">⇄</span> 交換星座</button>
+      <div class="match-modes" role="group" aria-label="配對方式">
+        <button type="button" id="match-mode-sign" aria-pressed="true" aria-controls="match-sign-panel" disabled>星座配對</button>
+        <button type="button" id="match-mode-chart" aria-pressed="false" aria-controls="match-chart-panel" disabled>雙人星盤配對</button>
       </div>
-      <p class="astro-status" id="match-status" role="status" hidden></p>
-      <noscript><p class="astro-status">請開啟瀏覽器的 JavaScript 功能，即可使用星座配對。</p></noscript>
-      <article class="astro-card match-result" id="match-result" aria-labelledby="match-headline" hidden>
-        <header class="match-pair-header">
-          <div class="match-pair-symbols" aria-hidden="true">
-            <span class="match-glyph" id="match-first-glyph"></span><span class="match-pair-cross">×</span><span class="match-glyph" id="match-second-glyph"></span>
+      <div id="match-sign-panel">
+        <div class="astro-controls match-controls">
+          <label class="astro-field" for="match-first">你的星座
+            <select id="match-first" disabled></select>
+          </label>
+          <label class="astro-field" for="match-second">對方的星座
+            <select id="match-second" disabled><option value="">選擇星座</option></select>
+          </label>
+          <button class="secondary match-swap" id="match-swap" type="button" disabled><span aria-hidden="true">⇄</span> 交換星座</button>
+        </div>
+        <p class="astro-status" id="match-status" role="status" hidden></p>
+        <noscript><p class="astro-status">請開啟瀏覽器的 JavaScript 功能，即可使用星座配對。</p></noscript>
+        <article class="astro-card match-result" id="match-result" aria-labelledby="match-headline" hidden>
+          <header class="match-pair-header">
+            <div class="match-pair-symbols" aria-hidden="true">
+              <span class="match-glyph" id="match-first-glyph"></span><span class="match-pair-cross">×</span><span class="match-glyph" id="match-second-glyph"></span>
+            </div>
+            <div class="match-pair-copy">
+              <p class="astro-caption" id="match-caption"></p>
+              <h3 id="match-headline"></h3>
+            </div>
+            <p class="match-score"><span>配對分數</span><span><strong id="match-score"></strong> / 100</span></p>
+          </header>
+          <p id="match-overview" class="astro-overview"></p>
+          <dl class="astro-details match-details">
+            <div><dt>哪裡合拍</dt><dd id="match-strength"></dd></div>
+            <div><dt>哪裡容易卡住</dt><dd id="match-friction"></dd></div>
+            <div><dt>下次可以怎麼做</dt><dd id="match-next"></dd></div>
+            <div id="match-transit-row" hidden><dt>這週可以試試</dt><dd id="match-transit"></dd></div>
+          </dl>
+          <section class="match-scenes" id="match-scenes" aria-labelledby="match-scenes-title" hidden>
+            <h4 id="match-scenes-title">約會、交朋友和一起做事</h4>
+            <div class="match-scene-grid" id="match-scene-grid"></div>
+          </section>
+          <details class="astro-method match-method" id="match-score-method">
+            <summary>配對分數怎麼來的？</summary>
+            <p>本站用兩個太陽星座在星盤上隔幾格、火土風水怎麼搭，以及兩人的做事步調，換算成相處參考分數。</p>
+          </details>
+        </article>
+        <p id="match-announcement" class="astro-sr-only" role="status"></p>
+      </div>
+
+      <div id="match-chart-panel" hidden>
+        <form id="synastry-form" class="synastry-form" novalidate autocomplete="off">
+          <p class="synastry-note">時間填出生地的當地時間。出生資料只在你的瀏覽器內計算。</p>
+          <div class="synastry-people">
+            <fieldset class="synastry-person" id="synastry-first"><legend>你的出生資料</legend></fieldset>
+            <fieldset class="synastry-person" id="synastry-second"><legend>對方的出生資料</legend></fieldset>
           </div>
-          <div>
-            <p class="astro-caption" id="match-caption"></p>
-            <h3 id="match-headline"></h3>
+          <p class="astro-status" id="synastry-status" role="status" hidden></p>
+          <button class="primary" type="submit" id="synastry-submit" disabled>比較兩張星盤</button>
+        </form>
+        <template id="synastry-fields">
+          <div class="synastry-fields">
+            <label>出生日期 <input data-field="date" type="date" required></label>
+            <label>出生時間 <input data-field="time" type="time" required></label>
+            <label class="synastry-wide">出生地
+              <select data-field="city" required><option value="">選擇縣市或城市</option><option value="custom">其他地點（輸入座標）</option></select>
+            </label>
           </div>
-        </header>
-        <p id="match-overview" class="astro-overview"></p>
-        <dl class="astro-details match-details">
-          <div><dt>容易合拍的地方</dt><dd id="match-strength"></dd></div>
-          <div><dt>需要協調的地方</dt><dd id="match-friction"></dd></div>
-          <div><dt>可以試試的做法</dt><dd id="match-next"></dd></div>
-          <div id="match-transit-row" hidden><dt>本週相處提醒</dt><dd id="match-transit"></dd></div>
-        </dl>
-        <section class="match-scenes" id="match-scenes" aria-labelledby="match-scenes-title" hidden>
-          <h4 id="match-scenes-title">三種相處情境</h4>
-          <div class="match-scene-grid" id="match-scene-grid"></div>
-        </section>
-      </article>
-      <p id="match-announcement" class="astro-sr-only" role="status"></p>
+          <div class="synastry-fields synastry-custom" data-field="custom" hidden>
+            <label>緯度 <input data-field="latitude" type="number" step="any" min="-90" max="90" inputmode="decimal" placeholder="25.033"></label>
+            <label>經度 <input data-field="longitude" type="number" step="any" min="-180" max="180" inputmode="decimal" placeholder="121.565"></label>
+            <label class="synastry-wide">出生地時區 <input data-field="time-zone" type="text" placeholder="Asia/Taipei" spellcheck="false" autocapitalize="none"></label>
+          </div>
+          <label class="synastry-occurrence" data-field="occurrence-label" hidden>當時的 UTC 時差 <select data-field="occurrence"></select></label>
+        </template>
+
+        <article class="astro-card match-result synastry-result" id="synastry-result" aria-labelledby="synastry-headline" hidden>
+          <header class="match-pair-header">
+            <div class="match-pair-copy">
+              <p class="astro-caption" id="synastry-caption"></p>
+              <h3 id="synastry-headline" tabindex="-1"></h3>
+            </div>
+            <p class="match-score"><span>配對分數</span><span><strong id="synastry-score"></strong> / 100</span></p>
+          </header>
+          <div class="match-scene-grid" id="synastry-areas"></div>
+          <div class="synastry-conclusion">
+            <h4>先試這件事</h4>
+            <p id="synastry-conclusion"></p>
+          </div>
+          <details class="astro-method match-method">
+            <summary>看兩張星盤的落點和相位</summary>
+            <div class="synastry-placements" id="synastry-placements"></div>
+            <ul class="synastry-aspects" id="synastry-aspects"></ul>
+          </details>
+          <details class="astro-method match-method" id="synastry-score-method">
+            <summary>星盤配對分數怎麼來的？</summary>
+            <p>用出生地的時區與座標排出兩張星盤，再看太陽、月亮、水星、金星、火星和上升點彼此隔了幾度。每項從 70 分起算，比較合拍的角度加分，容易磨合的角度扣分。總分是情緒、溝通和感情互動三項分數的平均。</p>
+            <p>縣市與城市使用代表座標。<a href="https://www.geonames.org/">GeoNames</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></p>
+          </details>
+        </article>
+      </div>
     </section>
 
     <section class="container zodiac-feature" id="zodiac-forecast" aria-labelledby="forecast-title">

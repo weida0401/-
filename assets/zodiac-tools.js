@@ -191,11 +191,12 @@
       next: match.nextStep,
       'first-glyph': first.glyph,
       'second-glyph': second.glyph,
+      score: match.score,
       transit: note
     });
     get('match-transit-row').hidden = !note;
     renderMatchScenes(first, second);
-    if (announce) get('match-announcement').textContent = pairName + '的配對已更新。' + match.headline;
+    if (announce) get('match-announcement').textContent = `${pairName}，配對 ${match.score} 分，滿分 100。${match.headline}`;
   }
 
   function selectMatchSign(signId, announce = false) {
